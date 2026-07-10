@@ -8,6 +8,7 @@ import { fetchExhibitorLeads } from '../../../src/api/leads';
 import { Avatar, Card, IllustratedEmpty, PrimaryButton, Screen, ScreenTitle, SecondaryButton } from '../../../src/components/ui';
 import { useAuth } from '../../../src/context/AuthContext';
 import { useI18n } from '../../../src/i18n/I18nProvider';
+import { localeCode } from '../../../src/lib/locale';
 import { badgeLevelLabel } from '../../../src/services/badge';
 import type { UserBadge } from '../../../src/types';
 import { colors, fonts, radius, spacing } from '../../../src/theme';
@@ -15,7 +16,8 @@ import { colors, fonts, radius, spacing } from '../../../src/theme';
 export default function ExhibitorContactDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const lc = localeCode(locale);
   const [badge, setBadge] = useState<UserBadge | null>(null);
   const [leadName, setLeadName] = useState('');
   const [leadEmail, setLeadEmail] = useState<string | null>(null);
@@ -74,7 +76,7 @@ export default function ExhibitorContactDetailScreen() {
                   {company ? <Text style={styles.meta}>{company}</Text> : null}
                   {leadEmail ? <Text style={styles.email}>{leadEmail}</Text> : null}
                   <Text style={styles.meta}>
-                    {t('exhibitor.contacts.scannedAt')} {new Date(scannedAt).toLocaleString('fr-FR')}
+                    {t('exhibitor.contacts.scannedAt')} {new Date(scannedAt).toLocaleString(lc)}
                   </Text>
                 </View>
               </View>

@@ -1,5 +1,6 @@
 import { PLATFORM } from '../config/platform';
 import { supabase } from '../lib/supabase';
+import { resolveExhibitorOwnerUserId } from './team';
 import { resolveSalonForScan } from '../lib/scanSalon';
 import { enqueueScanLog, getPendingScanLogs, removePendingScanLogs } from '../lib/offlineQueue';
 import { CACHE_KEYS, loadCache, saveCache } from '../lib/dataCache';
@@ -320,6 +321,7 @@ export async function scanBadgeCode(badgeCode: string, zone: string): Promise<Sc
 
 export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): Promise<ScanResult> {
   const scannedAt = new Date().toISOString();
+  const ownerUserId = await resolveExhibitorOwnerUserId(exhibitorUserId);
   const resolved = await resolveBadge(qrData);
 
   if (!resolved.ok || !resolved.badge) {
@@ -344,13 +346,13 @@ export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): P
   const { data: existing } = await supabase
     .from('exhibitor_leads')
     .select('id')
-    .eq('exhibitor_user_id', exhibitorUserId)
+    .eq('exhibitor_user_id', ownerUserId)
     .eq('visitor_user_id', visitorUserId)
     .maybeSingle();
 
   if (existing?.id) {
     const dup = {
-      valid: true,
+      valid: false,
       userName: resolved.badge.userName,
       badgeCode: visitorUserId,
       reason: 'Déjà scanné',
@@ -363,7 +365,7 @@ export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): P
   const { salonId, salonName } = await resolveSalonForScan();
 
   const { error } = await supabase.from('exhibitor_leads').insert({
-    exhibitor_user_id: exhibitorUserId,
+    exhibitor_user_id: ownerUserId,
     visitor_user_id: visitorUserId,
     scanned_at: scannedAt,
     salon_id: salonId,
@@ -372,7 +374,7 @@ export async function scanLeadFromQr(qrData: string, exhibitorUserId: string): P
   if (error) {
     if (error.code === '23505') {
       const dup = {
-        valid: true,
+        valid: false,
         userName: resolved.badge.userName,
         badgeCode: visitorUserId,
         reason: 'Déjà scanné',

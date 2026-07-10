@@ -88,16 +88,7 @@ export async function searchUsers(query: string, excludeUserId: string) {
   });
 
   if (!error) return data ?? [];
-
-  const { data: fallback, error: fbErr } = await supabase
-    .from('users')
-    .select('id, name, email, type, visitor_level')
-    .neq('id', excludeUserId)
-    .or(`name.ilike.%${term}%,email.ilike.%${term}%`)
-    .limit(20);
-
-  if (fbErr) throw fbErr;
-  return fallback ?? [];
+  throw error;
 }
 
 export async function requestConnection(fromUserId: string, toUserId: string): Promise<void> {
@@ -116,8 +107,18 @@ export async function requestConnection(fromUserId: string, toUserId: string): P
 
   if (lookupError) throw lookupError;
   if (existing && existing.status !== 'rejected') {
-    return;
+    throw new Error('Connexion déjà existante');
   }
+
+  const { error: rpcError } = await supabase.rpc('request_networking_connection', {
+    p_addressee_id: toUserId,
+  });
+
+  if (!rpcError) return;
+
+  const rpcMissing =
+    rpcError.code === '42883' || rpcError.message.includes('request_networking_connection');
+  if (!rpcMissing) throw rpcError;
 
   const { salonId, salonName } = await resolveSalonForScan();
   const { error } = await supabase.from('connections').insert({

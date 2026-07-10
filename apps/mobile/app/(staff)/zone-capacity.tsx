@@ -69,7 +69,9 @@ export default function ZoneCapacityScreen() {
             <Text style={styles.totalMax}>/ {totalMax.toLocaleString()}</Text>
           </View>
           <ProgressBar value={totalCurrent} max={totalMax} color={getCapacityColor(totalCurrent, totalMax)} />
-          <Text style={styles.totalPct}>{Math.round((totalCurrent / totalMax) * 100)}% de remplissage</Text>
+          <Text style={styles.totalPct}>
+            {totalMax > 0 ? `${Math.round((totalCurrent / totalMax) * 100)}% de remplissage` : '—'}
+          </Text>
         </View>
 
         {zones.map((z) => (

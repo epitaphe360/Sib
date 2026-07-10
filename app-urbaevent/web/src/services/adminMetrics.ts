@@ -12,6 +12,7 @@ export interface AdminMetrics {
   apiCalls: number;
   avgResponseTime: number;
   pendingValidations: number;
+  pendingPaymentRequests: number;
   activeContracts: number;
   contentModerations: number;
   onlineExhibitors: number;
@@ -44,6 +45,7 @@ const defaultMetrics: AdminMetrics = {
   apiCalls: 0,
   avgResponseTime: 0,
   pendingValidations: 0,
+  pendingPaymentRequests: 0,
   activeContracts: 0,
   contentModerations: 0,
   onlineExhibitors: 0,
@@ -78,7 +80,7 @@ export class AdminMetricsService {
       }
     }
 
-    if (!client) {return defaultMetrics;}
+    if (!client) {throw new Error('Supabase client not available');}
 
     try {
       const results: Record<string, number | undefined> = {};
@@ -106,6 +108,7 @@ export class AdminMetricsService {
         runCount('visitors', client.from('users').select('id', { count: 'exact', head: true }).eq('type', 'visitor')),
         runCount('events', client.from('events').select('id', { count: 'exact', head: true })),
         runCount('pendingValidations', client.from('registration_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending')),
+        runCount('pendingPaymentRequests', client.from('payment_requests').select('id', { count: 'exact', head: true }).in('status', ['pending', 'proof_uploaded'])),
         runCount('activeContracts', client.from('partners').select('id', { count: 'exact', head: true }).eq('verified', true)),
         runCount('contentModerations', client.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false)),
         runCount('connections', client.from('connections').select('id', { count: 'exact', head: true })),
@@ -147,6 +150,7 @@ export class AdminMetricsService {
         apiCalls,
         avgResponseTime,
         pendingValidations: (results['pendingValidations'] ?? 0),
+        pendingPaymentRequests: (results['pendingPaymentRequests'] ?? 0),
         activeContracts: (results['activeContracts'] ?? 0),
         contentModerations: (results['contentModerations'] ?? 0),
         onlineExhibitors,
@@ -162,43 +166,43 @@ export class AdminMetricsService {
       return metrics;
     } catch (err) {
       console.error('AdminMetricsService: error fetching metrics', err);
-      return defaultMetrics;
+      throw err;
     }
   }
 
   static async getPendingValidations(): Promise<number> {
     const client = (supabase as any);
-    if (!client) {return defaultMetrics.pendingValidations;}
+    if (!client) {throw new Error('Supabase client not available');}
     try {
       const res = await client.from('registration_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending');
-      return (res && typeof res.count === 'number') ? res.count : defaultMetrics.pendingValidations;
+      return (res && typeof res.count === 'number') ? res.count : 0;
     } catch (err) {
       console.error('AdminMetricsService.getPendingValidations error', err);
-      return defaultMetrics.pendingValidations;
+      throw err;
     }
   }
 
   static async getActiveContracts(): Promise<number> {
     const client = (supabase as any);
-    if (!client) {return defaultMetrics.activeContracts;}
+    if (!client) {throw new Error('Supabase client not available');}
     try {
       const res = await client.from('partners').select('id', { count: 'exact', head: true }).eq('verified', true);
-      return (res && typeof res.count === 'number') ? res.count : defaultMetrics.activeContracts;
+      return (res && typeof res.count === 'number') ? res.count : 0;
     } catch (err) {
       console.error('AdminMetricsService.getActiveContracts error', err);
-      return defaultMetrics.activeContracts;
+      throw err;
     }
   }
 
   static async getContentModerations(): Promise<number> {
     const client = (supabase as any);
-    if (!client) {return defaultMetrics.contentModerations;}
+    if (!client) {throw new Error('Supabase client not available');}
     try {
       const res = await client.from('mini_sites').select('id', { count: 'exact', head: true }).eq('published', false);
-      return (res && typeof res.count === 'number') ? res.count : defaultMetrics.contentModerations;
+      return (res && typeof res.count === 'number') ? res.count : 0;
     } catch (err) {
       console.error('AdminMetricsService.getContentModerations error', err);
-      return defaultMetrics.contentModerations;
+      throw err;
     }
   }
 

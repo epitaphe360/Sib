@@ -109,9 +109,9 @@ describe('Mobile — networkingPermissions', () => {
     it('ne peut pas envoyer de messages', () => {
       expect(perms.canSendMessages).toBe(false);
     });
-    it('peut planifier des RDV (max 5/jour)', () => {
-      expect(perms.canScheduleMeetings).toBe(true);
-      expect(perms.maxMeetingsPerDay).toBe(5);
+    it('ne peut pas planifier des RDV (quota serveur = 0)', () => {
+      expect(perms.canScheduleMeetings).toBe(false);
+      expect(perms.maxMeetingsPerDay).toBe(0);
     });
   });
 
@@ -137,10 +137,10 @@ describe('Mobile — networkingPermissions', () => {
       expect(limits.canMakeConnection).toBe(false);
       expect(limits.remainingConnections).toBe(0);
     });
-    it('autorise RDV sous le quota', () => {
-      const limits = checkDailyLimits('visitor', 'free', { connections: 0, messages: 0, meetings: 3 });
-      expect(limits.canScheduleMeeting).toBe(true);
-      expect(limits.remainingMeetings).toBe(2);
+    it('bloque RDV pour visiteur gratuit', () => {
+      const limits = checkDailyLimits('visitor', 'free', { connections: 0, messages: 0, meetings: 0 });
+      expect(limits.canScheduleMeeting).toBe(false);
+      expect(limits.remainingMeetings).toBe(0);
     });
     it('admin illimité (-1)', () => {
       const limits = checkDailyLimits('admin', undefined, { connections: 9999, messages: 9999, meetings: 9999 });

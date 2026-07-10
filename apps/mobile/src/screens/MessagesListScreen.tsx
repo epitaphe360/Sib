@@ -41,7 +41,7 @@ export function MessagesListScreen({ group, embedded }: { group: MessageRouteGro
     load();
   }, [load]);
 
-  if (group === 'visitor' && !permissions.canAccessNetworking) {
+  if (group === 'visitor' && !permissions.canSendMessages) {
     const blocked = (
       <>
         {!embedded && (

@@ -38,7 +38,7 @@ export default function PaymentScreen() {
       return;
     }
     try {
-      const request = await getPaymentRequest(id);
+      const request = await getPaymentRequest(id, user.id);
       if (request) {
         setAmount(request.amount);
         setCurrency(request.currency);

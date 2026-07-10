@@ -146,6 +146,20 @@ function mapCollaboratorRow(data: Record<string, unknown>, tempPassword: string)
   };
 }
 
+export async function resolveExhibitorOwnerUserId(userId: string): Promise<string> {
+  const ctx = await fetchOwnerContext(userId);
+  if (ctx) return ctx.ownerId;
+
+  const { data } = await supabase
+    .from('stand_collaborators')
+    .select('owner_id')
+    .eq('auth_user_id', userId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  return (data?.owner_id as string | undefined) ?? userId;
+}
+
 export async function fetchOwnerContext(userId: string): Promise<OwnerContext | null> {
   const { data } = await supabase
     .from('exhibitors')

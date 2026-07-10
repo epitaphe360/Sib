@@ -213,6 +213,15 @@ export async function updateUserStatusAdmin(userId: string, status: string, user
 
 export async function reviewRegistrationRequest(requestId: string, approve: boolean): Promise<void> {
   const status = approve ? 'approved' : 'rejected';
+
+  const { data: request, error: fetchErr } = await supabase
+    .from('registration_requests')
+    .select('user_id, user_type')
+    .eq('id', requestId)
+    .single();
+
+  if (fetchErr) throw fetchErr;
+
   const { error } = await supabase
     .from('registration_requests')
     .update({
@@ -222,6 +231,23 @@ export async function reviewRegistrationRequest(requestId: string, approve: bool
     .eq('id', requestId);
 
   if (error) throw error;
+
+  if (request?.user_id) {
+    const newUserStatus = approve ? 'active' : 'rejected';
+    const { error: userError } = await supabase
+      .from('users')
+      .update({ status: newUserStatus })
+      .eq('id', request.user_id);
+
+    if (userError) throw userError;
+
+    if (request.user_type === 'partner' && approve) {
+      await supabase.from('partners').update({ verified: true }).eq('id', request.user_id);
+    }
+    if (request.user_type === 'exhibitor' && approve) {
+      await supabase.from('exhibitors').update({ verified: true }).eq('user_id', request.user_id);
+    }
+  }
 }
 
 export async function fetchPendingRegistrationAlerts(): Promise<RegistrationAlertRow[]> {

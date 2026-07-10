@@ -34,6 +34,7 @@ export default function StaffLiveScreen() {
   useEffect(() => { load(); }, [load]);
 
   const isSecurity = user?.type === 'security';
+  const isAdmin = user?.type === 'admin';
 
   return (
     <Screen style={styles.flex}>
@@ -61,7 +62,7 @@ export default function StaffLiveScreen() {
                 <MenuRow icon="map-outline" label={t('staff.zoneCapacity')} onPress={() => router.push('/(staff)/zone-capacity' as never)} />
               </Card>
             </>
-          ) : (
+          ) : isAdmin ? (
             <>
               <View style={styles.statsRow}>
                 <StatCard icon="people-outline" label={t('staff.users')} value={metrics.totalUsers} accent="#4598D1" />
@@ -99,6 +100,17 @@ export default function StaffLiveScreen() {
                 <MenuRow icon="people-outline" label={t('staff.usersBtn')} onPress={() => router.push('/(staff)/users')} />
                 <View style={styles.divider} />
                 <MenuRow icon="bar-chart-outline" label={t('adminScanStats.menu')} onPress={() => router.push('/(staff)/scan-stats' as never)} accent={colors.primary} />
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card elevated style={styles.hintCard}>
+                <Text style={styles.hint}>{t('staff.orgHint')}</Text>
+              </Card>
+              <Card elevated style={styles.menuCard}>
+                <MenuRow icon="print-outline" label={t('staff.printStation')} onPress={() => router.push('/(staff)/print-station' as never)} />
+                <View style={styles.divider} />
+                <MenuRow icon="map-outline" label={t('staff.zoneCapacity')} onPress={() => router.push('/(staff)/zone-capacity' as never)} />
               </Card>
             </>
           )}

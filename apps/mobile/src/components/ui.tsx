@@ -213,19 +213,21 @@ export function Chip({
 }
 
 export function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, { label: string; bg: string; fg: string }> = {
-    pending: { label: 'En attente', bg: colors.warningBg, fg: colors.warning },
-    pending_payment: { label: 'Paiement requis', bg: colors.warningBg, fg: colors.warning },
-    confirmed: { label: 'Confirmé', bg: colors.successBg, fg: colors.success },
-    accepted: { label: 'Accepté', bg: colors.successBg, fg: colors.success },
-    active: { label: 'Actif', bg: colors.successBg, fg: colors.success },
-    rejected: { label: 'Refusé', bg: colors.dangerBg, fg: colors.danger },
-    cancelled: { label: 'Annulé', bg: colors.border, fg: colors.textMuted },
+  const { t } = useI18n();
+  const map: Record<string, { labelKey: string; bg: string; fg: string }> = {
+    pending: { labelKey: 'appointments.status.pending', bg: colors.warningBg, fg: colors.warning },
+    pending_payment: { labelKey: 'status.pendingPayment', bg: colors.warningBg, fg: colors.warning },
+    confirmed: { labelKey: 'appointments.status.confirmed', bg: colors.successBg, fg: colors.success },
+    accepted: { labelKey: 'status.accepted', bg: colors.successBg, fg: colors.success },
+    active: { labelKey: 'status.active', bg: colors.successBg, fg: colors.success },
+    rejected: { labelKey: 'appointments.status.rejected', bg: colors.dangerBg, fg: colors.danger },
+    cancelled: { labelKey: 'appointments.status.cancelled', bg: colors.border, fg: colors.textMuted },
   };
-  const s = map[status] ?? { label: status, bg: colors.border, fg: colors.textMuted };
+  const s = map[status] ?? { labelKey: status, bg: colors.border, fg: colors.textMuted };
+  const label = map[status] ? t(s.labelKey) : status;
   return (
     <View style={[styles.statusBadge, { backgroundColor: s.bg }]}>
-      <Text style={[styles.statusText, { color: s.fg }]}>{s.label}</Text>
+      <Text style={[styles.statusText, { color: s.fg }]}>{label}</Text>
     </View>
   );
 }

@@ -6,7 +6,7 @@ import { fetchExhibitorStand, fetchMiniSite } from '../../../src/api/minisite';
 import { fetchMiniSiteProducts } from '../../../src/api/minisiteProducts';
 import { AppIcon, type AppIconName } from '../../../src/components/AppIcon';
 import { LanguageSwitcher } from '../../../src/components/LanguageSwitcher';
-import { Card, MenuRow, PrimaryButton, Screen } from '../../../src/components/ui';
+import { Card, EmptyState, MenuRow, PrimaryButton, Screen } from '../../../src/components/ui';
 import { SkeletonBlock, SkeletonList } from '../../../src/components/Skeleton';
 import { useAuth } from '../../../src/context/AuthContext';
 import { useI18n } from '../../../src/i18n/I18nProvider';
@@ -82,12 +82,14 @@ export default function ExhibitorHomeScreen() {
   const [miniSite, setMiniSite] = useState<Awaited<ReturnType<typeof fetchMiniSite>>>(null);
   const [productCount, setProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const abortRef = useRef(false);
 
   const load = useCallback(async () => {
     if (!user) return;
     abortRef.current = false;
+    setLoadError(null);
     try {
       const [s, m, ms] = await withRetry(
         () => Promise.all([
@@ -114,10 +116,13 @@ export default function ExhibitorHomeScreen() {
       }
     } catch (e) {
       logger.warn('ExhibitorHome', 'load error', e);
+      if (!abortRef.current) {
+        setLoadError(e instanceof Error ? e.message : t('common.error'));
+      }
     } finally {
       if (!abortRef.current) setLoading(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   useEffect(() => {
     load();
@@ -155,6 +160,15 @@ export default function ExhibitorHomeScreen() {
           <SkeletonBlock height={120} width="100%" />
           <SkeletonList rows={3} />
         </View>
+      </Screen>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <Screen style={styles.flex}>
+        <EmptyState message={loadError} />
+        <PrimaryButton label={t('common.retry')} onPress={() => { setLoading(true); void load(); }} />
       </Screen>
     );
   }

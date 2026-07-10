@@ -15,11 +15,18 @@ export default function LeadAppointmentScreen() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!user) return;
-    setSlots(await fetchAvailableTimeSlots(user.id));
-  }, [user]);
+    setLoadError(null);
+    try {
+      setSlots(await fetchAvailableTimeSlots(user.id));
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : t('common.error'));
+      setSlots([]);
+    }
+  }, [user, t]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -63,7 +70,7 @@ export default function LeadAppointmentScreen() {
         style={styles.flex}
         data={slots}
         keyExtractor={(s) => s.id}
-        ListEmptyComponent={<EmptyState message={t('appointments.new.noSlots')} />}
+        ListEmptyComponent={<EmptyState message={loadError ?? t('appointments.new.noSlots')} />}
         renderItem={({ item }) => (
           <Pressable
             style={[styles.slot, selectedId === item.id && styles.slotSelected]}

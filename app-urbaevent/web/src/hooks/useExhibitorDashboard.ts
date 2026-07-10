@@ -282,8 +282,7 @@ export function useExhibitorDashboard() {
 
   const handleAccept = async (appointmentId: string) => {
     const appointment = appointments.find((a) => a.id === appointmentId);
-    const exhibitorUserId = (appointment as any)?.exhibitorUserId || (appointment as any)?.exhibitor?.user_id;
-    if (!appointment || !user?.id || exhibitorUserId !== user.id) {
+    if (!appointment || !user?.id || !exhibitorDbId || appointment.exhibitorId !== exhibitorDbId) {
       setError(t('exhibitor.error_unauthorized_confirm'));
       return;
     }
@@ -300,8 +299,7 @@ export function useExhibitorDashboard() {
 
   const handleReject = (appointmentId: string) => {
     const appointment = appointments.find((a) => a.id === appointmentId);
-    const exhibitorUserId = (appointment as any)?.exhibitorUserId || (appointment as any)?.exhibitor?.user_id;
-    if (!appointment || !user?.id || exhibitorUserId !== user.id) {
+    if (!appointment || !user?.id || !exhibitorDbId || appointment.exhibitorId !== exhibitorDbId) {
       setError(t('exhibitor.error_unauthorized_reject'));
       return;
     }

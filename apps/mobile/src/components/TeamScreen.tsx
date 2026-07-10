@@ -47,10 +47,14 @@ export function TeamScreen() {
 
   const load = useCallback(async () => {
     if (!user) return;
-    const ctx = await fetchOwnerContext(user.id);
-    setContext(ctx);
-    if (ctx) setItems(await fetchCollaborators(ctx.ownerId));
-  }, [user]);
+    try {
+      const ctx = await fetchOwnerContext(user.id);
+      setContext(ctx);
+      if (ctx) setItems(await fetchCollaborators(ctx.ownerId));
+    } catch (e) {
+      Alert.alert(t('common.error'), supabaseErrorMessage(e, t('common.error')));
+    }
+  }, [user, t]);
 
   useEffect(() => {
     setLoading(true);
@@ -96,8 +100,12 @@ export function TeamScreen() {
         text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
-          await deactivateCollaborator(id);
-          await load();
+          try {
+            await deactivateCollaborator(id);
+            await load();
+          } catch (e) {
+            Alert.alert(t('common.error'), supabaseErrorMessage(e, t('common.error')));
+          }
         },
       },
     ]);

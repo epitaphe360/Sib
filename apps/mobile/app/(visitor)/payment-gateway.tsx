@@ -21,7 +21,6 @@ import { getPaymentRequest } from '../../src/services/payment';
 import { fetchVipPassPricing } from '../../src/services/visitorLevel';
 import { useAppContent } from '../../src/hooks/useAppContent';
 import { useI18n } from '../../src/i18n/I18nProvider';
-import { navigateAfterAuth } from '../../src/lib/navigateAfterAuth';
 import { navigateSafe, requireAuth } from '../../src/lib/navigateSafe';
 import { colors, fonts, radius, shadows, spacing } from '../../src/theme';
 
@@ -64,7 +63,7 @@ export default function PaymentGatewayScreen() {
     }
     if (!id || !user) return;
     try {
-      const req = await getPaymentRequest(id);
+      const req = await getPaymentRequest(id, user.id);
       if (req) {
         setAmount(req.amount);
         setCurrency(req.currency);
@@ -132,9 +131,9 @@ export default function PaymentGatewayScreen() {
           });
           await refreshUser();
           Alert.alert(
-            t('payment.gateway.successTitle'),
-            t('payment.gateway.successBody'),
-            [{ text: t('common.ok'), onPress: () => navigateAfterAuth(user!.type) }]
+            t('payment.gateway.pendingTitle'),
+            t('payment.gateway.pendingBody'),
+            [{ text: t('common.ok'), onPress: () => router.push('/(visitor)/(tabs)/profile' as never) }]
           );
         } else {
           Alert.alert(t('payment.gateway.pendingTitle'), t('payment.gateway.pendingBody'));

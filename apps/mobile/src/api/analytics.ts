@@ -81,14 +81,15 @@ export async function fetchAdminLiveMetrics(): Promise<{
   pendingPayments: number;
   pendingValidations: number;
 }> {
-  const [users, payments] = await Promise.all([
+  const [users, payments, registrations] = await Promise.all([
     supabase.from('users').select('id', { count: 'exact', head: true }),
     supabase.from('payment_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('registration_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
   ]);
 
   return {
     totalUsers: users.count ?? 0,
     pendingPayments: payments.count ?? 0,
-    pendingValidations: payments.count ?? 0,
+    pendingValidations: registrations.count ?? 0,
   };
 }

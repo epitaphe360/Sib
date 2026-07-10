@@ -18,15 +18,16 @@ import { fetchEvents } from '../../../src/services/events';
 import { withRetry } from '../../../src/lib/withRetry';
 import { useAuth } from '../../../src/context/AuthContext';
 import { useI18n } from '../../../src/i18n/I18nProvider';
+import { localeCode } from '../../../src/lib/locale';
 import type { EventRegistrationStatus, SalonEvent } from '../../../src/types';
 import { colors, fonts, radius, spacing } from '../../../src/theme';
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+function formatDate(date: Date, lc: string): string {
+  return date.toLocaleDateString(lc, { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+function formatTime(date: Date, lc: string): string {
+  return date.toLocaleTimeString(lc, { hour: '2-digit', minute: '2-digit' });
 }
 
 export default function ProgramScreen() {
@@ -104,7 +105,8 @@ const STATUS_COLOR: Record<EventRegistrationStatus, string> = {
 };
 
 function EventCard({ event, regStatus, onPress }: { event: SalonEvent; regStatus: EventRegistrationStatus | null; onPress: () => void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const lc = localeCode(locale);
   const statusLabel = (status: EventRegistrationStatus) => t(`program.status.${status}`);
   return (
     <Pressable style={styles.cardWrap} onPress={onPress}>
@@ -128,7 +130,7 @@ function EventCard({ event, regStatus, onPress }: { event: SalonEvent; regStatus
         </View>
         <Text style={styles.eventTitle}>{event.title}</Text>
         <Text style={styles.eventMeta}>
-          {formatDate(event.startDate)} · {formatTime(event.startDate)}
+          {formatDate(event.startDate, lc)} · {formatTime(event.startDate, lc)}
           {event.location ? ` · ${event.location}` : ''}
         </Text>
         {event.description ? (

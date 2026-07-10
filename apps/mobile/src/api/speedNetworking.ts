@@ -42,25 +42,10 @@ export async function fetchSpeedSessions(): Promise<SpeedSession[]> {
   });
 }
 
-export async function joinSpeedSession(sessionId: string, userId: string): Promise<void> {
-  const { error: rpcError } = await supabase.rpc('join_speed_networking_session', {
+export async function joinSpeedSession(sessionId: string, _userId: string): Promise<void> {
+  const { error } = await supabase.rpc('join_speed_networking_session', {
     p_session_id: sessionId,
   });
 
-  if (!rpcError) return;
-
-  const rpcMissing =
-    rpcError.code === '42883' || rpcError.message.includes('join_speed_networking_session');
-  if (!rpcMissing) throw rpcError;
-
-  const { error } = await supabase.from('speed_networking_participants').insert({
-    session_id: sessionId,
-    user_id: userId,
-    status: 'registered',
-  });
-
-  if (error) {
-    if (error.code === '23505') return;
-    throw error;
-  }
+  if (error) throw error;
 }

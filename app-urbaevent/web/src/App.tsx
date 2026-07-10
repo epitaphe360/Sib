@@ -233,6 +233,7 @@ const CatalogueFormConfigPage = lazyRetry(() => import('./pages/admin/CatalogueF
 import { useLanguageStore, syncLanguageFromStore } from './store/languageStore';
 import { ROUTES } from './lib/routes';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { VisitorLevelGuard } from './components/guards/VisitorLevelGuard';
 import { initializeAuth } from './lib/initAuth';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePushNotifications } from './hooks/usePushNotifications';
@@ -390,10 +391,10 @@ const App = () => {
             <Route path={ROUTES.REGISTER_PARTNER} element={<Navigate to={ROUTES.REGISTER_EXHIBITOR} replace />} />
             <Route path={ROUTES.PAVILIONS} element={<PavillonsPage />} />
             <Route path={ROUTES.METRICS} element={<ProtectedRoute><MetricsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.NETWORKING} element={<NetworkingPage />} />
-            <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><InteractionHistoryPage /></ProtectedRoute>} />
-            <Route path={ROUTES.NETWORKING_ROOMS} element={<ProtectedRoute><NetworkingRoomsPage /></ProtectedRoute>} />
-            <Route path={ROUTES.SPEED_NETWORKING} element={<ProtectedRoute><SpeedNetworkingPage /></ProtectedRoute>} />
+            <Route path={ROUTES.NETWORKING} element={<VisitorLevelGuard><NetworkingPage /></VisitorLevelGuard>} />
+            <Route path={ROUTES.INTERACTION_HISTORY} element={<ProtectedRoute><VisitorLevelGuard><InteractionHistoryPage /></VisitorLevelGuard></ProtectedRoute>} />
+            <Route path={ROUTES.NETWORKING_ROOMS} element={<ProtectedRoute><VisitorLevelGuard><NetworkingRoomsPage /></VisitorLevelGuard></ProtectedRoute>} />
+            <Route path={ROUTES.SPEED_NETWORKING} element={<ProtectedRoute><VisitorLevelGuard><SpeedNetworkingPage /></VisitorLevelGuard></ProtectedRoute>} />
             <Route path={ROUTES.EVENTS} element={<EventsPage />} />
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.DEMO_ACCOUNTS} element={<DemoAccountsPage />} />
@@ -567,8 +568,8 @@ const App = () => {
             <Route path={ROUTES.HALL_MAP} element={<HallMapPage />} />
             <Route path={ROUTES.CATALOG} element={<CatalogPage />} />
             <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
-            <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><MatchmakingDashboard /></ProtectedRoute>} />
-            <Route path={ROUTES.B2B_NETWORKING_AI} element={<B2BNetworkingAIPage />} />
+            <Route path={ROUTES.NETWORKING_MATCHMAKING} element={<ProtectedRoute><VisitorLevelGuard><MatchmakingDashboard /></VisitorLevelGuard></ProtectedRoute>} />
+            <Route path={ROUTES.B2B_NETWORKING_AI} element={<VisitorLevelGuard><B2BNetworkingAIPage /></VisitorLevelGuard>} />
 
             {/* Modules — chapiteau, location, publicité */}
             <Route path={ROUTES.CHAPITEAU_CATALOG} element={<ChapiteauPublicPage />} />

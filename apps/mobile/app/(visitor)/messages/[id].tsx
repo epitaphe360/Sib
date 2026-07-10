@@ -47,7 +47,7 @@ export default function VisitorMessageThreadScreen() {
       return;
     }
     if (!permissions.canSendMessages || !limits.canSendMessage) {
-      Alert.alert(t('messages.title'), getPermissionErrorMessage(user.type, user.visitorLevel, 'message'));
+      Alert.alert(t('messages.title'), getPermissionErrorMessage(user.type, user.visitorLevel, 'message', t));
       return;
     }
     if (!otherUserId) {

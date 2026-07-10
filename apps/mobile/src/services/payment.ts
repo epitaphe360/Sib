@@ -77,12 +77,14 @@ export async function getLatestPaymentRequest(userId: string): Promise<PaymentRe
   };
 }
 
-export async function getPaymentRequest(requestId: string): Promise<PaymentRequest | null> {
-  const { data, error } = await supabase
+export async function getPaymentRequest(requestId: string, userId?: string): Promise<PaymentRequest | null> {
+  let query = supabase
     .from('payment_requests')
     .select('id, user_id, amount, currency, status, payment_method, created_at')
-    .eq('id', requestId)
-    .maybeSingle();
+    .eq('id', requestId);
+  if (userId) query = query.eq('user_id', userId);
+
+  const { data, error } = await query.maybeSingle();
 
   if (error) throw error;
   if (!data) return null;

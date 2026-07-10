@@ -95,7 +95,7 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
     const blocked = (
       <>
         {!embedded && <ScreenTitle title={t('networking.title')} />}
-        <EmptyState message={getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'connection')} />
+        <EmptyState message={getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'connection', t)} />
         <PrimaryButton label={t('vip.upgrade')} onPress={() => router.push('/(auth)/register-vip')} variant="gold" />
       </>
     );
@@ -122,7 +122,7 @@ export default function VisitorNetworkingScreen({ embedded = false, refreshKey =
   const connect = async (toUserId: string) => {
     if (!requireAuth(user, t)) return;
     if (!limits.canMakeConnection) {
-      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection'));
+      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection', t));
       return;
     }
     try {

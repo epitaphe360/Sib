@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../i18n/I18nProvider';
-import { getRoleGroup } from '../../navigation/roleConfig';
+import { getRouteGroupForUser } from '../../navigation/roleConfig';
 import { navigateAfterAuth } from '../../lib/navigateAfterAuth';
 import { colors } from '../../theme';
 
@@ -24,8 +24,8 @@ export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProp
       router.replace('/(auth)/login');
       return;
     }
-    if (user && getRoleGroup(user.type) !== allowed) {
-      navigateAfterAuth(user.type);
+    if (user && getRouteGroupForUser(user) !== allowed) {
+      navigateAfterAuth(user);
     }
   }, [user, isLoading, allowed, requireAuth]);
 
@@ -46,7 +46,7 @@ export function RoleGate({ children, allowed, requireAuth = true }: RoleGateProp
     );
   }
 
-  if (user && getRoleGroup(user.type) !== allowed) {
+  if (user && getRouteGroupForUser(user) !== allowed) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color={colors.primary} />

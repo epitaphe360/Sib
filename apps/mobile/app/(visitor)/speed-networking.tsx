@@ -6,14 +6,17 @@ import { EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../src/compon
 import { useAuth } from '../../src/context/AuthContext';
 import { useNetworkingPermissions } from '../../src/hooks/useNetworkingPermissions';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { localeCode } from '../../src/lib/locale';
 import { getPermissionErrorMessage } from '../../src/lib/networkingPermissions';
 import { requireAuth } from '../../src/lib/navigateSafe';
 import { colors, fonts, radius, spacing } from '../../src/theme';
 
 export default function SpeedNetworkingScreen() {
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const lc = localeCode(locale);
   const { permissions } = useNetworkingPermissions();
+  const canAccessSpeed = permissions.canSendMessages || permissions.canAccessPremiumFeatures;
   const [sessions, setSessions] = useState<SpeedSession[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -26,12 +29,14 @@ export default function SpeedNetworkingScreen() {
     }
   }, [t]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (canAccessSpeed) load();
+  }, [load, canAccessSpeed]);
 
   const join = async (sessionId: string) => {
     if (!requireAuth(user, t)) return;
-    if (!permissions.canSendMessages) {
-      Alert.alert(t('networking.title'), getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'message'));
+    if (!canAccessSpeed) {
+      Alert.alert(t('networking.title'), getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'message', t));
       return;
     }
     try {
@@ -43,7 +48,7 @@ export default function SpeedNetworkingScreen() {
     }
   };
 
-  if (!permissions.canSendMessages) {
+  if (!canAccessSpeed) {
     return (
       <Screen style={styles.flex}>
         <ScreenTitle title={t('speed.title')} subtitle={t('speed.subtitle')} />
@@ -69,7 +74,7 @@ export default function SpeedNetworkingScreen() {
               {item.currentParticipants}/{item.maxParticipants} · {item.status}
             </Text>
             {item.startTime ? (
-              <Text style={styles.time}>{new Date(item.startTime).toLocaleString('fr-FR')}</Text>
+              <Text style={styles.time}>{new Date(item.startTime).toLocaleString(lc)}</Text>
             ) : null}
             <PrimaryButton label={t('speed.join')} onPress={() => join(item.id)} variant="gold" />
           </View>

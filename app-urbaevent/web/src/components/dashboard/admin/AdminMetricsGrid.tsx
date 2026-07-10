@@ -1,6 +1,6 @@
 ﻿import { useEffect, useRef, useState } from 'react';
 import { motion, animate, useInView } from 'framer-motion';
-import { Users, Building2, Award, UserCheck, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { Users, Building2, Award, UserCheck, TrendingUp } from 'lucide-react';
 
 interface AdminMetricsGridProps {
   adminMetrics: Record<string, number | unknown>;
@@ -64,10 +64,10 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
       color: '#F39200',
     },
     {
-      value: '98',
-      label: 'Taux',
-      suffix: '%',
-      description: 'de satisfaction général',
+      value: metrics.onlineExhibitors ?? 0,
+      label: 'En ligne',
+      suffix: '',
+      description: 'exposants actifs en ligne',
       icon: Award,
       color: '#2D6A4F',
     },
@@ -167,12 +167,6 @@ export function AdminMetricsGrid({ adminMetrics: m, t }: AdminMetricsGridProps) 
 
               {/* Bottom divider */}
               <div className="mt-6 pt-6 border-t border-[#1e3a5f]/08" />
-
-              {/* Trend badge */}
-              <div className="flex items-center gap-1.5 text-xs mt-4 font-medium" style={{ color }}>
-                <ArrowUpRight className="h-3.5 w-3.5" />
-                <span>+12% ce mois</span>
-              </div>
             </div>
           </motion.div>
         ))}

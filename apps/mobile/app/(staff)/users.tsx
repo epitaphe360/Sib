@@ -40,6 +40,12 @@ export default function StaffUsersScreen() {
 
   useEffect(() => { load(); }, [load]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
   const isProtectedUser = (type?: string) => type === 'admin';
 
   const toggleStatus = async (userId: string, current?: string, userType?: string) => {

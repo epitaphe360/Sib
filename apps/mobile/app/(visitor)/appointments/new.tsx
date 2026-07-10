@@ -7,13 +7,14 @@ import { EmptyState, Input, PrimaryButton, Screen, ScreenTitle } from '../../../
 import { useAuth } from '../../../src/context/AuthContext';
 import { useNetworkingPermissions } from '../../../src/hooks/useNetworkingPermissions';
 import { useI18n } from '../../../src/i18n/I18nProvider';
+import { localeCode } from '../../../src/lib/locale';
 import { getPermissionErrorMessage } from '../../../src/lib/networkingPermissions';
 import { colors, spacing } from '../../../src/theme';
 
 export default function NewAppointmentScreen() {
   const { exhibitorUserId } = useLocalSearchParams<{ exhibitorUserId?: string }>();
   const { user, isLoading: authLoading } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const insets = useSafeAreaInsets();
   const { permissions, limits } = useNetworkingPermissions();
   const [slots, setSlots] = useState<MobileTimeSlot[]>([]);
@@ -51,7 +52,7 @@ export default function NewAppointmentScreen() {
     if (!user || !selectedId || !selectedSlot) return;
 
     if (!permissions.canScheduleMeetings || !limits.canScheduleMeeting) {
-      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user.type, user.visitorLevel, 'meeting'));
+      Alert.alert(t('networking.planLimit'), getPermissionErrorMessage(user.type, user.visitorLevel, 'meeting', t));
       return;
     }
 
@@ -92,8 +93,9 @@ export default function NewAppointmentScreen() {
     );
   }
 
+  const lc = localeCode(locale);
   const formatSlotLabel = (slot: MobileTimeSlot) => {
-    const dateLabel = new Date(slot.date).toLocaleDateString('fr-FR', {
+    const dateLabel = new Date(slot.date).toLocaleDateString(lc, {
       weekday: 'short',
       day: 'numeric',
       month: 'short',

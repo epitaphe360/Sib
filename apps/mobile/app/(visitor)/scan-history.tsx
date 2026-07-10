@@ -13,12 +13,13 @@ import { openContactProfile } from '../../src/lib/openContactProfile';
 import { EmptyState, IllustratedEmpty, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { localeCode } from '../../src/lib/locale';
 import { avatarColor, avatarInitials } from '../../src/lib/avatarColor';
 import { colors, fonts, radius, spacing } from '../../src/theme';
 
-function formatScanTime(iso: string): string {
+function formatScanTime(iso: string, lc: string): string {
   const d = new Date(iso);
-  return d.toLocaleString('fr-FR', {
+  return d.toLocaleString(lc, {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',
@@ -52,7 +53,7 @@ function openContact(item: VisitorScanEntry) {
   });
 }
 
-function ScanRow({ item, t }: { item: VisitorScanEntry; t: (k: string) => string }) {
+function ScanRow({ item, t, lc }: { item: VisitorScanEntry; t: (k: string) => string; lc: string }) {
   const kindLabel =
     item.kind === 'networking' ? t('scanHistory.kindNetworking') : t('scanHistory.kindStand');
   const bg = avatarColor(item.partnerUserId);
@@ -72,7 +73,7 @@ function ScanRow({ item, t }: { item: VisitorScanEntry; t: (k: string) => string
         <View style={styles.rowBody}>
           <View style={styles.rowTop}>
             <Text style={styles.partner} numberOfLines={1}>{item.partnerName}</Text>
-            <Text style={styles.time}>{formatScanTime(item.scannedAt)}</Text>
+            <Text style={styles.time}>{formatScanTime(item.scannedAt, lc)}</Text>
           </View>
           {item.partnerCompany ? (
             <Text style={styles.company} numberOfLines={1}>{item.partnerCompany}</Text>
@@ -96,7 +97,8 @@ function ScanRow({ item, t }: { item: VisitorScanEntry; t: (k: string) => string
 
 export default function VisitorScanHistoryScreen() {
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const lc = localeCode(locale);
   const [items, setItems] = useState<VisitorScanEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -201,7 +203,7 @@ export default function VisitorScanHistoryScreen() {
             )
           ) : null
         }
-        renderItem={({ item }) => <ScanRow item={item} t={t} />}
+        renderItem={({ item }) => <ScanRow item={item} t={t} lc={lc} />}
       />
     </Screen>
   );

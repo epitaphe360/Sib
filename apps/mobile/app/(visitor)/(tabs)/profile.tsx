@@ -125,6 +125,10 @@ export default function ProfileScreen() {
           <>
             <MenuRow icon="scan-outline" label={t('networking.scanCta')} onPress={() => router.push('/(visitor)/scan-connect' as never)} />
             <MenuRow icon="time-outline" label={t('scanHistory.title')} onPress={() => router.push('/(visitor)/scan-history' as never)} />
+          </>
+        )}
+        {permissions.canSendMessages && (
+          <>
             <MenuRow icon="chatbubbles-outline" label={t('tabs.messages')} onPress={() => router.push('/(visitor)/messages' as never)} />
             <MenuRow icon="people-outline" label={t('tabs.networking')} onPress={() => router.push('/(visitor)/networking' as never)} />
             <MenuRow icon="flash-outline" label={t('speed.title')} onPress={() => router.push('/(visitor)/speed-networking' as never)} />
@@ -132,10 +136,12 @@ export default function ProfileScreen() {
         )}
         <MenuRow icon="qr-code-outline" label={t('badge.title')} onPress={() => router.push('/(visitor)/(tabs)/badge')} accent={colors.primary} />
         <MenuRow icon="document-text-outline" label={t('visa.title')} onPress={() => router.push('/(visitor)/visa-letter' as never)} />
+        <MenuRow icon="ribbon-outline" label={t('certificate.title')} onPress={() => router.push('/(visitor)/certificate' as never)} />
         {!isFreeVisitor && (
           <MenuRow icon="receipt-outline" label={t('invoices.title')} onPress={() => router.push('/(visitor)/invoices' as never)} />
         )}
         <MenuRow icon="play-circle-outline" label={t('media.title')} onPress={() => router.push('/(visitor)/media' as never)} />
+        <MenuRow icon="videocam-outline" label={t('live.title')} onPress={() => router.push('/(visitor)/live-studio' as never)} />
 
         <Text style={styles.section}>{t('profile.sectionAccount')}</Text>
         {!isVip && (

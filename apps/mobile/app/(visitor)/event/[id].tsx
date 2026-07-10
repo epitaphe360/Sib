@@ -132,14 +132,19 @@ export default function EventDetailScreen() {
           {event.capacity ? (
             <MetaRow
               icon="people-outline"
-              label={`${event.registered} / ${event.capacity} inscrits${spotsLeft !== null ? ` — ${isFull ? 'Complet' : `${spotsLeft} places restantes`}` : ''}`}
+              label={
+                t('event.registrations', { registered: event.registered, capacity: event.capacity })
+                + (spotsLeft !== null
+                  ? ` — ${isFull ? t('event.full') : t('event.spotsRemaining', { count: spotsLeft })}`
+                  : '')
+              }
             />
           ) : null}
         </View>
 
         {event.description ? (
           <View style={styles.descCard}>
-            <Text style={styles.descTitle}>Description</Text>
+            <Text style={styles.descTitle}>{t('event.description')}</Text>
             <Text style={styles.descText}>{event.description}</Text>
           </View>
         ) : null}

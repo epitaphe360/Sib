@@ -277,24 +277,10 @@ export default function ExhibitorScansPage() {
     if (!supabase || !user?.id) return;
     setIsLoading(true);
     try {
-      // Récupérer les collaborateurs actifs de l'exposant (stand_collaborators)
-      const { data: collabData } = await supabase
-        .from('stand_collaborators')
-        .select('auth_user_id')
-        .eq('owner_id', user.id)
-        .eq('status', 'active')
-        .not('auth_user_id', 'is', null);
-
-      const collabIds = (collabData ?? [])
-        .map((c: { auth_user_id: string | null }) => c.auth_user_id)
-        .filter((id): id is string => Boolean(id));
-
-      const allScannerIds = [user.id, ...collabIds];
-
       const { data: scanData, error } = await supabase
-        .from('badge_scans')
-        .select('id, visitor_id, scanned_by, scanned_at, location, badge_type')
-        .in('scanned_by', allScannerIds)
+        .from('exhibitor_leads')
+        .select('id, visitor_user_id, exhibitor_user_id, scanned_at, badge_code')
+        .eq('exhibitor_user_id', user.id)
         .order('scanned_at', { ascending: false });
 
       if (error) throw error;
@@ -305,10 +291,10 @@ export default function ExhibitorScansPage() {
       }
 
       const visitorIds = [...new Set(
-        scanData.map((s: { visitor_id: string }) => s.visitor_id).filter(Boolean)
+        scanData.map((s: { visitor_user_id: string }) => s.visitor_user_id).filter(Boolean)
       )];
       const scannerIds = [...new Set(
-        scanData.map((s: { scanned_by: string }) => s.scanned_by).filter(Boolean)
+        scanData.map((s: { exhibitor_user_id: string }) => s.exhibitor_user_id).filter(Boolean)
       )];
 
       type UserRow = { id: string; name?: string; email?: string; profile?: { company?: string; organization?: string; phone?: string } };
@@ -326,13 +312,18 @@ export default function ExhibitorScansPage() {
       const visitorMap = new Map((visitorsRes.data ?? []).map((v: UserRow) => [v.id, v]));
       const scannerMap = new Map((scannersRes.data ?? []).map((s: ScannerRow) => [s.id, s]));
 
-      type RawScan = { id: string; visitor_id: string; scanned_by: string; scanned_at: string; location: string | null; badge_type: string };
-      const enriched: ScannedVisitor[] = scanData.map((s: RawScan) => {
-        const v = visitorMap.get(s.visitor_id);
-        const sc = scannerMap.get(s.scanned_by);
+      type RawLead = { id: string; visitor_user_id: string; exhibitor_user_id: string; scanned_at: string; badge_code: string | null };
+      const enriched: ScannedVisitor[] = scanData.map((s: RawLead) => {
+        const v = visitorMap.get(s.visitor_user_id);
+        const sc = scannerMap.get(s.exhibitor_user_id);
         return {
-          ...s,
-          scanned_by_id: s.scanned_by,
+          id: s.id,
+          visitor_id: s.visitor_user_id,
+          scanned_by: s.exhibitor_user_id,
+          scanned_at: s.scanned_at,
+          location: null,
+          badge_type: s.badge_code || 'visiteur',
+          scanned_by_id: s.exhibitor_user_id,
           visitor_name: v?.name ?? null,
           visitor_email: v?.email ?? null,
           visitor_company: v?.profile?.company ?? v?.profile?.organization ?? null,

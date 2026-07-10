@@ -203,34 +203,18 @@ export function ExhibitorScannedVisitors({ isExpanded: expandedProp, onToggle }:
     if (!supabase || !user?.id) return;
     setIsLoading(true);
     try {
-      // Récupérer l'exhibitor_id lié à cet utilisateur
-      const { data: exhibitor } = await supabase
-        .from('exhibitors')
-        .select('id, team_members')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (!exhibitor) { setIsLoading(false); return; }
-
-      // Construire la liste des IDs autorisés (exposant + collaborateurs)
-      const teamIds: string[] = (exhibitor.team_members || [])
-        .map((m: any) => m.user_id || m.id)
-        .filter(Boolean);
-      const allScannerIds = [user.id, ...teamIds];
-
-      // Récupérer les scans
       const { data: scanData, error } = await supabase
-        .from('badge_scans')
-        .select('id, visitor_id, scanned_by, scanned_at, location, badge_type')
-        .in('scanned_by', allScannerIds)
+        .from('exhibitor_leads')
+        .select('id, visitor_user_id, exhibitor_user_id, scanned_at, badge_code')
+        .eq('exhibitor_user_id', user.id)
         .order('scanned_at', { ascending: false });
 
       if (error) throw error;
       if (!scanData || scanData.length === 0) { setScans([]); setIsLoading(false); return; }
 
       // Récupérer les infos visiteurs
-      const visitorIds = [...new Set(scanData.map((s: any) => s.visitor_id).filter(Boolean))];
-      const scannerIds = [...new Set(scanData.map((s: any) => s.scanned_by).filter(Boolean))];
+      const visitorIds = [...new Set(scanData.map((s: { visitor_user_id: string }) => s.visitor_user_id).filter(Boolean))];
+      const scannerIds = [...new Set(scanData.map((s: { exhibitor_user_id: string }) => s.exhibitor_user_id).filter(Boolean))];
 
       const [visitorsRes, scannersRes] = await Promise.all([
         visitorIds.length > 0
@@ -244,11 +228,22 @@ export function ExhibitorScannedVisitors({ isExpanded: expandedProp, onToggle }:
       const visitorMap = new Map((visitorsRes.data || []).map((v: any) => [v.id, v]));
       const scannerMap = new Map((scannersRes.data || []).map((s: any) => [s.id, s]));
 
-      const enriched: ScannedVisitor[] = scanData.map((s: any) => {
-        const v = visitorMap.get(s.visitor_id);
-        const sc = scannerMap.get(s.scanned_by);
+      const enriched: ScannedVisitor[] = scanData.map((s: {
+        id: string;
+        visitor_user_id: string;
+        exhibitor_user_id: string;
+        scanned_at: string;
+        badge_code: string | null;
+      }) => {
+        const v = visitorMap.get(s.visitor_user_id);
+        const sc = scannerMap.get(s.exhibitor_user_id);
         return {
-          ...s,
+          id: s.id,
+          visitor_id: s.visitor_user_id,
+          scanned_by: s.exhibitor_user_id,
+          scanned_at: s.scanned_at,
+          location: null,
+          badge_type: s.badge_code || 'visiteur',
           visitor_name: v?.name || null,
           visitor_email: v?.email || null,
           visitor_company: v?.profile?.company || v?.profile?.organization || null,

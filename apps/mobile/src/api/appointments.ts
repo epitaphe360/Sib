@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { fetchNetworkingContactProfiles } from './contactProfiles';
 
 export interface MobileTimeSlot {
   id: string;
@@ -123,8 +124,7 @@ export async function fetchAppointmentsForUser(userId: string, userType: string)
   if (!data?.length) return [];
 
   const visitorIds = [...new Set(data.map((a) => a.visitor_id))];
-  const { data: visitors } = await supabase.from('users').select('id, name').in('id', visitorIds);
-  const visitorMap = new Map(visitors?.map((v) => [v.id, v.name]) ?? []);
+  const visitorProfiles = await fetchNetworkingContactProfiles(visitorIds);
 
   const exhibitorIds = [...new Set(data.map((a) => a.exhibitor_id))];
   const { data: exhibitors } = await supabase.from('exhibitors').select('id, user_id, company_name').in('id', exhibitorIds);
@@ -133,7 +133,7 @@ export async function fetchAppointmentsForUser(userId: string, userType: string)
   return data.map((row) => {
     const ex = exById.get(row.exhibitor_id);
     return mapRow(row as Record<string, unknown>, {
-      visitorName: visitorMap.get(row.visitor_id) ?? 'Visiteur',
+      visitorName: visitorProfiles.get(row.visitor_id)?.name ?? 'Visiteur',
       exhibitorName: ex?.company_name ?? 'Exposant',
     });
   });

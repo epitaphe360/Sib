@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
 import { fetchVipPrice, updateVipPrice } from '../../src/api/admin';
-import { Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
+import { EmptyState, Input, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
+import { useAuth } from '../../src/context/AuthContext';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { isFullAdmin } from '../../src/navigation/roleConfig';
 import { colors, spacing } from '../../src/theme';
 
 export default function StaffPricingScreen() {
+  const { user } = useAuth();
   const { t } = useI18n();
   const [price, setPrice] = useState('');
   const [current, setCurrent] = useState(0);
@@ -21,6 +24,14 @@ export default function StaffPricingScreen() {
   }, [t]);
 
   useEffect(() => { load(); }, [load]);
+
+  if (!isFullAdmin(user?.type)) {
+    return (
+      <Screen>
+        <EmptyState message={t('admin.users.adminOnly')} />
+      </Screen>
+    );
+  }
 
   const save = async () => {
     const n = Number.parseFloat(price.replace(',', '.'));

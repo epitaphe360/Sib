@@ -164,15 +164,15 @@ function getVisitorPermissions(passType: VisitorPassType): NetworkingPermissions
     };
   }
 
-  // Pass gratuit : RDV + scan-to-connect (comme ancienne UrbaEvent Play Store)
+  // Pass gratuit : scan-to-connect uniquement (0 RDV — aligné get_user_b2b_quota serveur)
   return {
     ...baseVisitorPermissions,
     canAccessNetworking: true,
     canViewProfiles: true,
     canMakeConnections: true,
-    canScheduleMeetings: true,
+    canScheduleMeetings: false,
     maxConnectionsPerDay: 20,
-    maxMeetingsPerDay: 5,
+    maxMeetingsPerDay: 0,
   };
 }
 
@@ -224,33 +224,52 @@ export function checkDailyLimits(
   };
 }
 
+const PERMISSION_ERROR_FR: Record<string, string> = {
+  'networking.permission.meetingLimitFree':
+    'Limite quotidienne de rendez-vous atteinte. Revenez demain ou passez au Pass Premium VIP.',
+  'networking.permission.freeBlocked':
+    "Le réseautage complet (messages, recherche) est réservé au Pass Premium VIP. Vous pouvez scanner des badges pour créer des connexions.",
+  'networking.permission.noAccess':
+    "Vous n'avez pas accès aux fonctionnalités de réseautage.",
+  'networking.permission.messageLimit': 'Limite quotidienne de messages atteinte.',
+  'networking.permission.connectionLimit': 'Limite quotidienne de connexions atteinte.',
+  'networking.permission.meetingLimit': 'Limite quotidienne de rendez-vous atteinte.',
+  'networking.permission.actionUnavailable':
+    "Cette action n'est pas disponible avec votre forfait.",
+};
+
+function permissionMsg(key: string, t?: (key: string) => string): string {
+  return t?.(key) ?? PERMISSION_ERROR_FR[key] ?? key;
+}
+
 export function getPermissionErrorMessage(
   userType: UserType,
   userLevel: string | undefined,
-  action: string
+  action: string,
+  t?: (key: string) => string
 ): string {
   const pass = normalizeVisitorPass(userLevel);
 
   if (userType === 'visitor' && pass === 'free') {
     if (action === 'meeting') {
-      return 'Limite quotidienne de rendez-vous atteinte. Revenez demain ou passez au Pass Premium VIP.';
+      return permissionMsg('networking.permission.meetingLimitFree', t);
     }
-    return "Le réseautage complet (messages, recherche) est réservé au Pass Premium VIP. Vous pouvez scanner des badges pour créer des connexions.";
+    return permissionMsg('networking.permission.freeBlocked', t);
   }
 
   const permissions = getNetworkingPermissions(userType, userLevel);
   if (!permissions.canAccessNetworking) {
-    return "Vous n'avez pas accès aux fonctionnalités de réseautage.";
+    return permissionMsg('networking.permission.noAccess', t);
   }
 
   switch (action) {
     case 'message':
-      return 'Limite quotidienne de messages atteinte.';
+      return permissionMsg('networking.permission.messageLimit', t);
     case 'connection':
-      return 'Limite quotidienne de connexions atteinte.';
+      return permissionMsg('networking.permission.connectionLimit', t);
     case 'meeting':
-      return 'Limite quotidienne de rendez-vous atteinte.';
+      return permissionMsg('networking.permission.meetingLimit', t);
     default:
-      return "Cette action n'est pas disponible avec votre forfait.";
+      return permissionMsg('networking.permission.actionUnavailable', t);
   }
 }

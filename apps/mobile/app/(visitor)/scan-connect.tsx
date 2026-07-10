@@ -23,7 +23,7 @@ export default function ScanConnectScreen() {
   const processCode = async (raw: string) => {
     if (!requireAuth(user, t)) return;
     if (!limits.canMakeConnection) {
-      Alert.alert(t('common.error'), getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection'));
+      Alert.alert(t('common.error'), getPermissionErrorMessage(user!.type, user!.visitorLevel, 'connection', t));
       return;
     }
 
@@ -49,7 +49,7 @@ export default function ScanConnectScreen() {
       Alert.alert(
         t('networking.scanSuccessTitle'),
         t('networking.scanSuccess').replace('{{name}}', name),
-        [{ text: 'OK', onPress: () => router.push('/(visitor)/networking' as never) }],
+        [{ text: t('common.ok'), onPress: () => router.push('/(visitor)/networking' as never) }],
       );
       setManual('');
     } catch (e) {

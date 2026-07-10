@@ -6,10 +6,13 @@ import { AnimatedListItem } from '../../src/components/AnimatedListItem';
 import { PressableScale } from '../../src/components/PressableScale';
 import { EmptyState, Screen, ScreenTitle } from '../../src/components/ui';
 import { SkeletonList } from '../../src/components/Skeleton';
+import { useAuth } from '../../src/context/AuthContext';
+import { isFullAdmin } from '../../src/navigation/roleConfig';
 import { useI18n } from '../../src/i18n/I18nProvider';
 import { colors, fonts, radius, shadows, spacing } from '../../src/theme';
 
 export default function StaffPaymentsScreen() {
+  const { user } = useAuth();
   const { t } = useI18n();
   const [items, setItems] = useState<PaymentRequestRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,14 @@ export default function StaffPaymentsScreen() {
   }, [t]);
 
   useEffect(() => { load(); }, [load]);
+
+  if (!isFullAdmin(user?.type)) {
+    return (
+      <Screen>
+        <EmptyState message={t('admin.users.adminOnly')} />
+      </Screen>
+    );
+  }
 
   const act = async (id: string, approve: boolean) => {
     setActingId(id);

@@ -40,11 +40,15 @@ export default function TeamPrintScreen() {
 
   const load = useCallback(async () => {
     if (!user) return;
-    const ctx = await fetchOwnerContext(user.id);
-    if (!ctx) return;
-    const team = await fetchCollaborators(ctx.ownerId);
-    setBadges(team.map((c) => collaboratorBadge(c, ctx.companyName, ctx.standNumber)));
-  }, [user]);
+    try {
+      const ctx = await fetchOwnerContext(user.id);
+      if (!ctx) return;
+      const team = await fetchCollaborators(ctx.ownerId);
+      setBadges(team.map((c) => collaboratorBadge(c, ctx.companyName, ctx.standNumber)));
+    } catch (e) {
+      Alert.alert(t('common.error'), e instanceof Error ? e.message : t('common.error'));
+    }
+  }, [user, t]);
 
   useEffect(() => { load(); }, [load]);
 

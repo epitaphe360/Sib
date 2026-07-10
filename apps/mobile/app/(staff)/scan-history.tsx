@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { fetchAccessLogHistory, type ScanHistoryEntry } from '../../src/api/scanner';
 import { fetchScannerNames } from '../../src/api/visitorScans';
@@ -27,6 +27,7 @@ export default function StaffScanHistoryScreen() {
   const [scannerNames, setScannerNames] = useState<Map<string, string>>(new Map());
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAdmin) {
@@ -35,17 +36,26 @@ export default function StaffScanHistoryScreen() {
   }, [isAdmin]);
 
   const load = useCallback(async () => {
-    const rows = await fetchAccessLogHistory(100, {
-      scannedBy: isController ? user?.id : undefined,
-    });
-    setItems(rows);
-    if (!isController) {
-      const ids = [...new Set(rows.map((r) => r.scannedBy).filter(Boolean))] as string[];
-      setScannerNames(await fetchScannerNames(ids));
+    setLoadError(null);
+    try {
+      const rows = await fetchAccessLogHistory(100, {
+        scannedBy: isController ? user?.id : undefined,
+      });
+      setItems(rows);
+      if (!isController) {
+        const ids = [...new Set(rows.map((r) => r.scannedBy).filter(Boolean))] as string[];
+        setScannerNames(await fetchScannerNames(ids));
+      }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : t('common.error');
+      setLoadError(message);
+      setItems([]);
+      Alert.alert(t('common.error'), message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
-    setLoading(false);
-    setRefreshing(false);
-  }, [isController, user?.id]);
+  }, [isController, user?.id, t]);
 
   useEffect(() => {
     if (isAdmin) return;
@@ -82,7 +92,10 @@ export default function StaffScanHistoryScreen() {
         ListHeaderComponent={header}
         ListEmptyComponent={
           !loading ? (
-            <EmptyState title={t('scanner.historyEmpty')} message={t('scanHistory.emptyHint')} />
+            <EmptyState
+              title={loadError ? t('common.error') : t('scanner.historyEmpty')}
+              message={loadError ?? t('scanHistory.emptyHint')}
+            />
           ) : null
         }
         renderItem={({ item }) => (

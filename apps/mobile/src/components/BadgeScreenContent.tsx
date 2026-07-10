@@ -12,6 +12,7 @@ import { IllustratedEmpty, PrimaryButton, SecondaryButton } from './ui';
 import { useAuth } from '../context/AuthContext';
 import { useRotatingQR } from '../hooks/useRotatingQR';
 import { useI18n } from '../i18n/I18nProvider';
+import { localeCode } from '../lib/locale';
 import { printBadgeFromView, shareBadgeFromView, shareBadgePdfFromView } from '../lib/printBadge';
 import { reloadBadgeConfig } from '../hooks/useBadgeConfig';
 import { fetchExhibitorStand } from '../api/minisite';
@@ -28,7 +29,8 @@ type Props = {
 export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: Props) {
   const isExhibitor = variant === 'exhibitor';
   const { user, isLoading: authLoading } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const lc = localeCode(locale);
   const [badge, setBadge] = useState<UserBadge | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -214,7 +216,7 @@ export function BadgeScreenContent({ requireAuth = true, variant = 'visitor' }: 
                   <View style={styles.expiryRow}>
                     <View style={styles.expiryDot} />
                     <Text style={styles.expiry}>
-                      {t('badge.secureQr')} {expiresAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                      {t('badge.secureQr')} {expiresAt.toLocaleTimeString(lc, { hour: '2-digit', minute: '2-digit' })}
                     </Text>
                   </View>
                 ) : null}

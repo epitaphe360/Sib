@@ -50,6 +50,10 @@ export function getRouteGroupForUser(user: AppUser): RoleRouteGroup {
   return getRoleGroup(user.type);
 }
 
+export function isFullAdmin(type?: UserType | string | null): boolean {
+  return type === 'admin';
+}
+
 export function isRoleAllowed(
   userType: UserType | string | undefined,
   allowed: UserType[] | RoleRouteGroup

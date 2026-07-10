@@ -13,7 +13,8 @@ export function AdminAlertsSection({ adminMetrics: m, t }: AdminAlertsSectionPro
   const metrics = m as Record<string, number>;
   const pendingRegistrations = metrics.pendingValidations || 0;
   const pendingModeration = metrics.contentModerations || 0;
-  const totalActions = pendingRegistrations + pendingModeration;
+  const pendingPayments = metrics.pendingPaymentRequests || 0;
+  const totalActions = pendingRegistrations + pendingModeration + pendingPayments;
 
   const actionCards = [
     {
@@ -28,11 +29,11 @@ export function AdminAlertsSection({ adminMetrics: m, t }: AdminAlertsSectionPro
     {
       key: 'payments',
       Icon: CreditCard,
-      count: null,
+      count: pendingPayments,
       label: t('admin.payment_validation'),
       sub: t('admin.manage_proofs'),
       to: ROUTES.ADMIN_PAYMENT_VALIDATION,
-      urgent: false,
+      urgent: pendingPayments > 0,
     },
     {
       key: 'moderation',

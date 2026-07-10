@@ -7,11 +7,14 @@ import {
 } from '../../src/api/admin';
 import { EmptyState, PrimaryButton, Screen, ScreenTitle } from '../../src/components/ui';
 import { SkeletonList } from '../../src/components/Skeleton';
+import { useAuth } from '../../src/context/AuthContext';
 import { withRetry } from '../../src/lib/withRetry';
 import { useI18n } from '../../src/i18n/I18nProvider';
+import { isFullAdmin } from '../../src/navigation/roleConfig';
 import { colors, fonts, spacing } from '../../src/theme';
 
 export default function StaffAlertsScreen() {
+  const { user } = useAuth();
   const { t } = useI18n();
   const [items, setItems] = useState<RegistrationAlertRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +51,14 @@ export default function StaffAlertsScreen() {
       setActingId(null);
     }
   };
+
+  if (!isFullAdmin(user?.type)) {
+    return (
+      <Screen>
+        <EmptyState message={t('admin.users.adminOnly')} />
+      </Screen>
+    );
+  }
 
   if (loading) {
     return (

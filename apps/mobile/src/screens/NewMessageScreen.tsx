@@ -30,7 +30,7 @@ export function NewMessageScreen({ group }: { group: MessageRouteGroup }) {
     return (
       <Screen style={styles.flex}>
         <ScreenTitle title={t('messages.newThread')} />
-        <EmptyState message={getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'message')} />
+        <EmptyState message={getPermissionErrorMessage(user?.type ?? 'visitor', user?.visitorLevel, 'message', t)} />
         <PrimaryButton label={t('vip.upgrade')} onPress={() => navigateSafe('/(auth)/register-vip', 'push')} variant="gold" />
       </Screen>
     );
