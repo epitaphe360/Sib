@@ -48,7 +48,7 @@ export function LabDemoAccounts<T extends LabDemoAdminAccount | LabDemoClientAcc
                 background: `linear-gradient(160deg, ${LAB_THEME.navyMid}, ${LAB_THEME.navy})`,
                 border: `1px solid ${TONE_BORDER[account.tone]}`,
                 boxShadow: `0 10px 28px rgba(7, 20, 34, 0.35), inset 0 0 0 1px rgba(255,255,255,0.04)`,
-                color: LAB_THEME.ink,
+                color: LAB_THEME.inkOnDark,
               }}
             >
               <span className="min-w-0">

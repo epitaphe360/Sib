@@ -3,6 +3,7 @@ import type { DossierStatus } from '../types';
 export interface LabJourneyStep {
   n: number;
   title: string;
+  short: string;
   summary: string;
   actor: string;
   statuses: DossierStatus[];
@@ -13,6 +14,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 1,
     title: 'Demande client standardisée',
+    short: 'Demande',
     summary: 'Formulaire structuré. E-mail libre → extraction rules-v1, jamais source opérationnelle.',
     actor: 'Client + aide IA',
     statuses: ['NEW_REQUEST'],
@@ -20,6 +22,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 2,
     title: 'Qualification',
+    short: 'Qualification',
     summary: 'Interne (FR) ou sous-traité (EN). Dossier maître unique, type d’analyse.',
     actor: 'Madame Zineb',
     statuses: ['QUALIFICATION'],
@@ -27,6 +30,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 3,
     title: 'Consultation sous-traitants',
+    short: 'Consultation',
     summary: 'Top 3 / 5, prix · délai · accréditation. Choix humain. Marge cible ~30 %.',
     actor: 'Application + Zineb',
     statuses: ['WAITING_SUPPLIER_QUOTES', 'SUPPLIER_SELECTED'],
@@ -34,6 +38,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 4,
     title: 'Suivi devis + bon de commande',
+    short: 'Devis / BDC',
     summary: 'Envoi après validation Zineb. Relance 3–4 j + sondage. Contrôle BDC. Attente échantillons.',
     actor: 'Application + client',
     statuses: [
@@ -47,6 +52,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 5,
     title: 'Réception et codification',
+    short: 'Échantillons',
     summary: 'Confirmation physique. Code ECH-seq-année-produit. Registre Supabase.',
     actor: 'Technicien + Zineb',
     statuses: ['SAMPLES_RECEIVED', 'SAMPLES_CODED'],
@@ -54,6 +60,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 6,
     title: 'Lancement analyses',
+    short: 'Analyses',
     summary: 'Dossier envoyé au sous-traitant. Échéance contractuelle. Pénalité paramétrable.',
     actor: 'Sous-traitant',
     statuses: ['SENT_TO_SUPPLIER', 'ANALYSIS_IN_PROGRESS'],
@@ -61,6 +68,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 7,
     title: 'Résultats + triple contrôle',
+    short: 'Contrôle',
     summary: 'Aide IA → responsable technique → Madame Zineb. Refus = correction 6 h + pénalités.',
     actor: 'IA + RT + Zineb',
     statuses: ['RESULTS_RECEIVED', 'AI_REVIEW', 'TECHNICAL_REVIEW', 'FINAL_REVIEW', 'CORRECTION_REQUESTED'],
@@ -68,6 +76,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 8,
     title: 'Rapport final',
+    short: 'Rapport',
     summary: 'Gabarit physico-chimique ou microbiologique. PDF versionné, envoi client.',
     actor: 'Application',
     statuses: ['APPROVED', 'REPORT_GENERATION', 'REPORT_SENT'],
@@ -75,6 +84,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 9,
     title: 'Portail client sécurisé',
+    short: 'Portail',
     summary: 'E-mail + OTP 10 min. Devis, rapports, suivi. Accès 1 an.',
     actor: 'Client',
     statuses: [],
@@ -82,6 +92,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 10,
     title: 'Dashboard administrateur',
+    short: 'Dashboard',
     summary: 'KPI, avancement, tâches à faire / en attente / en retard / à valider.',
     actor: 'Direction',
     statuses: [],
@@ -89,6 +100,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 11,
     title: 'Facturation et règlements',
+    short: 'Facturation',
     summary: 'Factures clients et fournisseurs. Payé / en attente / retard. Marge suivie.',
     actor: 'Finance',
     statuses: ['INVOICED'],
@@ -96,6 +108,7 @@ export const LAB_JOURNEY: LabJourneyStep[] = [
   {
     n: 12,
     title: 'Archivage et sécurité',
+    short: 'Archive',
     summary: 'Audit, backup hebdo Drive (si jeton), restauration testée. Vercel + Supabase + Resend.',
     actor: 'Système',
     statuses: ['CLOSED'],

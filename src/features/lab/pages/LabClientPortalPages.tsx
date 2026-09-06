@@ -26,7 +26,7 @@ export function LabClientHomePage() {
           <Link key={l.to} to={l.to}>
             <LabCard className="transition hover:border-[#c9a45c]">
               <p className="font-medium text-[#071422]">{l.label}</p>
-              <p className="mt-1 text-sm text-slate-500">{l.hint}</p>
+              <p className="mt-1 text-sm text-[#3d4f63]">{l.hint}</p>
             </LabCard>
           </Link>
         ))}
@@ -50,7 +50,7 @@ export function LabClientRequestsPage() {
           {rows.map((r) => (
             <li key={r.id} className="px-5 py-4">
               <Link className="font-medium text-cyan-800" to={LAB_ROUTES.CLIENT_REQUEST.replace(':id', r.id)}>{r.dossier_number}</Link>
-              <p className="mt-1 text-sm text-slate-500">{r.product_name}</p>
+              <p className="mt-1 text-sm text-[#3d4f63]">{r.product_name}</p>
               <div className="mt-3"><LabDossierTrack step={journeyStepForStatus(r.status)} /></div>
             </li>
           ))}
@@ -74,7 +74,7 @@ export function LabClientRequestDetailPage() {
   return (
     <LabCard>
       <p className="text-[11px] uppercase tracking-[0.22em] text-[#c9a45c]">{row.dossier_number}</p>
-      <h1 className="mt-1 font-serif text-2xl">{row.product_name}</h1>
+      <h1 className="mt-1 font-serif text-2xl font-semibold text-[#0B1F33]">{row.product_name}</h1>
       <LabBadge tone="gold">{row.status}</LabBadge>
       <div className="mt-5"><LabDossierTrack step={journeyStepForStatus(row.status)} /></div>
     </LabCard>

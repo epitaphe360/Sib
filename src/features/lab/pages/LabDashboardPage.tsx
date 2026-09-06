@@ -62,7 +62,7 @@ function TrackList({
   return (
     <section className="rounded-3xl border border-[#e8e2d4] bg-white/90 p-5 shadow-[0_18px_40px_-28px_rgba(7,20,34,0.45)]">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="lab-display text-xl text-[#0b1f3a]">{title}</h2>
+        <h2 className="lab-display text-xl font-semibold text-[#0B1F33]">{title}</h2>
         <Link to={href} className="text-xs text-cyan-800 hover:underline">Ouvrir</Link>
       </div>
       <ul className="divide-y divide-[#f0eadb]">
@@ -71,13 +71,13 @@ function TrackList({
             <Link to={item.href} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-cyan-800">
               <span>
                 <span className="font-medium text-[#0b1f3a]">{item.label}</span>
-                <span className="mt-0.5 block text-xs text-slate-500">{item.meta}</span>
+                <span className="mt-0.5 block text-xs text-[#3d4f63]">{item.meta}</span>
               </span>
               <ArrowUpRight className="h-4 w-4 shrink-0 text-amber-600" />
             </Link>
           </li>
         ))}
-        {items.length === 0 && <li className="py-6 text-center text-sm text-slate-400">{empty}</li>}
+        {items.length === 0 && <li className="py-6 text-center text-sm text-[#3d4f63]">{empty}</li>}
       </ul>
     </section>
   );
@@ -152,8 +152,8 @@ export default function LabDashboardPage() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-[10px] uppercase tracking-[0.28em] text-cyan-700">Étape 10 · Pilotage</p>
-          <h1 className="lab-display text-4xl text-[#0b1f3a]">Tableau de bord</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="lab-display text-4xl font-semibold text-[#0B1F33]">Tableau de bord</h1>
+          <p className="mt-1 text-sm text-[#3d4f63]">
             {live
               ? 'Données Laboratoire — suivi, relances et KPI.'
               : 'Jeu de démo local (Laboratoire vide). Les graphes restent lisibles. Seed : npm run lab:seed'}
@@ -289,7 +289,7 @@ export default function LabDashboardPage() {
 
       <div className="rounded-3xl bg-[#071422] p-6 text-white">
         <p className="text-[10px] uppercase tracking-[0.22em] text-amber-200">Parcours officiel</p>
-        <h2 className="lab-display mt-1 mb-4 text-3xl">Les 12 étapes</h2>
+        <h2 className="lab-display mt-1 mb-4 text-3xl text-white">Les 12 étapes</h2>
         <LabJourneyGrid compact />
       </div>
     </div>

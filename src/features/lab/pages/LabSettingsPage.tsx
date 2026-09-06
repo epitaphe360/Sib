@@ -35,20 +35,20 @@ export default function LabSettingsPage() {
   }, [orgId]);
 
   return (
-    <form className="max-w-lg space-y-3 rounded-xl border border-slate-200 bg-white p-5" onSubmit={form.handleSubmit(async (v) => {
+    <form className="max-w-lg space-y-3 rounded-xl border border-[#c9bea8] bg-[#fffdf8] p-4 text-[#0B1F33] sm:p-5" onSubmit={form.handleSubmit(async (v) => {
       if (!orgId) return;
       const { error: uErr } = await labSchema().from('settings').update(v).eq('organization_id', orgId);
       if (uErr) { setError(uErr.message); return; }
       await labSchema().from('pricing_rules').update({ margin_percent: margin }).eq('organization_id', orgId).eq('is_active', true);
       setOk(true);
     })}>
-      <h1 className="text-xl font-semibold text-[#0b1f3a]">Réglages labo</h1>
-      <label className="text-sm">Marge % <Input type="number" value={margin} onChange={(e) => setMargin(Number(e.target.value))} /></label>
-      <label className="text-sm">Pénalité % / jour <Input type="number" step="0.1" {...form.register('penalty_percent_per_day')} /></label>
-      <label className="text-sm">Relance devis (j) <Input type="number" {...form.register('quote_followup_days')} /></label>
-      <label className="text-sm">Conservation docs (j) <Input type="number" {...form.register('document_retention_days')} /></label>
-      <label className="text-sm">Pattern code échantillon <Input {...form.register('sample_code_pattern')} /></label>
-      <label className="text-sm">Délai correction (h) <Input type="number" {...form.register('correction_hours')} /></label>
+      <h1 className="text-xl font-semibold text-[#0B1F33]">Réglages labo</h1>
+      <label className="block text-sm font-medium text-[#0B1F33]">Marge % <Input type="number" value={margin} onChange={(e) => setMargin(Number(e.target.value))} /></label>
+      <label className="block text-sm font-medium text-[#0B1F33]">Pénalité % / jour <Input type="number" step="0.1" {...form.register('penalty_percent_per_day')} /></label>
+      <label className="block text-sm font-medium text-[#0B1F33]">Relance devis (j) <Input type="number" {...form.register('quote_followup_days')} /></label>
+      <label className="block text-sm font-medium text-[#0B1F33]">Conservation docs (j) <Input type="number" {...form.register('document_retention_days')} /></label>
+      <label className="block text-sm font-medium text-[#0B1F33]">Pattern code échantillon <Input {...form.register('sample_code_pattern')} /></label>
+      <label className="block text-sm font-medium text-[#0B1F33]">Délai correction (h) <Input type="number" {...form.register('correction_hours')} /></label>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {ok && <p className="text-sm text-green-700">Enregistré</p>}
       <Button type="submit" disabled={!form.formState.isValid}>Sauver</Button>

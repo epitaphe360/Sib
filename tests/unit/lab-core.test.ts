@@ -11,6 +11,8 @@ import { extractRequestDraftFromEmail } from '@/features/lab/lib/emailToRequest'
 import { filterRetained, isWithinRetention } from '@/features/lab/lib/documentRetention';
 import { isClientPriceTooHigh, proposedMarginPercent } from '@/features/lab/lib/competitiveness';
 import { journeyStepForStatus, countByJourney, LAB_JOURNEY } from '@/features/lab/lib/journey';
+import { LAB_THEME } from '@/features/lab/theme/tokens';
+import { contrastRatio } from '@/features/lab/theme/contrast';
 import { followupDueAt, isFollowupDue, surveyCreatesPriceAlert } from '@/features/lab/lib/quoteFollowup';
 import { reviewPurchaseOrder } from '@/features/lab/lib/reviewPurchaseOrder';
 import { detectResultAnomalies, shouldEmailSupplierOnDoubleRefuse } from '@/features/lab/lib/resultReview';
@@ -215,6 +217,21 @@ describe('lab journey', () => {
     expect(journeyStepForStatus('INVOICED')).toBe(11);
     expect(countByJourney({ NEW_REQUEST: 2, QUALIFICATION: 1 })[1]).toBe(2);
     expect(LAB_JOURNEY).toHaveLength(12);
+    expect(LAB_JOURNEY.every((step) => step.short.length > 0)).toBe(true);
+  });
+});
+
+describe('lab theme contrast', () => {
+  it('keeps titles, muted text and status colors AA on cream and navy', () => {
+    expect(contrastRatio(LAB_THEME.ink, LAB_THEME.card)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.ink, LAB_THEME.cream)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.muted, LAB_THEME.card)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.placeholder, LAB_THEME.card)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.inkOnDark, LAB_THEME.navyMid)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.mutedOnDark, LAB_THEME.navyMid)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.emerald, LAB_THEME.card)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.rose, LAB_THEME.card)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(LAB_THEME.navy, LAB_THEME.gold)).toBeGreaterThanOrEqual(4.5);
   });
 });
 

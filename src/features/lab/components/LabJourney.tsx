@@ -18,7 +18,7 @@ export function LabJourneyGrid({ compact = false }: { compact?: boolean }) {
             <span className="text-[10px] uppercase tracking-[0.16em] text-cyan-300">{step.actor}</span>
           </div>
           <h3 className="lab-display mt-3 text-lg leading-tight text-white">{step.title}</h3>
-          <p className="mt-2 text-xs leading-relaxed text-white/65">{step.summary}</p>
+          <p className="mt-2 text-xs leading-relaxed text-white/80">{step.summary}</p>
         </article>
       ))}
     </div>
@@ -36,35 +36,35 @@ export function LabJourneyRail({
 }) {
   const current = journeyStepForStatus(status);
   return (
-    <ol className="flex gap-2 overflow-x-auto pb-1">
+    <ol className="lab-journey-rail">
       {LAB_JOURNEY.map((step) => {
         const state = journeyState(step.n, current);
         const href = hrefForStep?.(step.n);
         const cls = tone === 'light'
           ? state === 'current'
-            ? 'border-cyan-600 bg-cyan-50 text-cyan-800'
+            ? 'border-[#0e5f73] bg-cyan-50 text-[#0e5f73]'
             : state === 'done'
-              ? 'border-amber-400 bg-amber-50 text-amber-900'
-              : 'border-slate-200 bg-white text-slate-500'
+              ? 'border-[#d4af37] bg-[#f4ead0] text-[#6b4e0b]'
+              : 'border-[#c9bea8] bg-white text-[#0B1F33]'
           : state === 'current'
             ? 'border-cyan-300 bg-cyan-400/15 text-cyan-100'
             : state === 'done'
-              ? 'border-amber-300/40 bg-amber-300/10 text-amber-100'
-              : 'border-white/10 bg-white/5 text-white/50';
+              ? 'border-amber-300/50 bg-amber-300/15 text-amber-100'
+              : 'border-white/20 bg-white/10 text-white/80';
         const inner = (
           <>
-            <span className="text-[10px] font-semibold">{String(step.n).padStart(2, '0')}</span>
-            <span className="hidden max-w-[9rem] truncate sm:inline">{step.title}</span>
+            <span className="text-[11px] font-bold tabular-nums">{String(step.n).padStart(2, '0')}</span>
+            <span className="max-w-[7.5rem] truncate sm:max-w-[11rem]">{tone === 'light' ? step.short : step.title}</span>
           </>
         );
         return (
-          <li key={step.n}>
+          <li key={step.n} className="shrink-0">
             {href ? (
-              <Link to={href} className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] ${cls}`}>
+              <Link to={href} className={`flex min-h-10 items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium ${cls}`}>
                 {inner}
               </Link>
             ) : (
-              <span className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] ${cls}`}>{inner}</span>
+              <span className={`flex min-h-10 items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium ${cls}`}>{inner}</span>
             )}
           </li>
         );

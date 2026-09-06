@@ -4,26 +4,77 @@
   --lab-navy-deep: #050d18;
   --lab-gold: #d4af37;
   --lab-gold-soft: #f0d78c;
+  --lab-gold-ink: #6b4e0b;
   --lab-cyan: #22d3ee;
   --lab-cyan-soft: #67e8f9;
-  --lab-ink: #e8eef7;
-  --lab-muted: #94a3b8;
+  --lab-cyan-ink: #0e5f73;
+  --lab-cream: #f4f1ea;
+  --lab-card: #fffdf8;
+  --lab-card-border: #c9bea8;
+  --lab-ink: #0B1F33;
+  --lab-muted: #3d4f63;
+  --lab-placeholder: #5c6b7d;
+  --lab-input-border: #8a7d68;
+  --lab-ink-on-dark: #e8eef7;
+  --lab-muted-on-dark: #c5d0dc;
+  --lab-success: #047857;
+  --lab-danger: #b91c1c;
   --lab-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --lab-body: ui-sans-serif, system-ui, sans-serif;
   font-family: var(--lab-body);
   color: var(--lab-ink);
+  background: var(--lab-cream);
 }
 
-.lab-root h1, .lab-root h2, .lab-root .lab-display {
+.lab-root h1,
+.lab-root h2,
+.lab-root h3,
+.lab-root .lab-display {
   font-family: var(--lab-display);
+}
+
+.lab-root label,
+.lab-root th,
+.lab-root .lab-muted {
+  color: var(--lab-muted);
+}
+
+.lab-app-light input:not([type='checkbox']):not([type='radio']):not([type='file']):not([type='hidden']),
+.lab-app-light select,
+.lab-app-light textarea {
+  color: var(--lab-ink);
+  background: #fff;
+  border: 1px solid var(--lab-input-border);
+}
+
+.lab-app-light input::placeholder,
+.lab-app-light textarea::placeholder {
+  color: var(--lab-placeholder);
+  opacity: 1;
+}
+
+.lab-app-light option {
+  color: var(--lab-ink);
+  background: #fff;
+}
+
+.lab-app-light .text-slate-400,
+.lab-app-light .text-slate-500,
+.lab-app-light .text-slate-600 {
+  color: var(--lab-muted);
 }
 
 .lab-public {
   min-height: 100vh;
+  color: var(--lab-ink-on-dark);
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(34, 211, 238, 0.18), transparent 55%),
     radial-gradient(900px 500px at 110% 10%, rgba(212, 175, 55, 0.16), transparent 50%),
     linear-gradient(165deg, #050d18 0%, #0b1f3a 48%, #071422 100%);
+}
+
+.lab-public label {
+  color: var(--lab-muted-on-dark);
 }
 
 .lab-glass {
@@ -31,6 +82,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(18px);
+  color: var(--lab-ink-on-dark);
 }
 
 .lab-gold-line {
@@ -41,6 +93,12 @@
 .lab-step-card {
   position: relative;
   overflow: hidden;
+}
+
+.lab-dash-panel,
+.lab-kpi-tile,
+.lab-on-dark {
+  color: var(--lab-ink-on-dark);
 }
 
 .lab-dash-panel {
@@ -74,4 +132,25 @@
   border-radius: 999px;
   background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 70%);
   pointer-events: none;
+}
+
+.lab-status-ok {
+  color: var(--lab-success);
+}
+
+.lab-status-late {
+  color: var(--lab-danger);
+}
+
+.lab-journey-rail {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lab-journey-rail > * {
+  scroll-snap-align: start;
 }

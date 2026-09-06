@@ -11,6 +11,7 @@ import { canTransition } from '../lib/status';
 import { nextStatusAfterQualify, supplierLanguage } from '../lib/executionChannel';
 import { rankSuppliersForConsult } from '../lib/compareOffers';
 import { LabJourneyRail } from '../components/LabJourney';
+import { LabBtn, LabField, LabSection, labControlClass } from '../components/LabUi';
 import type { LabClientRequest } from '../types';
 
 export default function LabRequestDetailPage() {
@@ -69,18 +70,17 @@ export default function LabRequestDetailPage() {
   if (!row) return <p className="text-sm text-slate-500">{error ?? 'Chargement…'}</p>;
 
   return (
-    <div className="space-y-8 max-w-4xl">
+    <div className="space-y-5 max-w-4xl">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.22em] text-cyan-700">{row.dossier_number}</p>
-        <h1 className="lab-display text-4xl text-[#0b1f3a]">{row.company_name}</h1>
-        <p className="text-sm text-slate-500">{row.product_name} · {row.status} · {row.execution_channel ?? 'canal à qualifier'}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0e5f73]">{row.dossier_number}</p>
+        <h1 className="lab-display text-3xl font-semibold text-[#0B1F33] sm:text-4xl">{row.company_name}</h1>
+        <p className="mt-1 text-sm font-medium text-[#3d4f63]">{row.product_name} · {row.status} · {row.execution_channel ?? 'canal à qualifier'}</p>
       </div>
       <LabJourneyRail tone="light" status={row.status} />
-      {message && <p className="text-sm text-emerald-700">{message}</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {message && <p className="text-sm font-medium text-emerald-800">{message}</p>}
+      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3">
-        <h2 className="lab-display text-2xl">Qualification · interne FR / sous-traité EN</h2>
+      <LabSection title="Qualification" hint="Interne FR / sous-traité EN — dossier maître unique.">
         <form
           className="space-y-3"
           onSubmit={qualify.handleSubmit(async (v) => {
@@ -115,26 +115,35 @@ export default function LabRequestDetailPage() {
             setMessage(`Qualifiée · ${v.execution_channel} · docs ${supplierLanguage(v.execution_channel).toUpperCase()}`);
           })}
         >
-          <select className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm" {...qualify.register('analysis_kind')}>
-            <option value="PHYSICO_CHIMIQUE">Physico-chimique</option>
-            <option value="MICROBIOLOGIQUE">Microbiologique</option>
-            <option value="MIXTE">Mixte</option>
-          </select>
-          <select className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm" {...qualify.register('execution_channel')}>
-            <option value="SUBCONTRACTED">Sous-traité (documents EN)</option>
-            <option value="INTERNAL">Interne (documents FR)</option>
-            <option value="MIXTE">Mixte — dossier unique</option>
-          </select>
-          <input className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm" placeholder="Analyses internes (FR)" {...qualify.register('internal_analyses')} />
-          <input className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm" placeholder="Analyses sous-traitées (EN)" {...qualify.register('subcontracted_analyses')} />
-          <button type="submit" className="rounded-lg bg-[#0b1f3a] px-4 py-2 text-sm text-white" disabled={!qualify.formState.isValid}>Qualifier</button>
+          <LabField label="Type d’analyse" tone="light">
+            <select className={labControlClass()} {...qualify.register('analysis_kind')}>
+              <option value="PHYSICO_CHIMIQUE">Physico-chimique</option>
+              <option value="MICROBIOLOGIQUE">Microbiologique</option>
+              <option value="MIXTE">Mixte</option>
+            </select>
+          </LabField>
+          <LabField label="Canal d’exécution" tone="light">
+            <select className={labControlClass()} {...qualify.register('execution_channel')}>
+              <option value="SUBCONTRACTED">Sous-traité (documents EN)</option>
+              <option value="INTERNAL">Interne (documents FR)</option>
+              <option value="MIXTE">Mixte — dossier unique</option>
+            </select>
+          </LabField>
+          <LabField label="Analyses internes (FR)" tone="light">
+            <input className={labControlClass()} placeholder="pH, acidité…" {...qualify.register('internal_analyses')} />
+          </LabField>
+          <LabField label="Analyses sous-traitées (EN)" tone="light">
+            <input className={labControlClass()} placeholder="Heavy metals, pesticides…" {...qualify.register('subcontracted_analyses')} />
+          </LabField>
+          <LabBtn type="submit" tone="navy" disabled={!qualify.formState.isValid}>Qualifier</LabBtn>
         </form>
-      </section>
+      </LabSection>
 
       {row.execution_channel !== 'INTERNAL' && (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3">
-          <h2 className="lab-display text-2xl">Consultation sous-traitants (EN)</h2>
-          <p className="text-xs text-slate-500">Proposition Top {mode === 'ALL' ? 'tous' : mode === 'TOP_5' ? '5' : '3'} selon scores. Choix humain obligatoire.</p>
+        <LabSection
+          title="Consultation sous-traitants (EN)"
+          hint={`Proposition Top ${mode === 'ALL' ? 'tous' : mode === 'TOP_5' ? '5' : '3'} selon scores. Choix humain obligatoire.`}
+        >
           <form
             className="space-y-3"
             onSubmit={consult.handleSubmit(async (v) => {
@@ -159,28 +168,28 @@ export default function LabRequestDetailPage() {
               setMessage('Consultation enregistrée');
             })}
           >
-            <select className="h-10 w-full rounded-lg border border-slate-200 px-3 text-sm" {...consult.register('recipient_mode')}>
-              <option value="TOP_3">TOP 3</option>
-              <option value="TOP_5">TOP 5</option>
-              <option value="ALL">Tous</option>
-            </select>
-            <div className="space-y-1">
+            <LabField label="Destinataires" tone="light">
+              <select className={labControlClass()} {...consult.register('recipient_mode')}>
+                <option value="TOP_3">TOP 3</option>
+                <option value="TOP_5">TOP 5</option>
+                <option value="ALL">Tous</option>
+              </select>
+            </LabField>
+            <div className="space-y-2 rounded-xl border border-[#c9bea8] bg-white p-3">
               {suggested.map((s) => (
-                <label key={s.id} className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" value={s.id} defaultChecked {...consult.register('supplier_ids')} />
+                <label key={s.id} className="flex items-center gap-2 text-sm font-medium text-[#0B1F33]">
+                  <input type="checkbox" className="accent-[#0e5f73]" value={s.id} defaultChecked {...consult.register('supplier_ids')} />
                   {s.name}
                 </label>
               ))}
-              {suggested.length === 0 && <p className="text-sm text-slate-400">Aucun fournisseur actif.</p>}
+              {suggested.length === 0 && <p className="text-sm text-[#3d4f63]">Aucun fournisseur actif.</p>}
             </div>
-            <button type="submit" className="rounded-lg bg-[#0b1f3a] px-4 py-2 text-sm text-white" disabled={!consult.formState.isValid}>Envoyer (brouillon)</button>
+            <LabBtn type="submit" tone="navy" disabled={!consult.formState.isValid}>Envoyer (brouillon)</LabBtn>
           </form>
-        </section>
+        </LabSection>
       )}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3">
-        <h2 className="lab-display text-2xl">Devis client</h2>
-        <p className="text-xs text-slate-500">Marge active : {margin} %. Contrôle de compétitivité — aucun prix auto-modifié.</p>
+      <LabSection title="Devis client" hint={`Marge active : ${margin} %. Contrôle de compétitivité — aucun prix auto-modifié.`}>
         <form
           className="space-y-3"
           onSubmit={quote.handleSubmit(async (v) => {
@@ -214,22 +223,32 @@ export default function LabRequestDetailPage() {
             setMessage(`Devis brouillon ${clientAmount.toFixed(2)} · ${check.flag}`);
           })}
         >
-          <input className="h-10 w-full rounded-lg border px-3 text-sm" type="number" step="0.01" placeholder="Prix fournisseur" {...quote.register('supplier_amount')} />
-          <input className="h-10 w-full rounded-lg border px-3 text-sm" type="number" placeholder="Marge %" {...quote.register('margin_percent')} />
-          <input className="h-10 w-full rounded-lg border px-3 text-sm" type="number" step="0.01" placeholder="Plafond marché (optionnel)" {...quote.register('market_ceiling')} />
-          <input className="h-10 w-full rounded-lg border px-3 text-sm" type="number" placeholder="Délai (jours)" {...quote.register('turnaround_days')} />
-          <input className="h-10 w-full rounded-lg border px-3 text-sm" placeholder="Conditions" {...quote.register('conditions')} />
+          <LabField label="Prix fournisseur" tone="light">
+            <input className={labControlClass()} type="number" step="0.01" placeholder="0.00" {...quote.register('supplier_amount')} />
+          </LabField>
+          <LabField label="Marge %" tone="light">
+            <input className={labControlClass()} type="number" placeholder="30" {...quote.register('margin_percent')} />
+          </LabField>
+          <LabField label="Plafond marché (optionnel)" tone="light">
+            <input className={labControlClass()} type="number" step="0.01" placeholder="Optionnel" {...quote.register('market_ceiling')} />
+          </LabField>
+          <LabField label="Délai (jours)" tone="light">
+            <input className={labControlClass()} type="number" placeholder="10" {...quote.register('turnaround_days')} />
+          </LabField>
+          <LabField label="Conditions" tone="light">
+            <input className={labControlClass()} placeholder="Conditions commerciales" {...quote.register('conditions')} />
+          </LabField>
           {competitiveness && (
-            <p className={`text-sm ${competitiveness.flag === 'high' ? 'text-amber-700' : 'text-slate-500'}`}>
+            <p className={`text-sm font-medium ${competitiveness.flag === 'high' ? 'text-amber-800' : 'text-[#3d4f63]'}`}>
               Client {competitiveness.clientAmount.toFixed(2)} · {competitiveness.message}
               {competitiveness.suggestedMargin != null && ` Marge suggérée : ${competitiveness.suggestedMargin} %.`}
             </p>
           )}
-          <button type="submit" className="rounded-lg bg-[#d4af37] px-4 py-2 text-sm text-[#071422]" disabled={!quote.formState.isValid}>
+          <LabBtn type="submit" tone="gold" disabled={!quote.formState.isValid}>
             Générer le devis
-          </button>
+          </LabBtn>
         </form>
-      </section>
+      </LabSection>
     </div>
   );
 }

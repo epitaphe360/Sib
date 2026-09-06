@@ -45,14 +45,14 @@ export function LabShell() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="lab-root min-h-screen flex" style={{ background: '#f4f1ea' }}>
+    <div className="lab-root lab-app-light min-h-screen flex">
       {open && (
         <button type="button" className="fixed inset-0 z-30 bg-black/40 lg:hidden" aria-label="Fermer" onClick={() => setOpen(false)} />
       )}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 shrink-0 flex-col text-white lg:static lg:flex ${open ? 'flex' : 'hidden lg:flex'}`} style={{ background: LAB_THEME.navyMid }}>
+      <aside className={`lab-on-dark fixed inset-y-0 left-0 z-40 w-64 shrink-0 flex-col text-white lg:static lg:flex ${open ? 'flex' : 'hidden lg:flex'}`} style={{ background: LAB_THEME.navyMid }}>
         <div className="px-5 py-6 border-b border-white/10">
           <p className="text-[10px] uppercase tracking-[0.28em] text-cyan-300">{LAB_THEME.brand}</p>
-          <p className="lab-display mt-1 text-xl truncate">{activeOrg?.name ?? 'Laboratoire'}</p>
+          <p className="lab-display mt-1 text-xl truncate text-white">{activeOrg?.name ?? 'Laboratoire'}</p>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {NAV.filter((item) => can(role, item.perm)).map((item) => (
@@ -85,14 +85,14 @@ export function LabShell() {
         </button>
       </aside>
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="h-14 border-b border-amber-200/60 bg-white/80 px-4 sm:px-6 flex items-center justify-between backdrop-blur">
-          <button type="button" className="rounded-lg p-2 lg:hidden" onClick={() => setOpen(true)} aria-label="Menu">
+        <header className="h-14 border-b border-[#c9bea8] bg-[#fffdf8]/95 px-3 sm:px-6 flex items-center justify-between backdrop-blur">
+          <button type="button" className="rounded-lg p-2 text-[#0B1F33] lg:hidden" onClick={() => setOpen(true)} aria-label="Menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{role?.replaceAll('_', ' ')}</p>
-          <p className="text-sm text-slate-700 truncate">{email}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#3d4f63]">{role?.replaceAll('_', ' ')}</p>
+          <p className="text-sm font-medium text-[#0B1F33] truncate">{email}</p>
         </header>
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-3 sm:p-6">
           <Outlet />
         </main>
       </div>
@@ -112,29 +112,29 @@ export function LabClientShell() {
   ];
 
   return (
-    <div className="lab-root min-h-screen" style={{ background: '#f4f1ea' }}>
-      <header className="bg-[#0b1f3a] text-white">
-        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="lab-root lab-app-light min-h-screen">
+      <header className="lab-on-dark bg-[#0b1f3a] text-white">
+        <div className="max-w-5xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-3">
           <div>
             <p className="text-[10px] uppercase tracking-[0.22em] text-cyan-300">Portail client · 12 mois</p>
-            <p className="lab-display text-lg">{activeOrg?.name ?? 'Espace client'}</p>
+            <p className="lab-display text-lg text-white">{activeOrg?.name ?? 'Espace client'}</p>
           </div>
-          <div className="flex items-center gap-4 text-sm text-white/70">
+          <div className="flex items-center gap-4 text-sm text-white/85">
             <span className="truncate max-w-[160px]">{email}</span>
             <button type="button" onClick={async () => { await logout(); navigate(LAB_ROUTES.CLIENT_LOGIN); }}>
               Sortir
             </button>
           </div>
         </div>
-        <nav className="max-w-5xl mx-auto px-4 pb-3 flex gap-4 text-sm text-cyan-100">
+        <nav className="max-w-5xl mx-auto px-3 sm:px-4 pb-3 flex gap-3 overflow-x-auto text-sm text-cyan-100">
           {links.map((l) => (
-            <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? 'text-white underline decoration-amber-300' : '')}>
+            <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? 'shrink-0 text-white underline decoration-amber-300' : 'shrink-0 text-cyan-100')}>
               {l.label}
             </NavLink>
           ))}
         </nav>
       </header>
-      <main className="max-w-5xl mx-auto p-6">
+      <main className="max-w-5xl mx-auto p-3 sm:p-6">
         <Outlet />
       </main>
     </div>
