@@ -10,7 +10,7 @@ import { proposeRegulatedAnalyses, parseProductListCsv } from '@/features/lab/li
 import { extractRequestDraftFromEmail } from '@/features/lab/lib/emailToRequest';
 import { filterRetained, isWithinRetention } from '@/features/lab/lib/documentRetention';
 import { isClientPriceTooHigh, proposedMarginPercent } from '@/features/lab/lib/competitiveness';
-import { journeyStepForStatus, countByJourney } from '@/features/lab/lib/journey';
+import { journeyStepForStatus, countByJourney, LAB_JOURNEY } from '@/features/lab/lib/journey';
 import { followupDueAt, isFollowupDue, surveyCreatesPriceAlert } from '@/features/lab/lib/quoteFollowup';
 import { reviewPurchaseOrder } from '@/features/lab/lib/reviewPurchaseOrder';
 import { detectResultAnomalies, shouldEmailSupplierOnDoubleRefuse } from '@/features/lab/lib/resultReview';
@@ -23,10 +23,9 @@ import { buildBackupManifest, LAB_BACKUP_TABLES } from '@/features/lab/lib/backu
 import { pickDueFollowups, pickDeadlineActions, pickUnpaidInvoices } from '@/features/lab/lib/cronJobs';
 import { heuristicClassifyEmail, heuristicExtractQuoteRef, heuristicTranslateToEnglish } from '@/features/lab/lib/aiHeuristics';
 import { assertLabFile } from '@/features/lab/lib/labStorage';
-import { LAB_JOURNEY, journeyStepForStatus } from '@/features/lab/lib/journey';
 import { extractRequestFromEmail } from '@/features/lab/lib/extractRequest';
-import { assessCompetitiveness, proposedMarginPercent } from '@/features/lab/lib/competitiveness';
-import { parseProductList, proposeRegulatedAnalyses } from '@/features/lab/lib/regulationCatalog';
+import { assessCompetitiveness } from '@/features/lab/lib/competitiveness';
+import { parseProductList } from '@/features/lab/lib/regulationCatalog';
 import { nextStatusAfterQualify, supplierLanguage } from '@/features/lab/lib/executionChannel';
 
 describe('lab pricing', () => {
@@ -215,6 +214,7 @@ describe('lab journey', () => {
     expect(journeyStepForStatus('REPORT_SENT')).toBe(8);
     expect(journeyStepForStatus('INVOICED')).toBe(11);
     expect(countByJourney({ NEW_REQUEST: 2, QUALIFICATION: 1 })[1]).toBe(2);
+    expect(LAB_JOURNEY).toHaveLength(12);
   });
 });
 
@@ -366,21 +366,7 @@ describe('lab routes', () => {
   });
 });
 
-describe('lab journey', () => {
-  it('maps statuses to the 12-step path', () => {
-    expect(journeyStepForStatus('NEW_REQUEST')).toBe(1);
-    expect(journeyStepForStatus('QUALIFICATION')).toBe(2);
-    expect(journeyStepForStatus('WAITING_SUPPLIER_QUOTES')).toBe(3);
-    expect(journeyStepForStatus('WAITING_SAMPLES')).toBe(4);
-    expect(journeyStepForStatus('SAMPLES_CODED')).toBe(5);
-    expect(journeyStepForStatus('ANALYSIS_IN_PROGRESS')).toBe(6);
-    expect(journeyStepForStatus('FINAL_REVIEW')).toBe(7);
-    expect(journeyStepForStatus('REPORT_SENT')).toBe(8);
-    expect(journeyStepForStatus('INVOICED')).toBe(11);
-    expect(journeyStepForStatus('CLOSED')).toBe(12);
-    expect(LAB_JOURNEY).toHaveLength(12);
-  });
-
+describe('lab execution channel', () => {
   it('allows internal qualification to skip consultation', () => {
     expect(canTransition('QUALIFICATION', 'CLIENT_QUOTE_DRAFT')).toBe(true);
     expect(nextStatusAfterQualify('INTERNAL')).toBe('CLIENT_QUOTE_DRAFT');
@@ -388,7 +374,7 @@ describe('lab journey', () => {
   });
 });
 
-describe('lab email extract', () => {
+describe('lab email extract rules-v1', () => {
   it('pre-fills structured fields and lists missing ones', () => {
     const extracted = extractRequestFromEmail(`
       Société: Atlas Oils
@@ -405,20 +391,16 @@ describe('lab email extract', () => {
   });
 });
 
-describe('lab competitiveness', () => {
+describe('lab competitiveness assess', () => {
   it('flags a high client price without changing it', () => {
     const check = assessCompetitiveness({ supplierAmount: 100, marginPercent: 80 });
     expect(check.flag).toBe('high');
     expect(check.clientAmount).toBe(180);
-    expect(proposedMarginPercent(100, 120)).toBe(20);
   });
 });
 
-describe('lab regulation catalog', () => {
-  it('only proposes named parameters with a Moroccan text', () => {
-    const rows = proposeRegulatedAnalyses('Eau minérale');
-    expect(rows.length).toBeGreaterThan(0);
-    expect(rows.every((r) => r.parameter && r.reference && r.textTitle && r.legal)).toBe(true);
+describe('lab product list parse', () => {
+  it('reads a simple product list', () => {
     expect(parseProductList('produit\nHuile d’olive\nEau').length).toBeGreaterThan(0);
   });
 });

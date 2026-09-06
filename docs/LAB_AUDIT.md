@@ -1,145 +1,75 @@
-# Audit Elitech Lab — cahier des charges v1.0 + infographie 12 étapes
+# Audit CDC Elitech Lab — 2026-09-06
 
-Sources : PDF `Cahier_des_charges_Elitech_Laboratoire_v1`, infographie « Automatisation complète », code `src/features/lab/**`, SQL `lab.*`, workers `api/lab/*`.
+Sources : *Cahier des charges fonctionnel & technique* v1.0 (05/09/2026) + infographie 12 étapes.  
+Verdict global : **PARTIAL**. Le workflow métier est codé. Ce qui manque est surtout l’allumage prod (Resend, Drive, premier admin), les gabarits officiels, la boîte mail réelle, et l’Excel/PDF binaire.
 
-**Légende** : OK = codé et branché · PARTIAL = logique ou UI incomplète · MISSING = pas livré · HUMAN = secret / décision métier, pas du code.
+Légende : **OK** = codé et testé (logique + UI/SQL). **PARTIAL** = présent mais incomplet ou heuristique. **MISSING** = pas dans le produit.
 
-## Infographie 12 étapes (1:1)
+## Chapitres CDC
 
-| # | Étape | Fichier / RPC | Statut | Note |
-|---|---|---|---|---|
-| 1 | Demande standardisée (formulaire + IA e-mail → champs) | `LabRequestFormPage.tsx`, `schemas.ts`, `lab.submit_public_request`, `emailToRequest.ts`, `LabInboxPage.tsx` | **OK** | Formulaire strict (tél. chiffres +212). Inbox crée une fiche structurée et liste les manquants. E-mail brut n’est pas la source aval. |
-| 2 | Qualification interne FR / sous-traitance EN | `LabRequestDetailPage.tsx`, `request_items.is_internal` | **OK** | Type d’analyse + scission interne/sous-traitée. Consultations forcées `language: en`. |
-| 3 | Consultation Top 3/5, comparaison, choix Zineb, ~30 % | `compareOffers.ts`, `LabConsultationDetailPage.tsx`, `pricing_rules`, `applyMargin` | **OK** | Classement scores + accréditation. Choix humain obligatoire. Marge défaut 30 % configurable. |
-| 4 | Relance devis 3–4 j + sondage + IA e-mail / 30 min | `quoteFollowup.ts`, `LabQuotesPage.tsx`, `LabQuoteSurveyPage.tsx`, `api/lab/cron.ts`, `api/lab/inbound-email.ts` | **PARTIAL** | Relance + sondage + cron + inbox BDC OK. Boîte IMAP réelle = HUMAN (fournisseur non choisi). Scan 30 min = cron Vercel, pas un worker Railway. |
-| 5 | Réception + codes uniques | `LabSamplesPage.tsx`, `sampleCode.ts`, table `lab.samples` | **OK** | Code `ECH-{seq}-{year}-{PRODUCT}` paramétrable. Remplace le registre Excel. |
-| 6 | Lancement analyses + pénalité | `LabAnalysesPage.tsx`, `LabDeadlinesPage.tsx`, `deadlines.ts`, `settings.penalty_percent_per_day` | **OK** | 1 %/j = **défaut paramétrable**, jamais règle universelle (conforme PDF §2.7). |
-| 7 | Triple revue IA / tech / Zineb + correction 6 h | `LabResultsPage.tsx`, `LabValidationsPage.tsx`, `resultReview.ts`, `aiHeuristics.ts` | **OK** | IA = aide, jamais validation. Motif obligatoire au refus. Double refus → e-mail + délai 6 h. |
-| 8 | Rapport PDF par type | `LabReportsPage.tsx`, `reportPdf.ts`, `reportReadiness.ts`, `report_templates` | **PARTIAL** | Gabarits physico / microbio + PDF versionné. Gabarits **officiels compagnie** non intégrés (HUMAN, §10). |
-| 9 | Portail OTP 10 min, docs 1 an | `LabClientLoginPage.tsx`, `labSessionStore.ts`, `documentRetention.ts` | **PARTIAL** | OTP 10 min OK. Filtre conservation 365 j OK. Google passwordless = HUMAN (OAuth projet Laboratoire). |
-| 10 | Dashboard KPI + tâches | `LabDashboardPage.tsx`, `LabTasksPage`, `LabJourney.tsx` | **OK** | KPI spec + seaux à faire / attente / retard / à valider + parcours 12 étapes. Graphiques = barres/KPI CSS, pas une lib charts. |
-| 11 | Facturation client/fournisseur + marge | `LabInvoicesPage.tsx`, `LabSupplierInvoicesPage.tsx`, `invoices.ts` | **OK** | Statuts payé / attente / retard. Marge via `pricing_rules`. |
-| 12 | Archive / backup Drive hebdo + audit | `LabBackupsPage.tsx`, `backupManifest.ts`, `lab:backup`, `RESTORE_TEST.md`, `audit_logs` | **PARTIAL** | Inventaire + run `weekly_drive` + audit. Upload Drive chiffré = HUMAN (token). Restauration testée par procédure, pas un bouton magique. |
-
-## PDF — chapitres
-
-### 1. Principes
-
-| Item | Fichier | Statut |
-|---|---|---|
-| Dossier maître unique | `client_requests` + FK devis/BDC/échantillons/rapports | **OK** |
-| Formulaire = canal cible, e-mail = secours IA | form + `extractRequestDraftFromEmail` | **OK** |
-| Interne FR / externe EN | UI FR, consultations EN | **OK** |
-| Décision = statut + horodatage + auteur + versions | `audit_logs`, `result_reviews`, `quotes.version` | **OK** |
-| Pas d’identité client au sous-traitant sans besoin | Offre publique token, pas de PII client dans le formulaire EN | **PARTIAL** | Pas de masquage automatique des notes internes. |
-
-### 2. Workflow 2.1–2.10
-
-Couvert par la matrice 12 étapes ci-dessus. Écarts honnêtes :
-
-| Item PDF | Statut |
-|---|---|
-| Matrice commerciale détaillée par famille/client | **PARTIAL** — une règle org, pas une matrice multi-familles (§10). |
-| Contrôle compétitivité + renégociation | **OK** — alerte sondage + nouvelle version devis (humain). Jamais de changement auto. |
-| Historique versions devis | **OK** — `quotes.version` / `parent_quote_id`. |
-| IMAP 30 min | **HUMAN** — cron Vercel + webhook `inbound-email`. |
-| Pénalité 1 %/j non universelle | **OK** |
-| Arbitrage tech vs Zineb (1 oui / 1 non) | **HUMAN** — §10 ; code exige les deux niveaux, pas de règle d’arbitrage inventée. |
-
-### 3. Portail admin
-
-| Item | Fichier | Statut |
-|---|---|---|
-| Dashboard visuel + KPI listés | `LabDashboardPage.tsx` | **OK** |
-| Avancement par test / labo / sous-traitant | Journey + délais + factures fourn. | **PARTIAL** — pas de Gantt par labo. |
-| Tâches priorité / échéance / statut | `tasks`, `LabTasksPage` | **OK** |
-| Suivi appels (remplace Excel Drive) | `lab.client_calls`, `LabCallsPage.tsx` | **OK** |
-| Factures / règlements / justificatifs | invoices + `LabFileField` | **OK** |
-| Confirmation actions sensibles | `confirmLabAction` (devis, choix, validations, réglementaire) | **OK** |
-
-### 4. Appels d’offres / réglementation
-
-| Item | Fichier | Statut |
-|---|---|---|
-| Import listes produits Excel/PDF | CSV / TSV (`parseProductListCsv`) | **PARTIAL** | Excel/PDF binaires : exporter CSV. Pas de parseur xlsx/pdf (pas de nouvelle lib). |
-| Uniquement analyses réglementées (textes MA) | `regulatoryCatalog.ts` | **OK** | Catalogue fermé : Loi 28-07, Arrêté 1643-16, NM 03.7.001. Produit hors matrice → **zéro** proposition. |
-| Nommer le contaminant | paramètres explicites (Plomb, Salmonella spp., …) | **OK** |
-| Texte + référence exacte | `REGULATORY_TEXTS` | **OK** |
-| Pas de reco scientifique déguisée | moteur vide si hors catalogue | **OK** |
-| Validation humaine avant usage commercial | `regulatory_proposals.status` | **OK** |
-| Catalogue exhaustif de tous les arrêtés MA | — | **PARTIAL** | Starter honnête. Limites numériques par denrée et autres arrêtés (ex. contaminants alimentaires hors eau) **non inventés**. |
-
-### 5. Architecture
-
-| Couche | Cible PDF | Livré | Statut |
+| Ch. | Exigence | Statut | Preuve / écart |
 |---|---|---|---|
-| Frontend | React / TS | `src/features/lab` | **OK** |
-| Déploiement | Vercel | `api/lab/*`, `lab:vercel` | **OK** |
-| Base / Auth / Storage | Supabase projet `omlhfjfpyttfvntfqjnk` schéma `lab` | **OK** |
-| Backend / workers | Railway | **Non** — Vercel cron + flush (contrainte produit). | **OK** (écart volontaire) |
-| E-mail sortant | Resend | file `email_messages` + worker | **PARTIAL** | `RESEND_API_KEY` HUMAN |
-| Boîte entrante | IMAP/API | webhook + classification | **HUMAN** |
-| Backup | Drive hebdo | inventaire + planned run | **HUMAN** token |
-| Git | oui | PR #9 | **OK** |
+| 1 | Dossier maître unique | **OK** | `client_requests` + items, devis, BDC, échantillons, résultats, factures |
+| 1 | Formulaire = source opérationnelle | **OK** | `submit_public_request` ; e-mail brut jamais traité en aval |
+| 1 | E-mail libre → pré-remplissage | **PARTIAL** | `extractRequestFromEmail` / `extractRequestDraftFromEmail` = **rules-v1**, pas GPT |
+| 1 | Interne FR / sous-traitant EN | **OK** | `execution_channel` + `supplierLanguage` ; consultations `language: 'en'` |
+| 1 | Décisions horodatées + auteur | **PARTIAL** | `audit_logs` + reviews ; pas toutes les actions UI auditées |
+| 1 | PII client non envoyée au ST sauf besoin | **PARTIAL** | Pas de masquage automatique des champs |
+| 2.1 | Formulaire + téléphone indicatif + chiffres | **OK** | `clientRequestSchema` + `LAB_COUNTRY_CODES` |
+| 2.2 | Qualification type + flux interne/ST | **OK** | UI qualification + `request_items.is_internal` |
+| 2.3 | Top 3/5, prix/délai/accréditation, choix Zineb | **OK** | `rankOffers` / `rankSuppliersForConsult` ; jamais auto-select |
+| 2.3 | Réponses tardives conservées | **OK** | Aucune exclusion automatique |
+| 2.4 | Comparaison + marge ~30 % paramétrable | **OK** | `pricing_rules` + `applyMargin` |
+| 2.4 | Contrôle compétitivité + réduction marge | **OK** | `assessCompetitiveness` + nouvelle version devis (humain) |
+| 2.4 | Versions devis | **PARTIAL** | Colonne `version` + UI ; SQL à appliquer sur Laboratoire |
+| 2.5 | Relance 3–4 j + sondage | **OK** | Cron + `/lab/quote-survey/:token` |
+| 2.5 | Scan e-mails 30 min + BDC IA | **PARTIAL** | Cron Vercel + `classifyInboundEmail` rules-v1. **Pas d’IMAP réel** |
+| 2.6 | Réception + `ECH-seq-year-product` | **OK** | `formatSampleCode` + registre Supabase |
+| 2.7 | Délais + pénalité **paramétrable** (pas 1 % figé) | **OK** | `settings.penalty_percent_per_day` |
+| 2.8 | Triple contrôle ; IA n’accepte jamais | **OK** | `detectResultAnomalies` + reviews tech/Zineb ; double refus → 6 h |
+| 2.9 | Gabarits physico / micro + PDF versionné | **PARTIAL** | Sélection auto + PDF générique. **Gabarits officiels compagnie absents** |
+| 2.10 | Portail OTP 10 min, accès 1 an | **PARTIAL** | OTP 10 min OK. Filtre conservation 365 j. **Pas de login Google** |
+| 3 | Dashboard KPI + tâches + graphiques | **PARTIAL** | KPI + buckets + rail 12 étapes. Pas de graphiques interactifs |
+| 3 | Suivi appels (remplace Excel Drive) | **OK** | `/lab/admin/calls` + table `lab.client_calls` (migration à appliquer) |
+| 3 | Factures client + fournisseur | **OK** | Pages + `invoiceProgress` |
+| 3 | Confirmation actions sensibles | **OK** | `confirmLabAction` devis / validation / choix ST / réglementaire |
+| 4 | Réglementation MA + import produits | **PARTIAL** | Catalogue textes identifiés + CSV. **Pas d’import Excel/PDF binaire**. Validation humaine obligatoire |
+| 5 | React / Vercel / Supabase / Resend | **OK** | Isolation `/lab` + `api/lab/*` |
+| 5 | Railway | **MISSING (volontaire)** | Vercel only, conformément à la consigne métier |
+| 5 | Boîte mail pro IMAP/API | **MISSING** | Inbox manuelle + webhook ; fournisseur mailbox non branché |
+| 6 | RBAC + RLS + OTP | **OK** | Schéma `lab` projet `omlhfjfpyttfvntfqjnk` |
+| 6 | Backup Drive hebdo chiffré + restore | **PARTIAL** | Manifest + `backup_runs` + `lab:restore-check`. Upload Drive si jeton |
+| 7 | UX luxe / parcours 12 étapes | **OK** | Landing + rail + dashboard + portail |
+| 8 | Modèle de données | **OK** | 43+ tables fondation ; gaps = migration `20260906000007` |
+| 9 | Statuts workflow | **OK** | Machine à états + chemin interne |
+| 12 | Acceptation (lien dossier, isolation, idempotence) | **PARTIAL** | Isolé `/lab` + RLS. Restore et Relance idempotentes côté code. Prod non allumée |
 
-Footer UI : React, Supabase, Vercel, Resend, Google Backup — **pas Railway**.
+## Infographie — 12 étapes
 
-### 6. Sécurité
+| # | Étape | Alignement produit | Statut |
+|---|---|---|---|
+| 1 | Demande standardisée (form + e-mail → champs) | Formulaire public + extract rules-v1 | **PARTIAL** |
+| 2 | Qualification interne FR / ST EN | Canal + listes internes/ST | **OK** |
+| 3 | Consultation Top 3/5, compare, choix Zineb, ~30 % | Comparatif + marge configurable | **OK** |
+| 4 | Devis + PO, relance 3–4 j, sondage, e-mails 30 min | Relance + sondage + cron. IMAP **MISSING** | **PARTIAL** |
+| 5 | Réception / code `ECH-…` / Supabase | Codification + registre | **OK** |
+| 6 | Lancement analyses + pénalité 1 %/j *paramétrable* | Deadlines + taux settings | **OK** |
+| 7 | Triple contrôle + correction 6 h | IA aide / RT / Zineb | **OK** |
+| 8 | Rapport gabarit + PDF auto | PDF générique, pas gabarit officiel | **PARTIAL** |
+| 9 | Portail e-mail + OTP 10 min, 1 an | OTP + rétention. Pas Google | **PARTIAL** |
+| 10 | Dashboard admin KPI / tâches | KPI + à faire / attente / retard / valider | **PARTIAL** |
+| 11 | Facturation client + fournisseur, marge ~30 % | Factures + règlements + marge | **OK** |
+| 12 | Archivage / audit / backup. Stack : Supabase+Vercel+Resend (**pas Railway**) | Audit + backup planifié | **PARTIAL** |
 
-| Item | Statut | Fichier |
-|---|---|---|
-| OTP client 10 min | **OK** | A6, login client |
-| RBAC + RLS | **OK** | `rbac.ts`, migrations |
-| Validation client + serveur | **OK** | zod + RPC `submit_public_request` |
-| Rate limit login | **OK** | `labSessionStore` + `rateLimiter` |
-| Secrets hors `src/` | **OK** | workers `api/lab` |
-| Confirmations sensibles | **OK** | `confirmLabAction` |
-| Audit validations | **OK** | `result_reviews`, `audit_logs` |
-| Backups + restore test | **PARTIAL** | procédure `docs/RESTORE_TEST.md` |
+## Encore humain (bloqueurs)
 
-### 7. UX/UI
-
-| Item | Statut |
-|---|---|
-| Design premium responsive | **OK** — navy / or / cyan, landing + shell + dashboard + flux clés |
-| Nav tâches (à faire / attente / retard / à valider) | **OK** dashboard |
-| Formulaires + masques + erreurs | **OK** |
-| Dashboard lisible en quelques secondes | **OK** |
-
-### 8. Modèle de données
-
-Toutes les entités du PDF existent (`clients` … `audit_logs`) + `client_calls`, `regulatory_*`, `backup_runs`. Isolation `organization_id` + RLS.
-
-### 9. Statuts
-
-Machine `status.ts` / `lab.dossier_status` couvre le happy path et la correction. Libellés UI = enums techniques (pas de traduction métier complète partout) → **PARTIAL** cosmétique.
-
-### 10. Points à paramétrer (HUMAN — pas inventés)
-
-Format code échantillon · matrice commerciale fine · clauses pénalité par contrat · arbitrage tech/Zineb · gabarits officiels · fournisseur mailbox · règles facturation héritées · conservation légale > 1 an.
-
-### 11–12. Acceptation
-
-| Critère | Statut |
-|---|---|
-| Lien dossier jamais perdu | **OK** (FK) |
-| Isolation clients | **OK** RLS (à valider en prod après 1er SUPER_ADMIN) |
-| Relances / pénalités idempotentes | **OK** flags `followup_sent_at`, `reminded_at`, `late_notified_at` |
-| Validations auditées | **OK** |
-| Restauration testée | **PARTIAL** procédure |
-| Formulaires invalides refusés | **OK** |
-| Perf desktop / tablette / mobile | **OK** layout responsive (non bench load) |
-
-## Encore HUMAN (pas du code)
-
-1. Premier login `/lab/login` → SUPER_ADMIN.
-2. Vercel : `RESEND_API_KEY`, `LAB_CRON_SECRET`, projet Laboratoire.
-3. Token Google Drive + politique de restauration réelle.
-4. Gabarits PDF officiels.
-5. Compte mailbox IMAP/API.
-6. OAuth Google client (option PDF §2.10).
-7. Enrichir le catalogue réglementaire avec les arrêtés manquants **cités**, après relecture juridique.
+1. Premier login `/lab/login` → `claim_first_admin` = SUPER_ADMIN.
+2. Vercel : `RESEND_API_KEY`, `LAB_CRON_SECRET`, `VITE_LAB_SUPABASE_*`.
+3. Appliquer la migration `20260906000007_lab_cdc_gaps.sql` sur Laboratoire `omlhfjfpyttfvntfqjnk`.
+4. Gabarits officiels physico / micro à intégrer.
+5. Fournisseur mailbox (IMAP/API) si scan 30 min réel.
+6. Jeton Google Drive pour backup hebdo automatique.
 
 ## Tests
 
-`npm run test:unit -- tests/unit/lab-core.test.ts` — doit rester vert (pricing, statuts, réglementaire, e-mail→fiche, rétention, parcours 12).
+Voir le run Vitest de cette livraison. Cible : **30+** tests lab verts.

@@ -43,12 +43,6 @@ export function nextQuoteVersion(current: number | null | undefined): number {
   return Number.isFinite(n) && n >= 1 ? Math.floor(n) + 1 : 1;
 }
 
-export function proposedMarginPercent(supplierAmount: number, clientAmount: number): number {
-  if (!Number.isFinite(supplierAmount) || supplierAmount <= 0) throw new Error('Montant fournisseur invalide');
-  if (!Number.isFinite(clientAmount) || clientAmount < 0) throw new Error('Montant client invalide');
-  return Math.round(((clientAmount / supplierAmount) - 1) * 10000) / 100;
-}
-
 export function isClientPriceTooHigh(clientAmount: number, referenceAmount?: number | null): boolean {
   if (!Number.isFinite(clientAmount) || clientAmount < 0) return false;
   if (referenceAmount == null || !Number.isFinite(referenceAmount) || referenceAmount <= 0) return false;

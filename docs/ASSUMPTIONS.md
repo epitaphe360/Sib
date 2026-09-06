@@ -25,3 +25,7 @@ Décisions prises pour avancer. Corriger ici si le métier tranche autrement.
 | A19 | Flush e-mails : Vercel `/api/lab/flush-emails` + cron `/api/lab/cron` | Pas de Railway. Header `x-lab-cron-secret` ou `CRON_SECRET`. |
 | A20 | Backup inventaire : `npm run lab:backup` | `LAB_BACKUP_ORG_UUID` pour insérer `backup_runs`. Drive upload manuel. |
 | A21 | Cron relances : `npm run lab:cron` / `POST /api/lab/cron` | Devis (3 j) + délais (J-2 / retard). File seulement, pas d’envoi. |
+| A22 | Extract e-mail = `rules-v1` | Pas de GPT. Champs manquants signalés. |
+| A23 | Canal INTERNAL peut sauter la consultation | `QUALIFICATION → CLIENT_QUOTE_DRAFT`. |
+| A24 | Catalogue réglementaire = textes identifiés seulement | Validation humaine avant usage commercial. CSV, pas Excel binaire. |
+| A25 | Railway hors scope Lab | Workers / cron sur Vercel (`api/lab/*`). |

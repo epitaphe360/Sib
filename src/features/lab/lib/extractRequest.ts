@@ -44,7 +44,7 @@ export function extractRequestFromEmail(raw: string): ExtractedRequest {
   }
 
   const labeled = (label: string) => {
-    const m = text.match(new RegExp(`${label}\\s*[:\\-]\\s*(.+)`, 'i'));
+    const m = text.match(new RegExp(`(?:${label})\\s*[:\\-]\\s*(.+)`, 'i'));
     return m?.[1]?.split('\n')[0]?.trim();
   };
 
