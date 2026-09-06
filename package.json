@@ -60,6 +60,7 @@
     "lab:flush-emails": "node scripts/lab-email-worker.mjs",
     "lab:cron": "node scripts/lab-cron.mjs",
     "lab:backup": "node scripts/lab-backup.mjs",
+    "lab:vercel": "node scripts/lab-vercel-setup.mjs",
     "test:unit": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",

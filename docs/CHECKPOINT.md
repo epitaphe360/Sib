@@ -20,6 +20,10 @@
 - `npm run lab:backup` → `scripts/output/lab-backup-manifest.json`
 - `POST /api/lab/flush-emails` et `POST /api/lab/cron` (header `x-lab-cron-secret`)
 
+## Audit
+
+Voir `docs/LAB_AUDIT.md`. Vercel Lab : `npm run lab:vercel`.
+
 ## Reste prod
 
-Cron Resend réel, upload Drive, E2E login lab, restore test exécuté.
+SUPER_ADMIN, OTP 10 min, cron Resend/Drive, E2E login lab, restore test exécuté.
