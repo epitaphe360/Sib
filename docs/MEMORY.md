@@ -1,19 +1,25 @@
 # Mémoire permanente — SIB 2026
 
-Index court. Détail dans les fichiers liés. Ne pas y coller de cahier des charges.
+Index court. Détail dans les fichiers liés. Ne pas coller de spec ici.
 
-## Skills agents
+| Sujet | Fichier |
+|---|---|
+| Conventions (stack, auth, i18n, tests, DB) | `docs/CONVENTIONS.md` |
+| Checkpoint courant | `docs/CHECKPOINT.md` |
+| Token skill (canon) | `.agents/skills/token-optimization/SKILL.md` |
+| Token skill (Claude) | `.claude/skills/token-optimization/SKILL.md` |
+| Skills hors catalogue | `.claude/skills-archive/` |
+| Lock | `skills-lock.json` |
 
-| Skill | Source | Version | Chemins | Lock |
-|---|---|---|---|---|
-| token-optimization | `bm629/agent-skills` (`skills.sh`) | 1.8.3 | `.agents/skills/token-optimization/` (canon) · `.claude/skills/token-optimization/` (Claude) | `skills-lock.json` hash `3cf99d341bebb75f…` |
+## Tokens
 
-Activation : coûts API, fenêtre de contexte, loops lents, prompt caching, compaction. Pas JWT / design tokens.
+- Cible : tokens-par-tâche, pas tokens-par-message.
+- `CLAUDE.md` always-on ~250 tokens (était ~700–950). Détail déplacé vers `docs/CONVENTIONS.md`.
+- Catalogue skills : 1 actif (`token-optimization`). 39 archivés (metadata plus injectée).
+- Agents SIB conservés : `.claude/agents/i18n-checker`, `security-reviewer`.
 
-Workflow : mesurer → cacher le préfixe → alléger le contexte toujours chargé → compresser l’historique → masquer les observations outils → router le modèle → couper les itérations → trim output → re-mesurer.
+## Session
 
-## Règles de session
-
-- `/docs` = mémoire persistante. Mettre à jour `docs/MEMORY.md` et `docs/CHECKPOINT.md` à chaque livrable.
-- Réponse agent : résultat, fichiers, tests, prochain checkpoint. Pas de recopie de spec.
-- Ne pas committer `.env*` ni `SUPABASE_SERVICE_ROLE_KEY`.
+- `/docs` = mémoire. Maj `MEMORY.md` + `CHECKPOINT.md` à chaque livrable.
+- Réponse : résultat, fichiers, tests, checkpoint.
+- Jamais committer `.env*` ni `SUPABASE_SERVICE_ROLE_KEY`.
