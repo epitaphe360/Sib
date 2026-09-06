@@ -8,7 +8,6 @@ import LabDashboardPage from './pages/LabDashboardPage';
 import LabRequestFormPage from './pages/LabRequestFormPage';
 import LabRequestsPage from './pages/LabRequestsPage';
 import LabRequestDetailPage from './pages/LabRequestDetailPage';
-import LabPlaceholderPage, { LabClientHomePage } from './pages/LabPlaceholderPage';
 import LabSuppliersPage from './pages/LabSuppliersPage';
 import LabSupplierDetailPage from './pages/LabSupplierDetailPage';
 import LabConsultationsPage from './pages/LabConsultationsPage';
@@ -21,6 +20,21 @@ import LabOrdersPage from './pages/LabOrdersPage';
 import LabOrderDetailPage from './pages/LabOrderDetailPage';
 import LabSamplesPage from './pages/LabSamplesPage';
 import LabSampleDetailPage from './pages/LabSampleDetailPage';
+import LabAnalysesPage from './pages/LabAnalysesPage';
+import LabResultsPage from './pages/LabResultsPage';
+import LabValidationsPage from './pages/LabValidationsPage';
+import LabReportsPage from './pages/LabReportsPage';
+import LabInvoicesPage from './pages/LabInvoicesPage';
+import LabSettingsPage from './pages/LabSettingsPage';
+import {
+  LabAuditPage, LabBackupsPage, LabClientsPage, LabPaymentsPage,
+  LabReportTemplatesPage, LabTasksPage, LabUsersPage,
+} from './pages/LabAdminLists';
+import {
+  LabClientHomePage, LabClientInvoicesPage, LabClientProfilePage,
+  LabClientQuotesPage, LabClientReportsPage,
+  LabClientRequestDetailPage, LabClientRequestsPage,
+} from './pages/LabClientPortalPages';
 
 function AdminOutlet() {
   return (
@@ -62,29 +76,29 @@ export default function LabApp() {
         <Route path="orders/:id" element={<LabOrderDetailPage />} />
         <Route path="samples" element={<LabSamplesPage />} />
         <Route path="samples/:id" element={<LabSampleDetailPage />} />
-        <Route path="analyses" element={<LabPlaceholderPage title="Analyses" />} />
-        <Route path="results" element={<LabPlaceholderPage title="Résultats" />} />
-        <Route path="validations" element={<LabPlaceholderPage title="Validations" />} />
-        <Route path="reports" element={<LabPlaceholderPage title="Rapports" />} />
-        <Route path="report-templates" element={<LabPlaceholderPage title="Gabarit rapports" />} />
-        <Route path="clients" element={<LabPlaceholderPage title="Clients" />} />
-        <Route path="users" element={<LabPlaceholderPage title="Utilisateurs" />} />
-        <Route path="tasks" element={<LabPlaceholderPage title="Tâches" />} />
-        <Route path="invoices" element={<LabPlaceholderPage title="Factures" />} />
-        <Route path="payments" element={<LabPlaceholderPage title="Paiements" />} />
-        <Route path="settings" element={<LabPlaceholderPage title="Réglages" />} />
-        <Route path="audit" element={<LabPlaceholderPage title="Audit" />} />
-        <Route path="backups" element={<LabPlaceholderPage title="Sauvegardes" />} />
+        <Route path="analyses" element={<LabAnalysesPage />} />
+        <Route path="results" element={<LabResultsPage />} />
+        <Route path="validations" element={<LabValidationsPage />} />
+        <Route path="reports" element={<LabReportsPage />} />
+        <Route path="report-templates" element={<LabReportTemplatesPage />} />
+        <Route path="clients" element={<LabClientsPage />} />
+        <Route path="users" element={<LabUsersPage />} />
+        <Route path="tasks" element={<LabTasksPage />} />
+        <Route path="invoices" element={<LabInvoicesPage />} />
+        <Route path="payments" element={<LabPaymentsPage />} />
+        <Route path="settings" element={<LabSettingsPage />} />
+        <Route path="audit" element={<LabAuditPage />} />
+        <Route path="backups" element={<LabBackupsPage />} />
       </Route>
 
       <Route path="client" element={<ClientOutlet />}>
         <Route path="dashboard" element={<LabClientHomePage />} />
-        <Route path="requests" element={<LabPlaceholderPage title="Mes demandes" />} />
-        <Route path="requests/:id" element={<LabPlaceholderPage title="Demande" />} />
-        <Route path="quotes" element={<LabPlaceholderPage title="Mes devis" />} />
-        <Route path="reports" element={<LabPlaceholderPage title="Mes rapports" />} />
-        <Route path="invoices" element={<LabPlaceholderPage title="Mes factures" />} />
-        <Route path="profile" element={<LabPlaceholderPage title="Profil" />} />
+        <Route path="requests" element={<LabClientRequestsPage />} />
+        <Route path="requests/:id" element={<LabClientRequestDetailPage />} />
+        <Route path="quotes" element={<LabClientQuotesPage />} />
+        <Route path="reports" element={<LabClientReportsPage />} />
+        <Route path="invoices" element={<LabClientInvoicesPage />} />
+        <Route path="profile" element={<LabClientProfilePage />} />
       </Route>
     </Routes>
   );

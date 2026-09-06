@@ -11,6 +11,10 @@ const KPI: { key: DossierStatus | 'all'; label: string; to: string }[] = [
   { key: 'CLIENT_QUOTE_SENT', label: 'Devis envoyés', to: LAB_ROUTES.ADMIN_QUOTES },
   { key: 'WAITING_SAMPLES', label: 'Attente échantillons', to: LAB_ROUTES.ADMIN_SAMPLES },
   { key: 'ANALYSIS_IN_PROGRESS', label: 'Analyses en cours', to: LAB_ROUTES.ADMIN_RESULTS },
+  { key: 'AI_REVIEW', label: 'Revue IA', to: LAB_ROUTES.ADMIN_VALIDATIONS },
+  { key: 'TECHNICAL_REVIEW', label: 'Validation technique', to: LAB_ROUTES.ADMIN_VALIDATIONS },
+  { key: 'FINAL_REVIEW', label: 'Validation finale', to: LAB_ROUTES.ADMIN_VALIDATIONS },
+  { key: 'REPORT_SENT', label: 'Rapports envoyés', to: LAB_ROUTES.ADMIN_REPORTS },
 ];
 
 export default function LabDashboardPage() {

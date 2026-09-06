@@ -8,6 +8,9 @@ import { isLabPath } from '@/features/lab/routes';
 import { rankOffers, suggestRecipients } from '@/features/lab/lib/compareOffers';
 import { followupDueAt, isFollowupDue, surveyCreatesPriceAlert } from '@/features/lab/lib/quoteFollowup';
 import { reviewPurchaseOrder } from '@/features/lab/lib/reviewPurchaseOrder';
+import { detectResultAnomalies, shouldEmailSupplierOnDoubleRefuse } from '@/features/lab/lib/resultReview';
+import { invoiceProgress } from '@/features/lab/lib/invoices';
+import { pickTemplateKind, reportReadiness } from '@/features/lab/lib/reportReadiness';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -142,6 +145,30 @@ describe('lab quote followup', () => {
       now: new Date('2026-01-03'),
     })).toBe(true);
     expect(surveyCreatesPriceAlert({ received: true, priceOk: false, delayOk: true, priceTooHigh: false })).toBe(true);
+  });
+});
+
+describe('lab results / billing / reports', () => {
+  it('flags missing result fields and never treats AI as validation', () => {
+    expect(detectResultAnomalies({ analysisName: '', value: '', unit: '', method: '' }).length).toBeGreaterThan(2);
+    expect(shouldEmailSupplierOnDoubleRefuse('REFUSER', 'REFUSER')).toBe(true);
+    expect(shouldEmailSupplierOnDoubleRefuse('ACCEPTER', 'REFUSER')).toBe(false);
+  });
+
+  it('computes invoice remaining and late status', () => {
+    const late = invoiceProgress(100, 0, '2020-01-01', new Date('2020-01-10'));
+    expect(late.status).toBe('IMPAYEE');
+    expect(invoiceProgress(100, 100).status).toBe('PAYEE');
+    expect(invoiceProgress(100, 40).status).toBe('PARTIELLEMENT_PAYEE');
+  });
+
+  it('blocks report if checklist incomplete and picks template by kind', () => {
+    expect(pickTemplateKind('MICROBIOLOGIQUE')).toBe('MICROBIOLOGIQUE');
+    expect(pickTemplateKind('MIXTE')).toBe('PHYSICO_CHIMIQUE');
+    expect(reportReadiness({
+      client: true, sample: true, sampleCode: true, methods: true,
+      results: false, units: true, dates: true, validations: true,
+    }).ok).toBe(false);
   });
 });
 

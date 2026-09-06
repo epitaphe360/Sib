@@ -103,4 +103,41 @@ export const receiveSamplesSchema = z.object({
   observation: z.string().max(2000).optional().or(z.literal('')),
 });
 
+export const resultSchema = z.object({
+  request_id: z.string().uuid(),
+  sample_id: z.string().uuid().optional().or(z.literal('')),
+  analysis_name: z.string().trim().min(2),
+  value: z.string().trim().min(1),
+  unit: z.string().trim().min(1),
+  method: z.string().trim().min(1),
+  uncertainty: z.string().optional().or(z.literal('')),
+  accreditation: z.string().optional().or(z.literal('')),
+});
+
+export const reviewSchema = z.object({
+  decision: z.enum(['ACCEPTER', 'REFUSER']),
+  comment: z.string().max(2000).optional().or(z.literal('')),
+});
+
+export const paymentSchema = z.object({
+  invoice_id: z.string().uuid(),
+  amount: z.coerce.number().positive(),
+  paid_at: z.string().min(1),
+});
+
+export const settingsSchema = z.object({
+  penalty_percent_per_day: z.coerce.number().min(0).max(100),
+  quote_followup_days: z.coerce.number().int().min(1).max(30),
+  document_retention_days: z.coerce.number().int().min(30),
+  sample_code_pattern: z.string().min(3),
+  correction_hours: z.coerce.number().int().min(1).max(72),
+});
+
+export const taskSchema = z.object({
+  title: z.string().trim().min(2),
+  priority: z.enum(['low', 'normal', 'high']),
+  due_date: z.string().optional().or(z.literal('')),
+});
+
+
 

@@ -2,19 +2,16 @@
 
 **Date** : 2026-09-06
 **Branche** : `cursor/elitech-lab-foundation-5783`
-**État** : phases 8–9 (BDC client + échantillons).
+**État** : workflow métier couvert (demande → facture), UI admin + portail client.
 
 ## Fait
 
-- Ingest BDC client (pas de création côté lab) + revue ACCEPTÉ / À CORRIGER
-- Demande de correction email si incohérent
-- Réception échantillons + codes `ECH-seq-year-produit` (pattern settings)
-- Profil échantillon `/lab/admin/samples/:id`
+Phases 1–17 dans `/lab` : auth, multi-tenant, demandes, fournisseurs, devis, BDC, échantillons, BDC sous-traitant, résultats, triple validation, rapports, factures, réglages, audit, backups, portail client.
 
 ## Infra
 
-Appliquer les 3 migrations `lab_*`.
+Appliquer les 4 migrations `2026090600000[1-4]_lab_*`. Exposer schéma `lab`. Créer SUPER_ADMIN.
 
-## Prochaine étape
+## Reste hors code (prod)
 
-Phase 10–11 : BDC sous-traitant + délais + résultats + triple validation.
+Resend réel, Drive cron, MFA enrollment, E2E Playwright login réel, restore test exécuté.
