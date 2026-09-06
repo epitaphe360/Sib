@@ -30,6 +30,7 @@ Checkpoint 1 : auth + membership + shell + demandes publiques + transitions de s
 - **Guards** : `LabGuard` (session + rôle). Permissions **hors** composants (matrice `rbac.ts`).
 - Secrets : anon key seulement. Service role interdit côté client.
 - E-mails : file `lab.email_messages` ; flush `scripts/lab-email-worker.mjs` / `POST /api/lab/flush-emails`.
+- Cron : `scripts/lab-cron.mjs` file les relances devis et rappels délais.
 - Inbox : classification `lab.processed_emails` (dédup `message_id`).
 - Backup : `scripts/lab-backup.mjs` + `docs/RESTORE_TEST.md`.
 
