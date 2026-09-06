@@ -6,12 +6,10 @@
 
 ## Infra (humain)
 
-1. ~~Migrations `01`–`05`~~ appliquées sur le projet **Laboratoire** `omlhfjfpyttfvntfqjnk` (schéma `lab` exposé).
-2. App : `VITE_LAB_SUPABASE_URL` + `VITE_LAB_SUPABASE_ANON_KEY` (projet Laboratoire), pas le projet SIB.
-3. Créer le premier `SUPER_ADMIN` (`auth.users` + `lab.organization_members`).
-4. OTP client : TTL 10 min dans Auth.
-5. Env serveur : `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` ou SMTP, `LAB_FROM_EMAIL`, `LAB_CRON_SECRET`, `LAB_BACKUP_ORG_UUID`.
-6. Cron : `npm run lab:flush-emails` et `npm run lab:backup`. Upload Drive manuel. Exécuter `docs/RESTORE_TEST.md`.
+1. Migrations `01`–`06` + schéma `lab` exposé sur Laboratoire.
+2. OTP 10 min (`mailer_otp_exp=600`).
+3. Premier login `/lab/login` → `claim_first_admin`.
+4. App : `VITE_LAB_SUPABASE_*`. Railway : Resend + `LAB_CRON_SECRET`. Drive : `GOOGLE_DRIVE_ACCESS_TOKEN`.
 
 ## Scripts
 
