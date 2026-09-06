@@ -55,7 +55,7 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
   activeOrg: null,
   role: null,
   clientId: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   hydrate: async () => {
@@ -143,6 +143,6 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
 
   logout: async () => {
     try { await getLabClient().auth.signOut(); } catch { /* ignore */ }
-    set({ userId: null, email: null, memberships: [], activeOrg: null, role: null, clientId: null, error: null });
+    set({ userId: null, email: null, memberships: [], activeOrg: null, role: null, clientId: null, error: null, isLoading: false });
   },
 }));
