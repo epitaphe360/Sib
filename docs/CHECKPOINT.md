@@ -2,20 +2,19 @@
 
 **Date** : 2026-09-06
 **Branche** : `cursor/elitech-lab-foundation-5783`
-**État** : phases 5–7 (fournisseurs, comparaison, devis + relance).
+**État** : phases 8–9 (BDC client + échantillons).
 
 ## Fait
 
-- CRUD fournisseurs `/lab/admin/suppliers`
-- Offre publique EN `/lab/supplier-offer/:token` (RPC)
-- Comparaison prix/délai + sélection humaine
-- Envoi devis + relance J+N (settings) + sondage `/lab/quote-survey/:token`
-- Alerte prix trop élevé, aucun changement auto de tarif
+- Ingest BDC client (pas de création côté lab) + revue ACCEPTÉ / À CORRIGER
+- Demande de correction email si incohérent
+- Réception échantillons + codes `ECH-seq-year-produit` (pattern settings)
+- Profil échantillon `/lab/admin/samples/:id`
 
-## Infra toujours requise
+## Infra
 
-Appliquer les 2 migrations `lab_*`, exposer schéma `lab`, créer SUPER_ADMIN.
+Appliquer les 3 migrations `lab_*`.
 
 ## Prochaine étape
 
-Phase 8–9 : BDC client + réception / codification échantillons.
+Phase 10–11 : BDC sous-traitant + délais + résultats + triple validation.

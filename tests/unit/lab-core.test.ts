@@ -7,6 +7,7 @@ import { clientRequestSchema, moroccoPhoneSchema } from '@/features/lab/schemas'
 import { isLabPath } from '@/features/lab/routes';
 import { rankOffers, suggestRecipients } from '@/features/lab/lib/compareOffers';
 import { followupDueAt, isFollowupDue, surveyCreatesPriceAlert } from '@/features/lab/lib/quoteFollowup';
+import { reviewPurchaseOrder } from '@/features/lab/lib/reviewPurchaseOrder';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -37,7 +38,37 @@ describe('lab status machine', () => {
     expect(canTransition('NEW_REQUEST', 'QUALIFICATION')).toBe(true);
     expect(canTransition('QUALIFICATION', 'WAITING_SUPPLIER_QUOTES')).toBe(true);
     expect(canTransition('SUPPLIER_SELECTED', 'CLIENT_QUOTE_DRAFT')).toBe(true);
+    expect(canTransition('CLIENT_QUOTE_SENT', 'PURCHASE_ORDER_RECEIVED')).toBe(true);
+    expect(canTransition('PURCHASE_ORDER_RECEIVED', 'WAITING_SAMPLES')).toBe(true);
+    expect(canTransition('WAITING_SAMPLES', 'SAMPLES_RECEIVED')).toBe(true);
     expect(canTransition('NEW_REQUEST', 'CLOSED')).toBe(false);
+  });
+});
+
+describe('lab purchase order review', () => {
+  it('accepts a coherent client PO', () => {
+    const review = reviewPurchaseOrder({
+      quoteNumber: 'DEV-2026-000001',
+      poQuoteRef: 'DEV-2026-000001',
+      quoteClient: 'Acme',
+      poClient: 'Acme',
+      quoteAmount: 130,
+      poAmount: 130,
+    });
+    expect(review.status).toBe('ACCEPTÉ');
+  });
+
+  it('flags amount and client mismatches without creating a PO', () => {
+    const review = reviewPurchaseOrder({
+      quoteNumber: 'DEV-2026-000001',
+      poQuoteRef: 'BC-99',
+      quoteClient: 'Acme',
+      poClient: 'Other',
+      quoteAmount: 130,
+      poAmount: 80,
+    });
+    expect(review.status).toBe('À CORRIGER');
+    expect(review.reasons.length).toBeGreaterThan(1);
   });
 });
 

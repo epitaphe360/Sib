@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FileText, Building2, Send, Beaker, FlaskConical,
-  FileCheck, Receipt, Settings, LogOut, Shield,
+  FileCheck, Receipt, Settings, LogOut, Shield, ClipboardList,
 } from 'lucide-react';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { LAB_ROUTES } from '../routes';
@@ -13,6 +13,7 @@ const NAV = [
   { to: LAB_ROUTES.ADMIN_SUPPLIERS, label: 'Fournisseurs', icon: Building2, perm: 'suppliers.read' as const },
   { to: LAB_ROUTES.ADMIN_CONSULTATIONS, label: 'Consultations', icon: Send, perm: 'consultations.write' as const },
   { to: LAB_ROUTES.ADMIN_QUOTES, label: 'Devis', icon: FileCheck, perm: 'quotes.write' as const },
+  { to: LAB_ROUTES.ADMIN_ORDERS, label: 'BDC', icon: ClipboardList, perm: 'quotes.write' as const },
   { to: LAB_ROUTES.ADMIN_SAMPLES, label: 'Échantillons', icon: Beaker, perm: 'samples.write' as const },
   { to: LAB_ROUTES.ADMIN_RESULTS, label: 'Résultats', icon: FlaskConical, perm: 'results.review.technical' as const },
   { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Factures', icon: Receipt, perm: 'invoices.read' as const },

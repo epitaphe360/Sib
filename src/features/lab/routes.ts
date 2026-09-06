@@ -13,6 +13,7 @@ export const LAB_ROUTES = {
   ADMIN_CONSULTATIONS: '/lab/admin/consultations',
   ADMIN_CONSULTATION: '/lab/admin/consultations/:id',
   ADMIN_ORDERS: '/lab/admin/orders',
+  ADMIN_ORDER: '/lab/admin/orders/:id',
   ADMIN_SAMPLES: '/lab/admin/samples',
   ADMIN_SAMPLE: '/lab/admin/samples/:id',
   ADMIN_ANALYSES: '/lab/admin/analyses',

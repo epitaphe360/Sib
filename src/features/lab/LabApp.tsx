@@ -17,6 +17,10 @@ import LabQuotesPage from './pages/LabQuotesPage';
 import LabQuoteDetailPage from './pages/LabQuoteDetailPage';
 import LabSupplierOfferPage from './pages/LabSupplierOfferPage';
 import LabQuoteSurveyPage from './pages/LabQuoteSurveyPage';
+import LabOrdersPage from './pages/LabOrdersPage';
+import LabOrderDetailPage from './pages/LabOrderDetailPage';
+import LabSamplesPage from './pages/LabSamplesPage';
+import LabSampleDetailPage from './pages/LabSampleDetailPage';
 
 function AdminOutlet() {
   return (
@@ -54,9 +58,10 @@ export default function LabApp() {
         <Route path="suppliers/:id" element={<LabSupplierDetailPage />} />
         <Route path="consultations" element={<LabConsultationsPage />} />
         <Route path="consultations/:id" element={<LabConsultationDetailPage />} />
-        <Route path="orders" element={<LabPlaceholderPage title="Commandes" />} />
-        <Route path="samples" element={<LabPlaceholderPage title="Échantillons" />} />
-        <Route path="samples/:id" element={<LabPlaceholderPage title="Échantillon" />} />
+        <Route path="orders" element={<LabOrdersPage />} />
+        <Route path="orders/:id" element={<LabOrderDetailPage />} />
+        <Route path="samples" element={<LabSamplesPage />} />
+        <Route path="samples/:id" element={<LabSampleDetailPage />} />
         <Route path="analyses" element={<LabPlaceholderPage title="Analyses" />} />
         <Route path="results" element={<LabPlaceholderPage title="Résultats" />} />
         <Route path="validations" element={<LabPlaceholderPage title="Validations" />} />

@@ -85,3 +85,22 @@ export const quoteSurveySchema = z.object({
   comment: z.string().max(2000).optional().or(z.literal('')),
 });
 
+export const ingestPurchaseOrderSchema = z.object({
+  quote_id: z.string().uuid('Devis requis'),
+  reference: z.string().trim().min(2, 'Référence BDC requise'),
+  client_name: z.string().trim().min(2, 'Client requis'),
+  amount: z.coerce.number().nonnegative('Montant ≥ 0'),
+  analyses: z.string().trim().optional().or(z.literal('')),
+});
+
+export const receiveSamplesSchema = z.object({
+  received_at: z.string().min(1, 'Date/heure requise'),
+  carrier: z.string().trim().min(1, 'Transporteur requis'),
+  received_by: z.string().trim().min(2, 'Réceptionnaire requis'),
+  condition_notes: z.string().trim().min(1, 'État requis'),
+  temperature: z.coerce.number().optional(),
+  quantity: z.coerce.number().int().positive('Nombre > 0'),
+  observation: z.string().max(2000).optional().or(z.literal('')),
+});
+
+
