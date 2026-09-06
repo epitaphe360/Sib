@@ -33,7 +33,6 @@
   font-family: var(--lab-display);
 }
 
-.lab-root label,
 .lab-root th,
 .lab-root .lab-muted {
   color: var(--lab-muted);
@@ -73,7 +72,7 @@
     linear-gradient(165deg, #050d18 0%, #0b1f3a 48%, #071422 100%);
 }
 
-.lab-public label {
+.lab-public .lab-muted {
   color: var(--lab-muted-on-dark);
 }
 
