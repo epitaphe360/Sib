@@ -15,6 +15,7 @@ import { renderEmail } from '@/features/lab/lib/emailTemplates';
 import { deadlineState, delayDays } from '@/features/lab/lib/deadlines';
 import { pickQueuedEmails, nextEmailStatus, classifyInboundEmail } from '@/features/lab/lib/emailQueue';
 import { buildBackupManifest, LAB_BACKUP_TABLES } from '@/features/lab/lib/backupManifest';
+import { pickDueFollowups, pickDeadlineActions } from '@/features/lab/lib/cronJobs';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -209,6 +210,31 @@ describe('lab email queue', () => {
     expect(classifyInboundEmail('BC-2026-009')).toBe('PURCHASE_ORDER');
     expect(classifyInboundEmail('Rapport final')).toBe('REPORT');
     expect(classifyInboundEmail('facture 12')).toBe('OTHER');
+  });
+});
+
+describe('lab cron jobs', () => {
+  const now = new Date('2026-01-10T00:00:00Z');
+
+  it('picks due quote follow-ups only', () => {
+    const due = pickDueFollowups([
+      { id: '1', quote_number: 'A', organization_id: 'o', sent_at: '2026-01-01', followup_due_at: '2026-01-04', followup_sent_at: null, survey_token: 't' },
+      { id: '2', quote_number: 'B', organization_id: 'o', sent_at: '2026-01-01', followup_due_at: '2026-01-04', followup_sent_at: '2026-01-05', survey_token: 't' },
+      { id: '3', quote_number: 'C', organization_id: 'o', sent_at: '2026-01-09', followup_due_at: '2026-01-12', followup_sent_at: null, survey_token: 't' },
+    ], now);
+    expect(due.map((q) => q.id)).toEqual(['1']);
+  });
+
+  it('queues reminder then late, never twice', () => {
+    const actions = pickDeadlineActions([
+      { id: 'soon', organization_id: 'o', expected_date: '2026-01-11', actual_date: null, reminded_at: null, late_notified_at: null },
+      { id: 'late', organization_id: 'o', expected_date: '2026-01-01', actual_date: null, reminded_at: 'x', late_notified_at: null },
+      { id: 'done', organization_id: 'o', expected_date: '2026-01-01', actual_date: null, reminded_at: 'x', late_notified_at: 'y' },
+    ], now);
+    expect(actions).toEqual([
+      expect.objectContaining({ id: 'soon', action: 'remind' }),
+      expect.objectContaining({ id: 'late', action: 'late' }),
+    ]);
   });
 });
 

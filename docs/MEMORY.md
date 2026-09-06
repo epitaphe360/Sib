@@ -11,6 +11,7 @@
 | Code lab | `src/features/lab/` |
 | Migrations | `supabase/migrations/20260906000001` → `05` |
 | Worker e-mails | `scripts/lab-email-worker.mjs` |
+| Cron relances | `scripts/lab-cron.mjs` |
 | Backup | `scripts/lab-backup.mjs` + `docs/RESTORE_TEST.md` |
 
 SIB reste sur `public` + routes existantes. Lab = `/lab` + schéma `lab`.

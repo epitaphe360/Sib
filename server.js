@@ -415,6 +415,31 @@ app.post('/api/lab/flush-emails', async (req, res) => {
   }
 });
 
+/**
+ * Queue due follow-ups and deadline notices, then optionally flush.
+ * POST /api/lab/cron
+ * Header: x-lab-cron-secret
+ */
+app.post('/api/lab/cron', async (req, res) => {
+  const secret = process.env.LAB_CRON_SECRET;
+  if (!secret || req.headers['x-lab-cron-secret'] !== secret) {
+    return res.status(401).json({ success: false, error: 'unauthorized' });
+  }
+  try {
+    const { runLabCron } = await import('./scripts/lab-cron.mjs');
+    const cron = await runLabCron({ dryRun: req.query.dryRun === '1' });
+    if (req.query.flush === '1' && !cron.error) {
+      const { flushLabEmails } = await import('./scripts/lab-email-worker.mjs');
+      const flush = await flushLabEmails({ dryRun: req.query.dryRun === '1' });
+      return res.json({ success: !flush.error, cron, flush });
+    }
+    return res.json({ success: !cron.error, cron });
+  } catch (error) {
+    console.error('❌ Lab cron:', error);
+    return res.status(500).json({ success: false, error: error.message || 'cron failed' });
+  }
+});
+
 // ============================================
 // ADMIN API: Delete exhibitor (bypasses RLS)
 // ============================================

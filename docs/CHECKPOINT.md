@@ -16,8 +16,9 @@
 ## Scripts
 
 - `npm run lab:flush-emails` / `--dry-run`
+- `npm run lab:cron` — relances devis + rappels délais
 - `npm run lab:backup` → `scripts/output/lab-backup-manifest.json`
-- `POST /api/lab/flush-emails` (header `x-lab-cron-secret`)
+- `POST /api/lab/flush-emails` et `POST /api/lab/cron` (header `x-lab-cron-secret`)
 
 ## Reste prod
 

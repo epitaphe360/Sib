@@ -58,6 +58,7 @@
     "test:b2b": "npx playwright test tests/e2e/quota-system.spec.ts tests/e2e/appointments.spec.ts tests/e2e/networking.spec.ts",
     "test:new": "npx playwright test tests/e2e/quota-system.spec.ts tests/e2e/dashboard-ui.spec.ts tests/e2e/marketing-account.spec.ts tests/e2e/ui-fixes.spec.ts tests/e2e/public-calendar.spec.ts",
     "lab:flush-emails": "node scripts/lab-email-worker.mjs",
+    "lab:cron": "node scripts/lab-cron.mjs",
     "lab:backup": "node scripts/lab-backup.mjs",
     "test:unit": "vitest run",
     "test:watch": "vitest watch",

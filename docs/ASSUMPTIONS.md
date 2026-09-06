@@ -20,6 +20,7 @@ Décisions prises pour avancer. Corriger ici si le métier tranche autrement.
 | A14 | IA : interface seulement, provider `noop` | Pas d’appel modèle au checkpoint 1. |
 | A15 | Emails : file `lab.email_messages` + worker serveur | `RESEND_API_KEY` ou SMTP. Jamais dans `src/`. |
 | A19 | Flush e-mails : `npm run lab:flush-emails` ou `POST /api/lab/flush-emails` | Header `x-lab-cron-secret` = `LAB_CRON_SECRET`. |
+| A21 | Cron relances : `npm run lab:cron` / `POST /api/lab/cron` | Devis (3 j) + délais (J-2 / retard). File seulement, pas d’envoi. |
 | A20 | Backup inventaire : `npm run lab:backup` | `LAB_BACKUP_ORG_UUID` pour insérer `backup_runs`. Drive upload manuel. |
 | A16 | Org démo `elitech` seedée | Slug public pour le formulaire. |
 | A17 | SUPER_ADMIN voit toutes les orgs | Autres rôles : `organization_id` strict. |
