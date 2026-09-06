@@ -8,7 +8,7 @@ import { canTransition } from '../lib/status';
 import { LAB_ROUTES } from '../routes';
 import { queueEmailPayload } from '../lib/emailTemplates';
 import { can } from '../rbac';
-import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
 
 interface QuoteRow {
   id: string;

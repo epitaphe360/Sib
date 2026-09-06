@@ -6,7 +6,7 @@ import { labSchema } from '../services/labClient';
 import { can } from '../rbac';
 import { correctionDueAt, shouldEmailSupplierOnDoubleRefuse } from '../lib/resultReview';
 import { canTransition } from '../lib/status';
-import { confirmLabAction, LabAlert, LabCard, LabPage } from '../components/labUi';
+import { confirmLabAction, LabAlert, LabCard, LabPage } from '../components/LabUi';
 
 interface ResultRow {
   id: string;

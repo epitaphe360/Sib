@@ -6,7 +6,7 @@ import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { classifyInboundEmail } from '../lib/emailQueue';
 import { extractRequestDraftFromEmail } from '../lib/emailToRequest';
-import { LabAlert, LabCard, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { LabAlert, LabCard, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
 
 export default function LabInboxPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);

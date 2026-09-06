@@ -7,7 +7,7 @@ import { labSchema } from '../services/labClient';
 import { LabFileField } from '../components/LabFileField';
 import { applyMargin } from '../lib/pricing';
 import { proposedMarginPercent } from '../lib/competitiveness';
-import { confirmLabAction, LabAlert, LabCard, LabPage } from '../components/labUi';
+import { confirmLabAction, LabAlert, LabCard, LabPage } from '../components/LabUi';
 
 export default function LabQuoteDetailPage() {
   const { id } = useParams();

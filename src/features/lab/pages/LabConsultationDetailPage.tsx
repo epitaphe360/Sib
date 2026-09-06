@@ -5,7 +5,7 @@ import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { rankOffers, type SupplierOffer } from '../lib/compareOffers';
 import { canTransition } from '../lib/status';
-import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
 
 interface ItemRow {
   id: string;

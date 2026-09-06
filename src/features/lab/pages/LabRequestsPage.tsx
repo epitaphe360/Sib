@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import type { LabClientRequest } from '../types';
-import { LabBadge, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { LabBadge, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
 import { journeyStepForStatus } from '../lib/journey';
 
 export default function LabRequestsPage() {

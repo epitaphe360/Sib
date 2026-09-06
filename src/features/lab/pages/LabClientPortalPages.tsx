@@ -6,7 +6,7 @@ import { LAB_ROUTES } from '../routes';
 import { journeyStepForStatus } from '../lib/journey';
 import { LabDossierTrack } from '../components/LabJourney';
 import { filterRetained } from '../lib/documentRetention';
-import { LabBadge, LabCard, LabEmpty, LabPage } from '../components/labUi';
+import { LabBadge, LabCard, LabEmpty, LabPage } from '../components/LabUi';
 import type { DossierStatus } from '../types';
 
 function useOrgId() {

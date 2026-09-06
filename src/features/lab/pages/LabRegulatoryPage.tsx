@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/Input';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { parseProductListCsv, proposeRegulatedAnalyses, REGULATORY_TEXTS } from '../lib/regulatoryCatalog';
-import { confirmLabAction, LabAlert, LabBadge, LabCard, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { confirmLabAction, LabAlert, LabBadge, LabCard, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
 import { can } from '../rbac';
 
 interface ProposalRow {
