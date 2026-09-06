@@ -9,7 +9,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { createSupabaseServerClient } = require('../server/supabaseNodeClient.cjs');
 
-const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const url = process.env.VITE_LAB_SUPABASE_URL || process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const limit = Number(process.env.LAB_EMAIL_BATCH || 25);
 
