@@ -11,6 +11,8 @@ import { reviewPurchaseOrder } from '@/features/lab/lib/reviewPurchaseOrder';
 import { detectResultAnomalies, shouldEmailSupplierOnDoubleRefuse } from '@/features/lab/lib/resultReview';
 import { invoiceProgress } from '@/features/lab/lib/invoices';
 import { pickTemplateKind, reportReadiness } from '@/features/lab/lib/reportReadiness';
+import { renderEmail } from '@/features/lab/lib/emailTemplates';
+import { deadlineState, delayDays } from '@/features/lab/lib/deadlines';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -169,6 +171,20 @@ describe('lab results / billing / reports', () => {
       client: true, sample: true, sampleCode: true, methods: true,
       results: false, units: true, dates: true, validations: true,
     }).ok).toBe(false);
+  });
+});
+
+describe('lab emails and deadlines', () => {
+  it('renders centralized templates', () => {
+    const mail = renderEmail('quote_followup', { quote: 'DEV-1', link: '/x' });
+    expect(mail.subject).toContain('DEV-1');
+    expect(mail.body).toContain('/x');
+  });
+
+  it('marks approaching and late supplier deadlines', () => {
+    expect(delayDays('2026-01-01', '2026-01-04')).toBe(3);
+    expect(deadlineState('2026-01-10', null, new Date('2026-01-09'))).toBe('due_soon');
+    expect(deadlineState('2026-01-01', null, new Date('2026-01-03'))).toBe('late');
   });
 });
 

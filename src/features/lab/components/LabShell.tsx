@@ -20,6 +20,9 @@ const NAV = [
   { to: LAB_ROUTES.ADMIN_VALIDATIONS, label: 'Validations', icon: FileCheck, perm: 'results.review.technical' as const },
   { to: LAB_ROUTES.ADMIN_REPORTS, label: 'Rapports', icon: FileText, perm: 'reports.write' as const },
   { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Factures', icon: Receipt, perm: 'invoices.read' as const },
+  { to: LAB_ROUTES.ADMIN_SUPPLIER_INVOICES, label: 'Fourn. factures', icon: Receipt, perm: 'invoices.read' as const },
+  { to: LAB_ROUTES.ADMIN_DEADLINES, label: 'Délais', icon: ClipboardList, perm: 'samples.write' as const },
+  { to: LAB_ROUTES.ADMIN_EMAILS, label: 'E-mails', icon: Send, perm: 'settings.write' as const },
   { to: LAB_ROUTES.ADMIN_SETTINGS, label: 'Réglages', icon: Settings, perm: 'settings.write' as const },
   { to: LAB_ROUTES.ADMIN_AUDIT, label: 'Audit', icon: Shield, perm: 'audit.read' as const },
 ];

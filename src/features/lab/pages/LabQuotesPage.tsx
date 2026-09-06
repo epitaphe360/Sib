@@ -6,6 +6,7 @@ import { labSchema } from '../services/labClient';
 import { followupDueAt, isFollowupDue } from '../lib/quoteFollowup';
 import { canTransition } from '../lib/status';
 import { LAB_ROUTES } from '../routes';
+import { queueEmailPayload } from '../lib/emailTemplates';
 
 interface QuoteRow {
   id: string;
@@ -51,14 +52,10 @@ export default function LabQuotesPage() {
       followup_due_at: due.toISOString(),
     }).eq('id', row.id);
     if (uErr) { setError(uErr.message); return; }
-    await labSchema().from('email_messages').insert({
-      organization_id: orgId,
-      template_key: 'client_quote',
-      recipient: 'client',
-      subject: `Quote ${row.quote_number}`,
-      status: 'queued',
-      provider: 'resend',
-    });
+    await labSchema().from('email_messages').insert(queueEmailPayload(orgId, 'client_quote', 'client', {
+      quote: row.quote_number,
+      amount: String(row.amount),
+    }));
     const req = await labSchema().from('client_requests').select('status').eq('id', row.request_id).maybeSingle();
     const current = req.data?.status as string | undefined;
     if (current && canTransition(current as never, 'CLIENT_QUOTE_SENT')) {
@@ -76,14 +73,10 @@ export default function LabQuotesPage() {
       followup_sent_at: new Date().toISOString(),
     }).eq('id', row.id);
     if (uErr) { setError(uErr.message); return; }
-    await labSchema().from('email_messages').insert({
-      organization_id: orgId,
-      template_key: 'quote_followup',
-      recipient: 'client',
-      subject: `Follow-up ${row.quote_number}`,
-      status: 'queued',
-      provider: 'resend',
-    });
+    await labSchema().from('email_messages').insert(queueEmailPayload(orgId, 'quote_followup', 'client', {
+      quote: row.quote_number,
+      link: `/lab/quote-survey/${row.survey_token ?? ''}`,
+    }));
     setMessage(`Relance ${row.quote_number} (sondage /lab/quote-survey/${row.survey_token})`);
     await load();
   }

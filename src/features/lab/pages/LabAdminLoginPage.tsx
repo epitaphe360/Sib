@@ -37,6 +37,7 @@ export default function LabAdminLoginPage() {
         })}
       >
         <h1 className="text-xl font-semibold text-[#0b1f3a]">Connexion laboratoire</h1>
+        <p className="text-xs text-slate-500">Auth Supabase. MFA : activer dans le profil Auth (architecture prête).</p>
         <div>
           <Input type="email" placeholder="email@laboratoire.ma" autoComplete="email" {...register('email')} />
           {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>}

@@ -4,6 +4,8 @@ import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { pickTemplateKind, reportReadiness } from '../lib/reportReadiness';
 import { canTransition } from '../lib/status';
+import { buildLabReportPdf, downloadBlob } from '../lib/reportPdf';
+import { queueEmailPayload } from '../lib/emailTemplates';
 
 interface RequestRow {
   id: string;
@@ -45,7 +47,7 @@ export default function LabReportsPage() {
           <Button type="button" onClick={async () => {
             if (!orgId) return;
             const samples = await labSchema().from('samples').select('code').eq('request_id', r.id);
-            const results = await labSchema().from('analysis_results').select('value,unit,method').eq('request_id', r.id);
+            const results = await labSchema().from('analysis_results').select('analysis_name,value,unit,method').eq('request_id', r.id);
             const reviews = await labSchema().from('result_reviews').select('decision,level').eq('organization_id', orgId);
             const check = reportReadiness({
               client: !!r.company_name,
@@ -60,12 +62,26 @@ export default function LabReportsPage() {
             if (!check.ok) { setError(`Mentions manquantes: ${check.missing.join(', ')}`); return; }
             const tpl = await labSchema().from('report_templates').select('id')
               .eq('organization_id', orgId).eq('analysis_kind', pickTemplateKind(r.analysis_kind)).eq('is_active', true).maybeSingle();
+            const blob = buildLabReportPdf({
+              kind: pickTemplateKind(r.analysis_kind),
+              dossier: r.dossier_number,
+              client: r.company_name,
+              sampleCodes: (samples.data ?? []).map((s) => s.code),
+              results: (results.data ?? []).map((x) => ({
+                analysis_name: x.analysis_name,
+                value: x.value,
+                unit: x.unit,
+                method: x.method,
+              })),
+            });
+            downloadBlob(blob, `${r.dossier_number}.pdf`);
             const { data, error: iErr } = await labSchema().from('reports').insert({
-              organization_id: orgId, request_id: r.id, template_id: tpl.data?.id ?? null, delivery_status: 'stored',
+              organization_id: orgId, request_id: r.id, template_id: tpl.data?.id ?? null,
+              delivery_status: 'stored', storage_path: `${r.dossier_number}.pdf`,
             }).select('id').maybeSingle();
             if (iErr || !data) { setError(iErr?.message ?? 'Génération impossible'); return; }
             await labSchema().from('client_requests').update({ status: 'REPORT_GENERATION' }).eq('id', r.id);
-            setMessage('Rapport stocké dans le portail (PDF à joindre plus tard)');
+            setMessage('PDF généré et rapport stocké au portail');
             await load();
           }}>Générer</Button>
           <Button type="button" variant="secondary" onClick={async () => {
@@ -75,10 +91,9 @@ export default function LabReportsPage() {
             await labSchema().from('reports').update({
               sent_at: new Date().toISOString(), recipient: r.company_name, delivery_status: 'queued',
             }).eq('id', existing.id);
-            await labSchema().from('email_messages').insert({
-              organization_id: orgId, template_key: 'report_ready', recipient: r.company_name,
-              subject: `Report ${r.dossier_number}`, status: 'queued', provider: 'resend',
-            });
+            await labSchema().from('email_messages').insert(queueEmailPayload(orgId, 'report_ready', r.company_name, {
+              dossier: r.dossier_number,
+            }));
             if (canTransition(r.status as never, 'REPORT_SENT')) {
               await labSchema().from('client_requests').update({ status: 'REPORT_SENT' }).eq('id', r.id);
             }
