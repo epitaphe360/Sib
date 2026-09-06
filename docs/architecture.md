@@ -7,7 +7,7 @@ Produit SaaS multi-tenant de gestion de laboratoire, **isolé** de la plateforme
 | Couche | SIB | Lab |
 |---|---|---|
 | Routes | `/`, `/admin/*`, `/dashboard` | `/lab/*` |
-| SQL | `public.*` | `lab.*` |
+| SQL | `public.*` projet SIB `sbyizudifmqakzxjlndr` | `lab.*` projet **Laboratoire** `omlhfjfpyttfvntfqjnk` |
 | Auth métier | `users.type` exposant/visiteur | `lab.organization_members.role` |
 | UI chrome | Header / Footer SIB | `LabShell` (sidebar + header) |
 

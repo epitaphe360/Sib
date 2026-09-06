@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { supabase } from '@/lib/supabase';
+import { labSchema } from '../services/labClient';
 import { supplierOfferSchema } from '../schemas';
 
 export default function LabSupplierOfferPage() {
@@ -19,9 +19,9 @@ export default function LabSupplierOfferPage() {
   });
 
   useEffect(() => {
-    if (!token || !supabase) return;
+    if (!token) return;
     (async () => {
-      const { data, error: qErr } = await supabase.schema('lab').rpc('get_consultation_invite', { p_token: token });
+      const { data, error: qErr } = await labSchema().rpc('get_consultation_invite', { p_token: token });
       if (qErr) setError(qErr.message);
       else setMeta(data as { supplier_name?: string });
     })();
@@ -36,8 +36,8 @@ export default function LabSupplierOfferPage() {
       <form
         className="max-w-md mx-auto rounded-2xl border border-slate-200 bg-white p-6 space-y-3"
         onSubmit={form.handleSubmit(async (v) => {
-          if (!supabase || !token) return;
-          const { error: rpcErr } = await supabase.schema('lab').rpc('submit_supplier_offer', {
+          if (!token) return;
+          const { error: rpcErr } = await labSchema().rpc('submit_supplier_offer', {
             p_token: token,
             p_amount: v.amount,
             p_currency: v.currency,

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { supabase } from '@/lib/supabase';
+import { labSchema } from '../services/labClient';
 import { clientRequestSchema, type ClientRequestInput } from '../schemas';
 
 const DEFAULT_ORG = 'elitech';
@@ -34,12 +34,8 @@ export default function LabRequestFormPage() {
         className="max-w-xl mx-auto rounded-2xl border border-slate-200 bg-white p-6 space-y-4"
         onSubmit={handleSubmit(async (values) => {
           setError(null);
-          if (!supabase) {
-            setError('Service indisponible');
-            return;
-          }
           const analyses = values.analyses.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean);
-          const { data, error: rpcError } = await supabase.schema('lab').rpc('submit_public_request', {
+          const { data, error: rpcError } = await labSchema().rpc('submit_public_request', {
             p_org_slug: DEFAULT_ORG,
             p_company_name: values.company_name,
             p_contact_name: values.contact_name,

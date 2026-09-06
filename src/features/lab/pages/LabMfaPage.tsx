@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { supabase } from '@/lib/supabase';
-import { labSchema } from '../services/labClient';
+import { getLabClient, labSchema } from '../services/labClient';
 import { useLabSessionStore } from '../store/labSessionStore';
 
 export default function LabMfaPage() {
@@ -18,8 +17,9 @@ export default function LabMfaPage() {
       <h1 className="text-xl font-semibold text-[#0b1f3a]">MFA administrateur</h1>
       <p className="text-sm text-slate-500">Enrollment TOTP Supabase. La clé service n’est jamais utilisée ici.</p>
       <Button type="button" onClick={async () => {
-        if (!supabase) { setError('Supabase indisponible'); return; }
-        const { data, error: e } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
+        let auth;
+        try { auth = getLabClient(); } catch { setError('Supabase indisponible'); return; }
+        const { data, error: e } = await auth.auth.mfa.enroll({ factorType: 'totp' });
         if (e || !data) { setError(e?.message ?? 'Enrollment impossible'); return; }
         setFactorId(data.id);
         setQr(data.totp.qr_code);
@@ -28,10 +28,11 @@ export default function LabMfaPage() {
       {factorId && (
         <form className="space-y-2" onSubmit={async (e) => {
           e.preventDefault();
-          if (!supabase || !factorId) return;
-          const challenge = await supabase.auth.mfa.challenge({ factorId });
+          if (!factorId) return;
+          const auth = getLabClient();
+          const challenge = await auth.auth.mfa.challenge({ factorId });
           if (challenge.error) { setError(challenge.error.message); return; }
-          const { error: vErr } = await supabase.auth.mfa.verify({
+          const { error: vErr } = await auth.auth.mfa.verify({
             factorId,
             challengeId: challenge.data.id,
             code,

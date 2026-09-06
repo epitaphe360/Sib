@@ -1,8 +1,7 @@
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabase';
 import { loginRateLimiter } from '@/utils/rateLimiter';
 import type { LabMembership, LabOrganization, LabRole } from '../types';
-import { labSchema } from '../services/labClient';
+import { getLabClient, labSchema } from '../services/labClient';
 
 const otpLimiter = loginRateLimiter;
 
@@ -60,13 +59,16 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
   error: null,
 
   hydrate: async () => {
-    if (!supabase) {
+    let auth;
+    try {
+      auth = getLabClient();
+    } catch {
       set({ isLoading: false });
       return;
     }
     set({ isLoading: true, error: null });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await auth.auth.getSession();
       if (!session?.user) {
         set({ userId: null, email: null, memberships: [], activeOrg: null, role: null, clientId: null, isLoading: false });
         return;
@@ -98,10 +100,10 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
   },
 
   loginAdmin: async (email, password) => {
-    if (!supabase) throw new Error('Supabase non configuré');
+    const auth = getLabClient();
     const gate = await loginRateLimiter.isAllowed(email);
     if (!gate.allowed) throw new Error('Trop de tentatives. Réessayez plus tard.');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await auth.auth.signInWithPassword({ email, password });
     if (error) {
       loginRateLimiter.recordFailure(email);
       throw error;
@@ -114,10 +116,10 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
   },
 
   requestClientOtp: async (email) => {
-    if (!supabase) throw new Error('Supabase non configuré');
+    const auth = getLabClient();
     const gate = await otpLimiter.isAllowed(`otp:${email}`);
     if (!gate.allowed) throw new Error('Trop de codes demandés. Réessayez plus tard.');
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await auth.auth.signInWithOtp({
       email,
       options: { shouldCreateUser: true },
     });
@@ -128,14 +130,14 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
   },
 
   verifyClientOtp: async (email, token) => {
-    if (!supabase) throw new Error('Supabase non configuré');
-    const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
+    const auth = getLabClient();
+    const { error } = await auth.auth.verifyOtp({ email, token, type: 'email' });
     if (error) throw error;
     await get().hydrate();
   },
 
   logout: async () => {
-    await supabase?.auth.signOut();
+    try { await getLabClient().auth.signOut(); } catch { /* ignore */ }
     set({ userId: null, email: null, memberships: [], activeOrg: null, role: null, clientId: null, error: null });
   },
 }));

@@ -4,7 +4,7 @@ Décisions prises pour avancer. Corriger ici si le métier tranche autrement.
 
 | ID | Décision | Raison |
 |---|---|---|
-| A1 | Produit isolé : schéma SQL `lab` + routes `/lab/*` | Le repo est SIB 2026. Tables `invoices`, `notifications`, `/admin/*` existent déjà. |
+| A1 | Produit isolé : schéma SQL `lab` + routes `/lab/*` | Repo Sib. SQL Lab sur projet Supabase **Laboratoire** `omlhfjfpyttfvntfqjnk`, pas `sbyizudifmqakzxjlndr`. |
 | A2 | Rôle `MADAME_ZINEB` = `RESPONSABLE_VALIDATION` | Un seul enum ; alias métier dans l’UI. |
 | A3 | Rôle portail client = `CLIENT` | Distinct de `UTILISATEUR_STANDARD` interne. |
 | A4 | Marge défaut 30 % via `lab.pricing_rules` | Configurable, jamais hardcodée dans le calcul métier. |

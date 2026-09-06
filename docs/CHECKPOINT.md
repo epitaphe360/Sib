@@ -6,8 +6,8 @@
 
 ## Infra (humain)
 
-1. Appliquer migrations `20260906000001` → `05` sur `sbyizudifmqakzxjlndr`.
-2. Exposer le schéma `lab` dans l’API Supabase.
+1. ~~Migrations `01`–`05`~~ appliquées sur le projet **Laboratoire** `omlhfjfpyttfvntfqjnk` (schéma `lab` exposé).
+2. App : `VITE_LAB_SUPABASE_URL` + `VITE_LAB_SUPABASE_ANON_KEY` (projet Laboratoire), pas le projet SIB.
 3. Créer le premier `SUPER_ADMIN` (`auth.users` + `lab.organization_members`).
 4. OTP client : TTL 10 min dans Auth.
 5. Env serveur : `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` ou SMTP, `LAB_FROM_EMAIL`, `LAB_CRON_SECRET`, `LAB_BACKUP_ORG_UUID`.

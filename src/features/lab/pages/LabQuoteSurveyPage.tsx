@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
-import { supabase } from '@/lib/supabase';
+import { labSchema } from '../services/labClient';
 import { quoteSurveySchema } from '../schemas';
 
 export default function LabQuoteSurveyPage() {
@@ -25,8 +25,8 @@ export default function LabQuoteSurveyPage() {
       <form
         className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 space-y-3"
         onSubmit={form.handleSubmit(async (v) => {
-          if (!supabase || !token) return;
-          const { error: rpcErr } = await supabase.schema('lab').rpc('submit_quote_survey', {
+          if (!token) return;
+          const { error: rpcErr } = await labSchema().rpc('submit_quote_survey', {
             p_token: token,
             p_received: v.received,
             p_price_ok: v.priceOk,

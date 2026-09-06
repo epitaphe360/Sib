@@ -106,6 +106,48 @@ BEGIN
 END;
 $$;
 
+-- ---------------------------------------------------------------------------
+-- Core tables
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS lab.organizations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  slug text NOT NULL UNIQUE,
+  email text,
+  phone text,
+  country_code text NOT NULL DEFAULT '+212',
+  city text,
+  country text NOT NULL DEFAULT 'MA',
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  deleted_at timestamptz
+);
+
+CREATE TABLE IF NOT EXISTS lab.profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,
+  email text NOT NULL,
+  full_name text,
+  phone text,
+  mfa_ready boolean NOT NULL DEFAULT false,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  deleted_at timestamptz
+);
+
+CREATE TABLE IF NOT EXISTS lab.organization_members (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  organization_id uuid NOT NULL REFERENCES lab.organizations (id),
+  user_id uuid NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
+  role lab.member_role NOT NULL,
+  client_id uuid,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  deleted_at timestamptz,
+  UNIQUE (organization_id, user_id)
+);
+
 CREATE OR REPLACE FUNCTION lab.user_org_ids()
 RETURNS SETOF uuid
 LANGUAGE sql
@@ -179,48 +221,6 @@ AS $$
     AND deleted_at IS NULL
   LIMIT 1;
 $$;
-
--- ---------------------------------------------------------------------------
--- Core tables
--- ---------------------------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS lab.organizations (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
-  slug text NOT NULL UNIQUE,
-  email text,
-  phone text,
-  country_code text NOT NULL DEFAULT '+212',
-  city text,
-  country text NOT NULL DEFAULT 'MA',
-  is_active boolean NOT NULL DEFAULT true,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  deleted_at timestamptz
-);
-
-CREATE TABLE IF NOT EXISTS lab.profiles (
-  id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE,
-  email text NOT NULL,
-  full_name text,
-  phone text,
-  mfa_ready boolean NOT NULL DEFAULT false,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  deleted_at timestamptz
-);
-
-CREATE TABLE IF NOT EXISTS lab.organization_members (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  organization_id uuid NOT NULL REFERENCES lab.organizations (id),
-  user_id uuid NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
-  role lab.member_role NOT NULL,
-  client_id uuid,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  deleted_at timestamptz,
-  UNIQUE (organization_id, user_id)
-);
 
 CREATE TABLE IF NOT EXISTS lab.clients (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
