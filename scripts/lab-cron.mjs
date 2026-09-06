@@ -92,6 +92,27 @@ export async function runLabCron({ dryRun = false } = {}) {
     queued += 1;
   }
 
+  const invoices = await supabase.schema('lab').from('client_invoices')
+    .select('id,organization_id,invoice_number,status,amount_due')
+    .in('status', ['IMPAYEE', 'EN_ATTENTE'])
+    .limit(100);
+  if (!invoices.error) {
+    for (const inv of invoices.data || []) {
+      if (!dryRun) {
+        await supabase.schema('lab').from('email_messages').insert({
+          organization_id: inv.organization_id,
+          template_key: 'payment_reminder',
+          recipient: 'client',
+          subject: `Rappel paiement ${inv.invoice_number}`,
+          body: `Impayé ${inv.amount_due ?? ''}`,
+          status: 'queued',
+          provider: 'resend',
+        });
+      }
+      queued += 1;
+    }
+  }
+
   return { queued, dryRun };
 }
 

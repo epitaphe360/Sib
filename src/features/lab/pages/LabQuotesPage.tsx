@@ -7,6 +7,7 @@ import { followupDueAt, isFollowupDue } from '../lib/quoteFollowup';
 import { canTransition } from '../lib/status';
 import { LAB_ROUTES } from '../routes';
 import { queueEmailPayload } from '../lib/emailTemplates';
+import { can } from '../rbac';
 
 interface QuoteRow {
   id: string;
@@ -19,10 +20,12 @@ interface QuoteRow {
   followup_sent_at: string | null;
   survey_token: string | null;
   request_id: string;
+  validated_by: string | null;
 }
 
 export default function LabQuotesPage() {
-  const orgId = useLabSessionStore((s) => s.activeOrg?.id);
+  const { activeOrg, role, userId } = useLabSessionStore();
+  const orgId = activeOrg?.id;
   const [rows, setRows] = useState<QuoteRow[]>([]);
   const [followupDays, setFollowupDays] = useState(3);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +34,7 @@ export default function LabQuotesPage() {
   async function load() {
     if (!orgId) return;
     const [quotes, settings] = await Promise.all([
-      labSchema().from('quotes').select('id,quote_number,amount,currency,status,sent_at,followup_due_at,followup_sent_at,survey_token,request_id')
+      labSchema().from('quotes').select('id,quote_number,amount,currency,status,sent_at,followup_due_at,followup_sent_at,survey_token,request_id,validated_by')
         .eq('organization_id', orgId).is('deleted_at', null).order('created_at', { ascending: false }).limit(50),
       labSchema().from('settings').select('quote_followup_days').eq('organization_id', orgId).maybeSingle(),
     ]);
@@ -42,8 +45,24 @@ export default function LabQuotesPage() {
 
   useEffect(() => { void load(); }, [orgId]);
 
+  async function validateQuote(row: QuoteRow) {
+    if (!orgId || !userId) return;
+    if (!can(role, 'quotes.validate')) { setError('Seule Madame Zineb (validation) peut valider'); return; }
+    const { error: uErr } = await labSchema().from('quotes').update({
+      status: 'validated',
+      validated_by: userId,
+    }).eq('id', row.id);
+    if (uErr) { setError(uErr.message); return; }
+    setMessage(`Devis ${row.quote_number} validé — prêt à envoyer`);
+    await load();
+  }
+
   async function sendQuote(row: QuoteRow) {
     if (!orgId) return;
+    if (!row.validated_by && row.status !== 'validated') {
+      setError('Validation Zineb requise avant envoi');
+      return;
+    }
     const sentAt = new Date();
     const due = followupDueAt(sentAt, followupDays);
     const { error: uErr } = await labSchema().from('quotes').update({
@@ -107,6 +126,9 @@ export default function LabQuotesPage() {
                 <td className="px-4 py-2">{row.status}</td>
                 <td className="px-4 py-2 space-x-2">
                   {row.status === 'draft' && (
+                    <Button type="button" onClick={() => void validateQuote(row)}>Zineb valider</Button>
+                  )}
+                  {(row.status === 'validated' || row.validated_by) && row.status !== 'sent' && (
                     <Button type="button" onClick={() => void sendQuote(row)}>Envoyer</Button>
                   )}
                   {isFollowupDue({

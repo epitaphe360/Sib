@@ -29,6 +29,10 @@ export function pickDueFollowups(quotes: FollowupQuote[], now = new Date()): Fol
   }));
 }
 
+export function pickUnpaidInvoices(rows: { id: string; status: string; reminder_sent_at?: string | null }[]) {
+  return rows.filter((row) => (row.status === 'IMPAYEE' || row.status === 'EN_ATTENTE') && !row.reminder_sent_at);
+}
+
 export function pickDeadlineActions(rows: DeadlineRow[], now = new Date()) {
   return rows.flatMap((row) => {
     const state = deadlineState(row.expected_date, row.actual_date, now);

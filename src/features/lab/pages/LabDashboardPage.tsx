@@ -20,6 +20,7 @@ const KPI: { key: DossierStatus | 'all'; label: string; to: string }[] = [
 export default function LabDashboardPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [finance, setFinance] = useState({ unpaid: 0, margin: 30 });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,6 +40,12 @@ export default function LabDashboardPage() {
           const status = row.status as string;
           next[status] = (next[status] ?? 0) + 1;
         }
+        const [inv, rule] = await Promise.all([
+          labSchema().from('client_invoices').select('status').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('pricing_rules').select('margin_percent').eq('organization_id', orgId).eq('is_active', true).maybeSingle(),
+        ]);
+        const unpaid = (inv.data ?? []).filter((i) => i.status !== 'PAYEE').length;
+        setFinance({ unpaid, margin: Number(rule.data?.margin_percent ?? 30) });
         setCounts(next);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Chargement impossible');
@@ -63,6 +70,14 @@ export default function LabDashboardPage() {
             </Card>
           </Link>
         ))}
+        <Card className="bg-white">
+          <p className="text-sm text-slate-500">Factures non soldées</p>
+          <p className="mt-2 text-3xl font-semibold text-[#0b1f3a]">{finance.unpaid}</p>
+        </Card>
+        <Card className="bg-white">
+          <p className="text-sm text-slate-500">Marge active %</p>
+          <p className="mt-2 text-3xl font-semibold text-[#0b1f3a]">{finance.margin}</p>
+        </Card>
       </div>
     </div>
   );

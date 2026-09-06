@@ -15,7 +15,9 @@ import { renderEmail } from '@/features/lab/lib/emailTemplates';
 import { deadlineState, delayDays } from '@/features/lab/lib/deadlines';
 import { pickQueuedEmails, nextEmailStatus, classifyInboundEmail } from '@/features/lab/lib/emailQueue';
 import { buildBackupManifest, LAB_BACKUP_TABLES } from '@/features/lab/lib/backupManifest';
-import { pickDueFollowups, pickDeadlineActions } from '@/features/lab/lib/cronJobs';
+import { pickDueFollowups, pickDeadlineActions, pickUnpaidInvoices } from '@/features/lab/lib/cronJobs';
+import { heuristicClassifyEmail, heuristicExtractQuoteRef, heuristicTranslateToEnglish } from '@/features/lab/lib/aiHeuristics';
+import { assertLabFile } from '@/features/lab/lib/labStorage';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -235,6 +237,30 @@ describe('lab cron jobs', () => {
       expect.objectContaining({ id: 'soon', action: 'remind' }),
       expect.objectContaining({ id: 'late', action: 'late' }),
     ]);
+  });
+});
+
+describe('lab unpaid invoices', () => {
+  it('picks unpaid without reminder', () => {
+    expect(pickUnpaidInvoices([
+      { id: '1', status: 'IMPAYEE' },
+      { id: '2', status: 'PAYEE' },
+      { id: '3', status: 'EN_ATTENTE', reminder_sent_at: 'x' },
+    ]).map((r) => r.id)).toEqual(['1']);
+  });
+});
+
+describe('lab AI aid', () => {
+  it('classifies and extracts without validating', () => {
+    expect(heuristicClassifyEmail('Bon de commande BC-12')).toBe('PURCHASE_ORDER');
+    expect(heuristicExtractQuoteRef('ref DEV-2026-000001')).toBe('DEV-2026-000001');
+    expect(heuristicTranslateToEnglish('Bonjour devis')).toMatch(/hello/i);
+  });
+});
+
+describe('lab storage guards', () => {
+  it('rejects bad mime', () => {
+    expect(() => assertLabFile({ type: 'application/x-msdownload', size: 10 } as File)).toThrow();
   });
 });
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
+import { LabFileField } from '../components/LabFileField';
 
 export default function LabSampleDetailPage() {
   const { id } = useParams();
@@ -42,6 +43,9 @@ export default function LabSampleDetailPage() {
         <dt className="text-slate-500">Température</dt>
         <dd>{row.temperature != null ? `${row.temperature} °C` : '—'}</dd>
       </dl>
+      {orgId && (
+        <LabFileField organizationId={orgId} bucket="lab-samples" entityType="sample" entityId={String(row.id)} label="Fichier échantillon (URL signée)" />
+      )}
     </div>
   );
 }

@@ -73,7 +73,12 @@ export const useLabSessionStore = create<LabSessionState>((set, get) => ({
         set({ userId: null, email: null, memberships: [], activeOrg: null, role: null, clientId: null, isLoading: false });
         return;
       }
-      const memberships = await loadMemberships(session.user.id, session.user.email ?? null);
+      let memberships = await loadMemberships(session.user.id, session.user.email ?? null);
+      if (!memberships.length) {
+        await labSchema().rpc('accept_invite');
+        await labSchema().rpc('claim_first_admin');
+        memberships = await loadMemberships(session.user.id, session.user.email ?? null);
+      }
       const first = memberships[0];
       set({
         userId: session.user.id,

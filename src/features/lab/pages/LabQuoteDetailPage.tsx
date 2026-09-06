@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
+import { LabFileField } from '../components/LabFileField';
 
 export default function LabQuoteDetailPage() {
   const { id } = useParams();
@@ -31,6 +32,9 @@ export default function LabQuoteDetailPage() {
       <p className="text-sm text-slate-600">{String(row.amount)} {String(row.currency)} · {String(row.status)}</p>
       {row.survey_token && (
         <p className="text-xs text-slate-500">Sondage client : /lab/quote-survey/{String(row.survey_token)}</p>
+      )}
+      {orgId && (
+        <LabFileField organizationId={orgId} bucket="lab-client-documents" entityType="quote" entityId={String(row.id)} label="Pièce jointe devis" />
       )}
     </div>
   );

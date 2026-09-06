@@ -36,20 +36,57 @@ export function LabClientsPage() {
 }
 
 export function LabUsersPage() {
-  const orgId = useLabSessionStore((s) => s.activeOrg?.id);
+  const { activeOrg, userId, role } = useLabSessionStore();
+  const orgId = activeOrg?.id;
   const [rows, setRows] = useState<{ id: string; role: LabRole; user_id: string }[]>([]);
-  useEffect(() => {
+  const [invites, setInvites] = useState<{ id: string; email: string; role: string }[]>([]);
+  const [email, setEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState<LabRole>('ASSISTANTE');
+  const [error, setError] = useState<string | null>(null);
+  async function load() {
     if (!orgId) return;
-    void labSchema().from('organization_members').select('id,role,user_id').eq('organization_id', orgId).is('deleted_at', null)
-      .then(({ data }) => setRows((data ?? []) as typeof rows));
-  }, [orgId]);
+    const [mem, inv] = await Promise.all([
+      labSchema().from('organization_members').select('id,role,user_id').eq('organization_id', orgId).is('deleted_at', null),
+      labSchema().from('member_invites').select('id,email,role').eq('organization_id', orgId).is('accepted_at', null),
+    ]);
+    setRows((mem.data ?? []) as typeof rows);
+    setInvites((inv.data ?? []) as typeof invites);
+  }
+  useEffect(() => { void load(); }, [orgId]);
   return (
     <div className="space-y-3">
       <h1 className="text-2xl font-semibold text-[#0b1f3a]">Utilisateurs org</h1>
-      <p className="text-xs text-slate-500">Rôles : {LAB_ROLES.join(', ')}</p>
+      <p className="text-xs text-slate-500">Rôles : {LAB_ROLES.join(', ')}. Premier compte sans membre devient SUPER_ADMIN.</p>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {(role === 'SUPER_ADMIN' || role === 'DIRECTION') && (
+        <form className="flex flex-wrap gap-2" onSubmit={async (e) => {
+          e.preventDefault();
+          if (!orgId || !email.includes('@')) return;
+          const { error: iErr } = await labSchema().from('member_invites').insert({
+            organization_id: orgId, email: email.trim().toLowerCase(), role: inviteRole, invited_by: userId,
+          });
+          if (iErr) { setError(iErr.message); return; }
+          await labSchema().from('email_messages').insert({
+            organization_id: orgId, template_key: 'otp', recipient: email.trim(),
+            subject: 'Invitation Elitech Lab', body: 'Connectez-vous sur /lab/login pour accepter l’invitation.',
+            status: 'queued', provider: 'resend',
+          });
+          setEmail('');
+          await load();
+        }}>
+          <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <select className="h-10 rounded-lg border px-2 text-sm" value={inviteRole} onChange={(e) => setInviteRole(e.target.value as LabRole)}>
+            {LAB_ROLES.map((r) => <option key={r} value={r}>{r === 'RESPONSABLE_VALIDATION' ? 'Zineb / validation' : r}</option>)}
+          </select>
+          <Button type="submit">Inviter</Button>
+        </form>
+      )}
       <ul className="rounded-xl border bg-white divide-y">
         {rows.map((r) => <li key={r.id} className="px-4 py-2 text-sm">{r.role} · {r.user_id.slice(0, 8)}</li>)}
       </ul>
+      {invites.length > 0 && (
+        <p className="text-xs text-slate-500">Invitations : {invites.map((i) => `${i.email} (${i.role})`).join(', ')}</p>
+      )}
     </div>
   );
 }
@@ -83,12 +120,17 @@ export function LabTasksPage() {
         <Button type="submit">Créer</Button>
       </form>
       <ul className="rounded-xl border bg-white divide-y">
-        {rows.map((r) => (
-          <li key={r.id} className="px-4 py-2 text-sm flex justify-between">
-            <span>{r.title}</span>
-            <span className="text-slate-500">{r.status}{r.due_date ? ` · ${r.due_date}` : ''}</span>
-          </li>
-        ))}
+        {rows.map((r) => {
+          const overdue = r.due_date && r.status !== 'TERMINEE' && new Date(r.due_date) < new Date();
+          return (
+            <li key={r.id} className="px-4 py-2 text-sm flex justify-between">
+              <span>{r.title}</span>
+              <span className={overdue ? 'text-red-600' : 'text-slate-500'}>
+                {overdue ? 'EN RETARD · ' : ''}{r.status}{r.due_date ? ` · ${r.due_date}` : ''}
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -156,10 +198,24 @@ export function LabReportTemplatesPage() {
 }
 
 export function LabPaymentsPage() {
+  const orgId = useLabSessionStore((s) => s.activeOrg?.id);
+  const [rows, setRows] = useState<{ id: string; amount: number; paid_at: string | null; invoice_id: string }[]>([]);
+  useEffect(() => {
+    if (!orgId) return;
+    void labSchema().from('client_payments').select('id,amount,paid_at,invoice_id').eq('organization_id', orgId)
+      .order('paid_at', { ascending: false }).limit(80)
+      .then(({ data }) => setRows((data ?? []) as typeof rows));
+  }, [orgId]);
   return (
-    <div className="rounded-xl border bg-white p-6">
-      <h1 className="text-xl font-semibold text-[#0b1f3a]">Paiements</h1>
-      <p className="text-sm text-slate-500 mt-2">Saisie des règlements sur la page Factures (paiements multiples).</p>
+    <div className="space-y-3">
+      <h1 className="text-xl font-semibold text-[#0b1f3a]">Paiements client</h1>
+      <p className="text-sm text-slate-500">Règlements multiples. Saisie sur Factures.</p>
+      <ul className="rounded-xl border bg-white divide-y text-sm">
+        {rows.map((r) => (
+          <li key={r.id} className="px-4 py-2">{r.amount} · {r.paid_at ?? '—'} · facture {r.invoice_id.slice(0, 8)}</li>
+        ))}
+        {rows.length === 0 && <li className="px-4 py-6 text-slate-400">Aucun paiement</li>}
+      </ul>
     </div>
   );
 }

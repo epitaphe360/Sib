@@ -45,7 +45,36 @@ async function main() {
       notes: `manifest ${file}`,
     });
   }
-  console.log(JSON.stringify({ ok: true, file }));
+  let drive = null;
+  const token = process.env.GOOGLE_DRIVE_ACCESS_TOKEN;
+  const folder = process.env.GOOGLE_DRIVE_FOLDER_ID;
+  if (token) {
+    const boundary = `lab${Date.now()}`;
+    const meta = JSON.stringify({
+      name: `lab-backup-${new Date().toISOString().slice(0, 10)}.json`,
+      parents: folder ? [folder] : undefined,
+    });
+    const body = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(manifest)}\r\n--${boundary}--`;
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': `multipart/related; boundary=${boundary}`,
+      },
+      body,
+    });
+    drive = { ok: res.ok, status: res.status };
+    if (url && key && process.env.LAB_BACKUP_ORG_UUID) {
+      const supabase = createSupabaseServerClient(url, key);
+      await supabase.schema('lab').from('backup_runs').insert({
+        organization_id: process.env.LAB_BACKUP_ORG_UUID,
+        kind: 'weekly_drive',
+        status: res.ok ? 'tested' : 'failed',
+        notes: `drive ${res.status}`,
+      });
+    }
+  }
+  console.log(JSON.stringify({ ok: true, file, drive }));
 }
 
 const isMain = process.argv[1] && process.argv[1].endsWith('lab-backup.mjs');

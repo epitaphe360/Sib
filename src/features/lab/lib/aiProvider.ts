@@ -1,3 +1,11 @@
+import {
+  heuristicClassifyEmail,
+  heuristicDetectAnomalies,
+  heuristicExtractAmount,
+  heuristicExtractQuoteRef,
+  heuristicTranslateToEnglish,
+} from './aiHeuristics';
+
 export interface AiJobLog {
   provider: string;
   model: string;
@@ -16,31 +24,38 @@ export interface LabAiProvider {
   summarizeCase(input: string): Promise<{ summary: string; log: AiJobLog }>;
 }
 
-function noopLog(): AiJobLog {
-  return { provider: 'noop', model: 'none', durationMs: 0, status: 'noop' };
+function log(status: AiJobLog['status'], started: number): AiJobLog {
+  return { provider: 'heuristic', model: 'rules-v1', durationMs: Date.now() - started, status, costEstimate: 0 };
 }
 
-export const noopAiProvider: LabAiProvider = {
-  async analyzeEmail() {
-    return { classification: 'OTHER', summary: '', log: noopLog() };
+export const heuristicAiProvider: LabAiProvider = {
+  async analyzeEmail(input) {
+    const started = Date.now();
+    const classification = heuristicClassifyEmail(input);
+    return { classification, summary: classification, log: log('ok', started) };
   },
-  async extractPurchaseOrder() {
-    return { quoteRef: null, log: noopLog() };
+  async extractPurchaseOrder(input) {
+    const started = Date.now();
+    return { quoteRef: heuristicExtractQuoteRef(input), log: log('ok', started) };
   },
-  async analyzeSupplierQuote() {
-    return { amount: null, log: noopLog() };
+  async analyzeSupplierQuote(input) {
+    const started = Date.now();
+    return { amount: heuristicExtractAmount(input), log: log('ok', started) };
   },
-  async detectResultAnomalies() {
-    return { anomalies: [], log: noopLog() };
+  async detectResultAnomalies(input) {
+    const started = Date.now();
+    return { anomalies: heuristicDetectAnomalies(input), log: log('ok', started) };
   },
   async translateToEnglish(input) {
-    return { text: input, log: noopLog() };
+    const started = Date.now();
+    return { text: heuristicTranslateToEnglish(input), log: log('ok', started) };
   },
-  async summarizeCase() {
-    return { summary: '', log: noopLog() };
+  async summarizeCase(input) {
+    const started = Date.now();
+    return { summary: input.slice(0, 280), log: log('ok', started) };
   },
 };
 
 export function getAiProvider(): LabAiProvider {
-  return noopAiProvider;
+  return heuristicAiProvider;
 }
