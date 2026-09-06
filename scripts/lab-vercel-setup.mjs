@@ -4,10 +4,10 @@
  *
  *   npm run lab:vercel
  *
- * Uses the existing sib-2026 Vercel project. Sets VITE_LAB_* (anon only)
- * on production / preview / development, then deploys.
+ * Vercel only — no Railway. Sets VITE_LAB_* then deploys sib-2026.
+ * Cron Lab : /api/lab/cron?flush=1 (Vercel Cron 30 min).
  *
- * Optional env: VERCEL_TOKEN (CI). Otherwise uses the local Vercel login.
+ * Optional: VERCEL_TOKEN. First time: npx vercel login
  */
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';

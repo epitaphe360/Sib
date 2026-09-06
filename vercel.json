@@ -24,10 +24,17 @@
       "VITE_EXHIBITORS_SERVER_URL": "https://sib-production.up.railway.app"
     }
   },
+  "crons": [
+    { "path": "/api/lab/cron?flush=1", "schedule": "*/30 * * * *" }
+  ],
   "rewrites": [
     {
+      "source": "/api/lab/:path*",
+      "destination": "/api/lab/:path*"
+    },
+    {
       "source": "/api/:path*",
-      "destination": "https://sib-production.up.railway.app/api/:path*"
+      "destination": "/api/:path*"
     }
   ],
   "headers": [

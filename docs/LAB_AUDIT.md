@@ -20,6 +20,5 @@ Isolation `/lab` · RLS · formulaire · qualification · consultations EN · ch
 ## Encore humain (pas du code)
 
 1. Se connecter une fois sur `/lab/login` → premier user = SUPER_ADMIN.
-2. `RESEND_API_KEY` + `LAB_CRON_SECRET` sur Railway (cron 30 min : `/api/lab/cron?flush=1` + inbound).
-3. `GOOGLE_DRIVE_ACCESS_TOKEN` pour le backup hebdo.
-4. `npm run lab:vercel` (CLI Vercel connecté).
+2. Vercel : `RESEND_API_KEY` + `LAB_CRON_SECRET` (optionnel, file e-mails).
+3. `npm run lab:vercel` — pas de Railway.

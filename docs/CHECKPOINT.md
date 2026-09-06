@@ -9,7 +9,7 @@
 1. Migrations `01`–`06` + schéma `lab` exposé sur Laboratoire.
 2. OTP 10 min (`mailer_otp_exp=600`).
 3. Premier login `/lab/login` → `claim_first_admin`.
-4. App : `VITE_LAB_SUPABASE_*`. Railway : Resend + `LAB_CRON_SECRET`. Drive : `GOOGLE_DRIVE_ACCESS_TOKEN`.
+4. **Vercel only** (`npm run lab:vercel`). Cron : `/api/lab/cron?flush=1`. Pas de Railway.
 
 ## Scripts
 
