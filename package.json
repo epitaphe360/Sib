@@ -62,6 +62,7 @@
     "lab:backup": "node scripts/lab-backup.mjs",
     "lab:vercel": "node scripts/lab-vercel-setup.mjs",
     "lab:restore-check": "node scripts/lab-restore-check.mjs",
+    "lab:seed": "node scripts/lab-seed.mjs",
     "test:unit": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",

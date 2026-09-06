@@ -19,7 +19,7 @@ Décisions prises pour avancer. Corriger ici si le métier tranche autrement.
 | A13 | Code échantillon : `ECH-{seq:6}-{year}-{PRODUCT}` | Configurable `settings.sample_code_pattern`. |
 | A14 | IA heuristique (`rules-v1`) | Aide seulement ; jamais validation technique. |
 | A15 | Emails : file `lab.email_messages` + worker serveur | `RESEND_API_KEY` ou SMTP. Jamais dans `src/`. |
-| A16 | Org démo `elitech` seedée | Slug public pour le formulaire. |
+| A16 | Org démo `elitech` + `npm run lab:seed` | Slug public. Comptes DEV documentés dans `docs/LAB_SEED.md`. Pas de mots de passe prod dans git. |
 | A17 | SUPER_ADMIN voit toutes les orgs | Autres rôles : `organization_id` strict. |
 | A18 | Soft delete `deleted_at` | Pas de DELETE physique sur les tables métier. |
 | A19 | Flush e-mails : Vercel `/api/lab/flush-emails` + cron `/api/lab/cron` | Pas de Railway. Header `x-lab-cron-secret` ou `CRON_SECRET`. |

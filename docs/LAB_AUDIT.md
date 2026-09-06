@@ -29,7 +29,7 @@ Légende : **OK** = codé et testé (logique + UI/SQL). **PARTIAL** = présent m
 | 2.8 | Triple contrôle ; IA n’accepte jamais | **OK** | `detectResultAnomalies` + reviews tech/Zineb ; double refus → 6 h |
 | 2.9 | Gabarits physico / micro + PDF versionné | **PARTIAL** | Sélection auto + PDF générique. **Gabarits officiels compagnie absents** |
 | 2.10 | Portail OTP 10 min, accès 1 an | **PARTIAL** | OTP 10 min OK. Filtre conservation 365 j. **Pas de login Google** |
-| 3 | Dashboard KPI + tâches + graphiques | **PARTIAL** | KPI + buckets + rail 12 étapes. Pas de graphiques interactifs |
+| 3 | Dashboard KPI + tâches + graphiques | **OK** | KPI + suivi (relances, BDC, revues, tâches) + Recharts (pipeline, devis, transactions, marge, succès). Vide = graphes démo locaux, pas la base. |
 | 3 | Suivi appels (remplace Excel Drive) | **OK** | `/lab/admin/calls` + table `lab.client_calls` (migration à appliquer) |
 | 3 | Factures client + fournisseur | **OK** | Pages + `invoiceProgress` |
 | 3 | Confirmation actions sensibles | **OK** | `confirmLabAction` devis / validation / choix ST / réglementaire |
@@ -57,15 +57,15 @@ Légende : **OK** = codé et testé (logique + UI/SQL). **PARTIAL** = présent m
 | 7 | Triple contrôle + correction 6 h | IA aide / RT / Zineb | **OK** |
 | 8 | Rapport gabarit + PDF auto | PDF générique, pas gabarit officiel | **PARTIAL** |
 | 9 | Portail e-mail + OTP 10 min, 1 an | OTP + rétention. Pas Google | **PARTIAL** |
-| 10 | Dashboard admin KPI / tâches | KPI + à faire / attente / retard / valider | **PARTIAL** |
+| 10 | Dashboard admin KPI / tâches | KPI + suivi + graphes Recharts + actions vers les pages | **OK** |
 | 11 | Facturation client + fournisseur, marge ~30 % | Factures + règlements + marge | **OK** |
 | 12 | Archivage / audit / backup. Stack : Supabase+Vercel+Resend (**pas Railway**) | Audit + backup planifié | **PARTIAL** |
 
 ## Encore humain (bloqueurs)
 
-1. Premier login `/lab/login` → `claim_first_admin` = SUPER_ADMIN.
+1. Comptes DEV : `npm run lab:seed` (docs/LAB_SEED.md). Sans jeton Management, aucun user Auth n’existe.
 2. Vercel : `RESEND_API_KEY`, `LAB_CRON_SECRET`, `VITE_LAB_SUPABASE_*`.
-3. Appliquer la migration `20260906000007_lab_cdc_gaps.sql` sur Laboratoire `omlhfjfpyttfvntfqjnk`.
+3. `lab:seed` applique `20260906000007` si `client_calls` manque. Vérifier ensuite sur Laboratoire.
 4. Gabarits officiels physico / micro à intégrer.
 5. Fournisseur mailbox (IMAP/API) si scan 30 min réel.
 6. Jeton Google Drive pour backup hebdo automatique.

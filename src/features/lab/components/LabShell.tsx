@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FileText, Building2, Send, Beaker, FlaskConical,
   FileCheck, Receipt, Settings, LogOut, Shield, ClipboardList, KeyRound, Inbox, Phone, Scale, Menu, X,
+  Users, ListTodo, Wallet, Contact,
 } from 'lucide-react';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { LAB_ROUTES } from '../routes';
@@ -23,7 +24,11 @@ const NAV = [
   { to: LAB_ROUTES.ADMIN_RESULTS, label: 'Résultats', icon: FlaskConical, perm: 'results.review.technical' as const },
   { to: LAB_ROUTES.ADMIN_VALIDATIONS, label: 'Validations', icon: FileCheck, perm: 'results.review.technical' as const },
   { to: LAB_ROUTES.ADMIN_REPORTS, label: 'Rapports', icon: FileText, perm: 'reports.write' as const },
+  { to: LAB_ROUTES.ADMIN_TASKS, label: 'Tâches', icon: ListTodo, perm: 'dashboard.view' as const },
+  { to: LAB_ROUTES.ADMIN_CLIENTS, label: 'Clients', icon: Contact, perm: 'requests.read' as const },
+  { to: LAB_ROUTES.ADMIN_USERS, label: 'Utilisateurs', icon: Users, perm: 'users.write' as const },
   { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Factures', icon: Receipt, perm: 'invoices.read' as const },
+  { to: LAB_ROUTES.ADMIN_PAYMENTS, label: 'Paiements', icon: Wallet, perm: 'invoices.read' as const },
   { to: LAB_ROUTES.ADMIN_SUPPLIER_INVOICES, label: 'Fourn. factures', icon: Receipt, perm: 'invoices.read' as const },
   { to: LAB_ROUTES.ADMIN_DEADLINES, label: 'Délais', icon: ClipboardList, perm: 'samples.write' as const },
   { to: LAB_ROUTES.ADMIN_EMAILS, label: 'E-mails', icon: Send, perm: 'settings.write' as const },

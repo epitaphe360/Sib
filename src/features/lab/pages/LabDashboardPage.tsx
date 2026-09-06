@@ -1,50 +1,135 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart,
+  ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
+import { ArrowUpRight, Bell, CheckCircle2, Clock3, PackageSearch } from 'lucide-react';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { LAB_ROUTES } from '../routes';
-import { LAB_JOURNEY, journeyStepForStatus } from '../lib/journey';
 import { LabJourneyGrid, LabJourneyRail } from '../components/LabJourney';
-import type { DossierStatus } from '../types';
+import { LabBtn } from '../components/LabUi';
+import { LAB_THEME } from '../theme/tokens';
+import {
+  buildDashboardModel,
+  demoDashboardSnapshot,
+  hrefForJourneyStep,
+  type DashDeadline,
+  type DashInvoice,
+  type DashPayment,
+  type DashPo,
+  type DashQuote,
+  type DashRequest,
+  type DashReview,
+  type DashSample,
+  type DashTask,
+  type DashboardModel,
+  type TrackingItem,
+} from '../lib/dashboardStats';
 
-const TASK_BUCKETS = [
-  { key: 'todo', label: 'À faire', match: (s: string) => ['NEW_REQUEST', 'QUALIFICATION', 'CLIENT_QUOTE_DRAFT'].includes(s) },
-  { key: 'wait', label: 'En attente', match: (s: string) => ['WAITING_SUPPLIER_QUOTES', 'WAITING_CLIENT_RESPONSE', 'WAITING_SAMPLES', 'ANALYSIS_IN_PROGRESS'].includes(s) },
-  { key: 'late', label: 'En retard', match: (_s: string, late: boolean) => late },
-  { key: 'validate', label: 'À valider', match: (s: string) => ['AI_REVIEW', 'TECHNICAL_REVIEW', 'FINAL_REVIEW'].includes(s) },
-];
+const CHART = {
+  gold: LAB_THEME.gold,
+  cyan: LAB_THEME.cyan,
+  navy: '#8eb4d8',
+  rose: '#fb7185',
+  grid: 'rgba(255,255,255,0.08)',
+};
+
+function ChartCard({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+  return (
+    <section className="lab-dash-panel rounded-3xl p-5">
+      <div className="mb-3 flex items-end justify-between gap-3">
+        <h2 className="lab-display text-2xl text-white">{title}</h2>
+        {hint && <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{hint}</p>}
+      </div>
+      <div className="h-64">{children}</div>
+    </section>
+  );
+}
+
+function TrackList({
+  title,
+  items,
+  empty,
+  href,
+}: {
+  title: string;
+  items: TrackingItem[];
+  empty: string;
+  href: string;
+}) {
+  return (
+    <section className="rounded-3xl border border-[#e8e2d4] bg-white/90 p-5 shadow-[0_18px_40px_-28px_rgba(7,20,34,0.45)]">
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="lab-display text-xl text-[#0b1f3a]">{title}</h2>
+        <Link to={href} className="text-xs text-cyan-800 hover:underline">Ouvrir</Link>
+      </div>
+      <ul className="divide-y divide-[#f0eadb]">
+        {items.map((item) => (
+          <li key={item.id}>
+            <Link to={item.href} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-cyan-800">
+              <span>
+                <span className="font-medium text-[#0b1f3a]">{item.label}</span>
+                <span className="mt-0.5 block text-xs text-slate-500">{item.meta}</span>
+              </span>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-amber-600" />
+            </Link>
+          </li>
+        ))}
+        {items.length === 0 && <li className="py-6 text-center text-sm text-slate-400">{empty}</li>}
+      </ul>
+    </section>
+  );
+}
 
 export default function LabDashboardPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);
-  const [rows, setRows] = useState<{ status: string; id: string }[]>([]);
-  const [finance, setFinance] = useState({ unpaid: 0, margin: 30, quotes: 0, invoices: 0 });
-  const [lateCount, setLateCount] = useState(0);
+  const [model, setModel] = useState<DashboardModel>(() => demoDashboardSnapshot());
   const [error, setError] = useState<string | null>(null);
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
     if (!orgId) return;
     let cancelled = false;
     (async () => {
       try {
-        const [{ data, error: qErr }, inv, rule, quotes, late] = await Promise.all([
-          labSchema().from('client_requests').select('id,status').eq('organization_id', orgId).is('deleted_at', null),
-          labSchema().from('client_invoices').select('status').eq('organization_id', orgId).is('deleted_at', null),
+        const [req, quotes, inv, pay, late, tasks, pos, reviews, samples, rule, settings] = await Promise.all([
+          labSchema().from('client_requests').select('id,status,analysis_kind,company_name,dossier_number').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('quotes').select('id,amount,status,sent_at,followup_due_at,followup_sent_at,created_at,quote_number').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('client_invoices').select('id,amount_total,status,invoice_date,invoice_number').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('client_payments').select('amount,paid_at').eq('organization_id', orgId),
+          labSchema().from('supplier_deadlines').select('expected_date,actual_date,penalty_amount,penalty_rate,request_id').eq('organization_id', orgId),
+          labSchema().from('tasks').select('id,title,status,due_date').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('purchase_orders').select('id,request_id,review_status,reference').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('result_reviews').select('id,level,decision,result_id').eq('organization_id', orgId),
+          labSchema().from('samples').select('id,code,request_id,received_at').eq('organization_id', orgId).is('deleted_at', null),
           labSchema().from('pricing_rules').select('margin_percent').eq('organization_id', orgId).eq('is_active', true).maybeSingle(),
-          labSchema().from('quotes').select('id').eq('organization_id', orgId).is('deleted_at', null),
-          labSchema().from('supplier_deadlines').select('id,expected_date,actual_date').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('settings').select('penalty_percent_per_day').eq('organization_id', orgId).maybeSingle(),
         ]);
-        if (qErr) throw qErr;
         if (cancelled) return;
-        setRows((data ?? []) as { status: string; id: string }[]);
-        const unpaid = (inv.data ?? []).filter((i) => i.status !== 'PAYEE').length;
-        const lateN = (late.data ?? []).filter((d) => !d.actual_date && new Date(d.expected_date) < new Date()).length;
-        setLateCount(lateN);
-        setFinance({
-          unpaid,
-          margin: Number(rule.data?.margin_percent ?? 30),
-          quotes: quotes.data?.length ?? 0,
-          invoices: inv.data?.length ?? 0,
+        const firstErr = [req, quotes, inv, late].find((q) => q.error)?.error;
+        if (firstErr) throw firstErr;
+        const built = buildDashboardModel({
+          requests: (req.data ?? []) as DashRequest[],
+          quotes: (quotes.data ?? []) as DashQuote[],
+          invoices: (inv.data ?? []) as DashInvoice[],
+          payments: (pay.data ?? []) as DashPayment[],
+          deadlines: (late.data ?? []) as DashDeadline[],
+          tasks: (tasks.data ?? []) as DashTask[],
+          purchaseOrders: (pos.data ?? []) as DashPo[],
+          reviews: (reviews.data ?? []) as DashReview[],
+          samples: (samples.data ?? []) as DashSample[],
+          marginPercent: Number(rule.data?.margin_percent ?? 30),
+          penaltyPercentPerDay: Number(settings.data?.penalty_percent_per_day ?? 1),
         });
+        if (built.empty) {
+          setModel({ ...demoDashboardSnapshot(), empty: true, demo: true });
+          setLive(false);
+        } else {
+          setModel(built);
+          setLive(true);
+        }
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Chargement impossible');
       }
@@ -52,81 +137,156 @@ export default function LabDashboardPage() {
     return () => { cancelled = true; };
   }, [orgId]);
 
-  const counts = useMemo(() => {
-    const next: Record<string, number> = { all: rows.length };
-    for (const row of rows) next[row.status] = (next[row.status] ?? 0) + 1;
-    return next;
-  }, [rows]);
+  const pie = useMemo(() => [
+    { name: 'Réussis', value: model.successRate, fill: CHART.cyan },
+    { name: 'Autres', value: Math.max(0, 100 - model.successRate), fill: 'rgba(255,255,255,0.12)' },
+  ], [model.successRate]);
 
-  const buckets = TASK_BUCKETS.map((b) => ({
-    ...b,
-    n: rows.filter((r) => b.match(r.status, false)).length + (b.key === 'late' ? lateCount : 0),
-  }));
-
-  const stepCounts = LAB_JOURNEY.map((step) => ({
-    n: step.n,
-    title: step.title,
-    count: rows.filter((r) => journeyStepForStatus(r.status as DossierStatus) === step.n).length,
-  }));
-
-  const kpis = [
-    { label: 'Dossiers', value: counts.all ?? 0, to: LAB_ROUTES.ADMIN_REQUESTS },
-    { label: 'Devis', value: finance.quotes, to: LAB_ROUTES.ADMIN_QUOTES },
-    { label: 'Analyses en cours', value: counts.ANALYSIS_IN_PROGRESS ?? 0, to: LAB_ROUTES.ADMIN_ANALYSES },
-    { label: 'Rapports', value: counts.REPORT_SENT ?? 0, to: LAB_ROUTES.ADMIN_REPORTS },
-    { label: 'Factures', value: finance.invoices, to: LAB_ROUTES.ADMIN_INVOICES },
-    { label: 'Impayés', value: finance.unpaid, to: LAB_ROUTES.ADMIN_INVOICES },
-    { label: 'Marge %', value: finance.margin, to: LAB_ROUTES.ADMIN_SETTINGS },
-    { label: 'Retards', value: lateCount, to: LAB_ROUTES.ADMIN_DEADLINES },
-  ];
+  const marginBars = useMemo(() => [
+    { name: 'Réalisée', value: model.realizedMargin, fill: CHART.gold },
+    { name: 'Cible 30%', value: model.targetMargin, fill: CHART.cyan },
+  ], [model.realizedMargin, model.targetMargin]);
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-[10px] uppercase tracking-[0.28em] text-cyan-700">Étape 10 · Pilotage</p>
-        <h1 className="lab-display text-4xl text-[#0b1f3a]">Tableau de bord</h1>
-        <p className="mt-1 text-sm text-slate-500">Situation du laboratoire en quelques secondes.</p>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.28em] text-cyan-700">Étape 10 · Pilotage</p>
+          <h1 className="lab-display text-4xl text-[#0b1f3a]">Tableau de bord</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            {live
+              ? 'Données Laboratoire — suivi, relances et KPI.'
+              : 'Jeu de démo local (Laboratoire vide). Les graphes restent lisibles. Seed : npm run lab:seed'}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link to={LAB_ROUTES.REQUEST_FORM}><LabBtn tone="gold">Nouvelle demande</LabBtn></Link>
+          <Link to={LAB_ROUTES.ADMIN_QUOTES}><LabBtn tone="cyan">Relances devis</LabBtn></Link>
+          <Link to={LAB_ROUTES.ADMIN_VALIDATIONS} className="inline-flex h-10 items-center rounded-xl border border-[#d4af37] bg-white px-4 text-sm text-[#071422]">Validations</Link>
+          <Link to={LAB_ROUTES.ADMIN_TASKS} className="inline-flex h-10 items-center rounded-xl border border-[#d4af37] bg-white px-4 text-sm text-[#071422]">Tâches</Link>
+        </div>
       </div>
-      {error && <p className="text-sm text-amber-700">{error}</p>}
-      <LabJourneyRail tone="light" status="NEW_REQUEST" hrefForStep={(n) => {
-        if (n === 1 || n === 2) return LAB_ROUTES.ADMIN_REQUESTS;
-        if (n === 3) return LAB_ROUTES.ADMIN_CONSULTATIONS;
-        if (n === 4) return LAB_ROUTES.ADMIN_QUOTES;
-        if (n === 5) return LAB_ROUTES.ADMIN_SAMPLES;
-        if (n === 6) return LAB_ROUTES.ADMIN_ANALYSES;
-        if (n === 7) return LAB_ROUTES.ADMIN_VALIDATIONS;
-        if (n === 8) return LAB_ROUTES.ADMIN_REPORTS;
-        if (n === 11) return LAB_ROUTES.ADMIN_INVOICES;
-        if (n === 12) return LAB_ROUTES.ADMIN_BACKUPS;
-        return undefined;
-      }} />
+
+      {error && <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">{error}</p>}
+
+      <LabJourneyRail tone="light" status="NEW_REQUEST" hrefForStep={hrefForJourneyStep} />
+
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {kpis.map((k) => (
-          <Link key={k.label} to={k.to} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-cyan-400">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{k.label}</p>
-            <p className="lab-display mt-2 text-4xl text-[#0b1f3a]">{k.value}</p>
+        {model.kpis.map((k) => (
+          <Link key={k.label} to={k.to} className="lab-kpi-tile rounded-2xl p-5">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{k.label}</p>
+            <p className="lab-display mt-2 text-4xl text-white">{k.value}</p>
+            {k.hint && <p className="mt-1 text-xs text-white/50">{k.hint}</p>}
           </Link>
         ))}
       </div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        {buckets.map((b) => (
-          <div key={b.key} className="rounded-2xl border border-slate-200 bg-[#0b1f3a] p-4 text-white">
+
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {model.buckets.map((b) => (
+          <Link key={b.key} to={b.href} className="rounded-2xl border border-[#d4af37]/40 bg-[#0b1f3a] p-4 text-white transition hover:border-cyan-300">
             <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{b.label}</p>
             <p className="lab-display mt-2 text-3xl">{b.n}</p>
-          </div>
+          </Link>
         ))}
       </div>
-      <div>
-        <h2 className="lab-display mb-3 text-2xl text-[#0b1f3a]">Avancement par étape</h2>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {stepCounts.map((s) => (
-            <div key={s.n} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
-              <span className="text-sm text-slate-600">{String(s.n).padStart(2, '0')} · {s.title}</span>
-              <span className="text-lg font-semibold text-[#0b1f3a]">{s.count}</span>
-            </div>
-          ))}
-        </div>
+
+      <div className="grid gap-4 xl:grid-cols-2">
+        <ChartCard title="Pipeline 12 étapes" hint="dossiers">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={model.pipeline.map((s) => ({ ...s, label: String(s.n).padStart(2, '0') }))}>
+              <CartesianGrid stroke={CHART.grid} vertical={false} />
+              <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} />
+              <YAxis stroke="#94a3b8" allowDecimals={false} fontSize={11} />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
+              <Bar dataKey="count" fill={CHART.gold} radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+        <ChartCard title="Devis" hint="montant · mois">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={model.quotesByMonth}>
+              <CartesianGrid stroke={CHART.grid} />
+              <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
+              <YAxis stroke="#94a3b8" fontSize={11} />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
+              <Area type="monotone" dataKey="amount" stroke={CHART.cyan} fill="rgba(34,211,238,0.25)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </ChartCard>
+        <ChartCard title="Transactions" hint="facturé / encaissé">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={model.transactionsByMonth}>
+              <CartesianGrid stroke={CHART.grid} vertical={false} />
+              <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
+              <YAxis stroke="#94a3b8" fontSize={11} />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
+              <Legend />
+              <Bar dataKey="invoiced" name="Facturé" fill={CHART.gold} radius={[6, 6, 0, 0]} />
+              <Bar dataKey="paid" name="Encaissé" fill={CHART.cyan} radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+        <ChartCard title="Avancement par analyse" hint="lab / type">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={model.progressByKind} layout="vertical">
+              <CartesianGrid stroke={CHART.grid} horizontal={false} />
+              <XAxis type="number" stroke="#94a3b8" allowDecimals={false} fontSize={11} />
+              <YAxis type="category" dataKey="kind" stroke="#94a3b8" width={120} fontSize={10} />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
+              <Bar dataKey="count" fill={CHART.navy} radius={[0, 6, 6, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+        <ChartCard title="Taux de succès" hint={`${model.successRate} %`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Legend />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
+              <Pie data={pie} dataKey="value" nameKey="name" innerRadius={58} outerRadius={88} paddingAngle={3}>
+                {pie.map((p) => <Cell key={p.name} fill={p.fill} />)}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartCard>
+        <ChartCard title="Marge & pénalités" hint={`retards ${model.lateCount}`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={[...marginBars, { name: 'Pénalités', value: model.penaltyTotal, fill: CHART.rose }]}>
+              <CartesianGrid stroke={CHART.grid} vertical={false} />
+              <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+              <YAxis stroke="#94a3b8" fontSize={11} />
+              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(251,113,133,0.3)', color: '#fff' }} />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                {[...marginBars, { fill: CHART.rose }].map((c, i) => <Cell key={i} fill={c.fill} />)}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
       </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <TrackList title="Dossiers en cours" items={model.tracking.inProgress} empty="Aucun dossier ouvert" href={LAB_ROUTES.ADMIN_REQUESTS} />
+        <TrackList title="Relances devis en retard" items={model.tracking.followupsOverdue} empty="Aucune relance due" href={LAB_ROUTES.ADMIN_QUOTES} />
+        <TrackList title="BDC sans échantillons" items={model.tracking.poAwaitingSamples} empty="Aucun BDC en attente d’échantillons" href={LAB_ROUTES.ADMIN_ORDERS} />
+        <TrackList title="Revues en attente" items={model.tracking.reviewsPending} empty="Aucune revue pendante" href={LAB_ROUTES.ADMIN_VALIDATIONS} />
+        <TrackList title="Tâches en retard" items={model.tracking.tasksOverdue} empty="Aucune tâche en retard" href={LAB_ROUTES.ADMIN_TASKS} />
+        <section className="rounded-3xl border border-[#e8e2d4] bg-[#071422] p-5 text-white">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200">Actions rapides</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {[
+              { to: LAB_ROUTES.ADMIN_CALLS, label: 'Suivi appels', icon: Bell },
+              { to: LAB_ROUTES.ADMIN_SAMPLES, label: 'Réception ECH', icon: PackageSearch },
+              { to: LAB_ROUTES.ADMIN_DEADLINES, label: 'Délais / pénalités', icon: Clock3 },
+              { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Factures', icon: CheckCircle2 },
+            ].map((a) => (
+              <Link key={a.to} to={a.to} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm hover:border-cyan-300">
+                <a.icon className="h-4 w-4 text-cyan-300" />
+                {a.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+
       <div className="rounded-3xl bg-[#071422] p-6 text-white">
         <p className="text-[10px] uppercase tracking-[0.22em] text-amber-200">Parcours officiel</p>
         <h2 className="lab-display mt-1 mb-4 text-3xl">Les 12 étapes</h2>

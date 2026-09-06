@@ -8,11 +8,12 @@
 
 1. Migrations `01`–`06` + schéma `lab` exposé sur Laboratoire.
 2. OTP 10 min (`mailer_otp_exp=600`).
-3. Premier login `/lab/login` → `claim_first_admin`.
+3. Seed DEV : `npm run lab:seed` — docs/LAB_SEED.md. `claim_first_admin` reste si aucun SUPER_ADMIN.
 4. **Vercel only** (`npm run lab:vercel`). Cron : `/api/lab/cron?flush=1`. Pas de Railway.
 
 ## Scripts
 
+- `npm run lab:seed` — comptes DEV + 12 dossiers (jeton Laboratoire requis)
 - `npm run lab:flush-emails` / `--dry-run`
 - `npm run lab:cron` — relances devis + rappels délais
 - `npm run lab:backup` → `scripts/output/lab-backup-manifest.json`

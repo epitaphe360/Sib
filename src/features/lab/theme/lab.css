@@ -43,6 +43,28 @@
   overflow: hidden;
 }
 
+.lab-dash-panel {
+  background:
+    radial-gradient(420px 180px at 100% 0%, rgba(34, 211, 238, 0.12), transparent 55%),
+    linear-gradient(165deg, #0b1f3a 0%, #071422 100%);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  box-shadow: 0 18px 48px rgba(7, 20, 34, 0.28);
+}
+
+.lab-kpi-tile {
+  background:
+    radial-gradient(180px 80px at 90% 0%, rgba(212, 175, 55, 0.18), transparent 60%),
+    linear-gradient(160deg, #0b1f3a, #071422);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px rgba(7, 20, 34, 0.2);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.lab-kpi-tile:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  transform: translateY(-1px);
+}
+
 .lab-step-card::after {
   content: "";
   position: absolute;
