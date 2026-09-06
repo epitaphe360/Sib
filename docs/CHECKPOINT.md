@@ -2,23 +2,20 @@
 
 **Date** : 2026-09-06
 **Branche** : `cursor/elitech-lab-foundation-5783`
-**État** : AUTH + multi-tenant + DB + dashboard shell.
+**État** : phases 5–7 (fournisseurs, comparaison, devis + relance).
 
 ## Fait
 
-- Isolation `/lab` + schéma SQL `lab` (SIB intact)
-- Migration + RLS + RPC `submit_public_request`
-- RBAC central (`rbac.ts`) · machine à états · marge configurable
-- Shell admin/client, login password + OTP, formulaire demande, qualification / consultation / devis brouillon
-- Tests unitaires `tests/unit/lab-core.test.ts`
+- CRUD fournisseurs `/lab/admin/suppliers`
+- Offre publique EN `/lab/supplier-offer/:token` (RPC)
+- Comparaison prix/délai + sélection humaine
+- Envoi devis + relance J+N (settings) + sondage `/lab/quote-survey/:token`
+- Alerte prix trop élevé, aucun changement auto de tarif
 
-## À faire (humain)
+## Infra toujours requise
 
-- Appliquer la migration sur le projet Supabase
-- Exposer le schéma `lab` (déjà dans `config.toml`)
-- OTP TTL 10 min dans le dashboard Auth
-- Créer le 1er membership SUPER_ADMIN (user auth + `lab.organization_members`)
+Appliquer les 2 migrations `lab_*`, exposer schéma `lab`, créer SUPER_ADMIN.
 
 ## Prochaine étape
 
-Phase 5–7 : CRUD fournisseurs, comparaison offres, envoi devis + relance.
+Phase 8–9 : BDC client + réception / codification échantillons.

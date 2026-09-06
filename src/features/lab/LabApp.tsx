@@ -9,6 +9,14 @@ import LabRequestFormPage from './pages/LabRequestFormPage';
 import LabRequestsPage from './pages/LabRequestsPage';
 import LabRequestDetailPage from './pages/LabRequestDetailPage';
 import LabPlaceholderPage, { LabClientHomePage } from './pages/LabPlaceholderPage';
+import LabSuppliersPage from './pages/LabSuppliersPage';
+import LabSupplierDetailPage from './pages/LabSupplierDetailPage';
+import LabConsultationsPage from './pages/LabConsultationsPage';
+import LabConsultationDetailPage from './pages/LabConsultationDetailPage';
+import LabQuotesPage from './pages/LabQuotesPage';
+import LabQuoteDetailPage from './pages/LabQuoteDetailPage';
+import LabSupplierOfferPage from './pages/LabSupplierOfferPage';
+import LabQuoteSurveyPage from './pages/LabQuoteSurveyPage';
 
 function AdminOutlet() {
   return (
@@ -33,17 +41,19 @@ export default function LabApp() {
       <Route path="login" element={<LabAdminLoginPage />} />
       <Route path="client-login" element={<LabClientLoginPage />} />
       <Route path="request-form" element={<LabRequestFormPage />} />
+      <Route path="supplier-offer/:token" element={<LabSupplierOfferPage />} />
+      <Route path="quote-survey/:token" element={<LabQuoteSurveyPage />} />
 
       <Route path="admin" element={<AdminOutlet />}>
         <Route path="dashboard" element={<LabDashboardPage />} />
         <Route path="requests" element={<LabRequestsPage />} />
         <Route path="requests/:id" element={<LabRequestDetailPage />} />
-        <Route path="quotes" element={<LabPlaceholderPage title="Devis" />} />
-        <Route path="quotes/:id" element={<LabPlaceholderPage title="Devis" />} />
-        <Route path="suppliers" element={<LabPlaceholderPage title="Fournisseurs" />} />
-        <Route path="suppliers/:id" element={<LabPlaceholderPage title="Fournisseur" />} />
-        <Route path="consultations" element={<LabPlaceholderPage title="Consultations" />} />
-        <Route path="consultations/:id" element={<LabPlaceholderPage title="Consultation" />} />
+        <Route path="quotes" element={<LabQuotesPage />} />
+        <Route path="quotes/:id" element={<LabQuoteDetailPage />} />
+        <Route path="suppliers" element={<LabSuppliersPage />} />
+        <Route path="suppliers/:id" element={<LabSupplierDetailPage />} />
+        <Route path="consultations" element={<LabConsultationsPage />} />
+        <Route path="consultations/:id" element={<LabConsultationDetailPage />} />
         <Route path="orders" element={<LabPlaceholderPage title="Commandes" />} />
         <Route path="samples" element={<LabPlaceholderPage title="Échantillons" />} />
         <Route path="samples/:id" element={<LabPlaceholderPage title="Échantillon" />} />

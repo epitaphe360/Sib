@@ -5,6 +5,8 @@ import { canTransition } from '@/features/lab/lib/status';
 import { can } from '@/features/lab/rbac';
 import { clientRequestSchema, moroccoPhoneSchema } from '@/features/lab/schemas';
 import { isLabPath } from '@/features/lab/routes';
+import { rankOffers, suggestRecipients } from '@/features/lab/lib/compareOffers';
+import { followupDueAt, isFollowupDue, surveyCreatesPriceAlert } from '@/features/lab/lib/quoteFollowup';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -66,6 +68,49 @@ describe('lab validators', () => {
       accreditation_required: false,
     });
     expect(parsed.phone).toBe('661234567');
+  });
+});
+
+describe('lab offer ranking', () => {
+  it('ranks by price then delay and never auto-selects', () => {
+    const ranked = rankOffers([
+      { id: 'b', supplierId: '2', supplierName: 'B', amount: 120, currency: 'EUR', turnaroundDays: 2 },
+      { id: 'a', supplierId: '1', supplierName: 'A', amount: 100, currency: 'EUR', turnaroundDays: 5 },
+      { id: 'c', supplierId: '3', supplierName: 'C', amount: 100, currency: 'EUR', turnaroundDays: 3 },
+    ]);
+    expect(ranked[0].id).toBe('c');
+    expect(ranked[0].recommended).toBe(true);
+    expect(ranked[1].id).toBe('a');
+  });
+
+  it('filters to accredited offers when required', () => {
+    const ranked = rankOffers([
+      { id: 'cheap', supplierId: '1', supplierName: 'A', amount: 10, currency: 'EUR', turnaroundDays: 1 },
+      { id: 'iso', supplierId: '2', supplierName: 'B', amount: 50, currency: 'EUR', turnaroundDays: 4, accreditation: 'ISO 17025' },
+    ], { accreditationRequired: true });
+    expect(ranked).toHaveLength(1);
+    expect(ranked[0].id).toBe('iso');
+  });
+
+  it('suggests TOP_3 recipients', () => {
+    expect(suggestRecipients([{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }], 'TOP_3')).toHaveLength(3);
+  });
+});
+
+describe('lab quote followup', () => {
+  it('schedules follow-up from settings days', () => {
+    const due = followupDueAt(new Date('2026-01-01T00:00:00Z'), 3);
+    expect(due.toISOString()).toBe('2026-01-04T00:00:00.000Z');
+  });
+
+  it('detects due follow-up and price alert without changing price', () => {
+    expect(isFollowupDue({
+      sentAt: '2026-01-01',
+      followupDueAt: '2026-01-02',
+      followupSentAt: null,
+      now: new Date('2026-01-03'),
+    })).toBe(true);
+    expect(surveyCreatesPriceAlert({ received: true, priceOk: false, delayOk: true, priceTooHigh: false })).toBe(true);
   });
 });
 

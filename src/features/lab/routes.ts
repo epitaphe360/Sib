@@ -35,6 +35,8 @@ export const LAB_ROUTES = {
   CLIENT_REPORTS: '/lab/client/reports',
   CLIENT_INVOICES: '/lab/client/invoices',
   CLIENT_PROFILE: '/lab/client/profile',
+  SUPPLIER_OFFER: '/lab/supplier-offer/:token',
+  QUOTE_SURVEY: '/lab/quote-survey/:token',
 } as const;
 
 export function isLabPath(pathname: string): boolean {
