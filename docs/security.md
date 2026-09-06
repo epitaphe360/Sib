@@ -11,13 +11,14 @@
 ## Auth
 
 - Client : OTP email uniquement (pas de password local). Rate-limit client (`otpRateLimiter`, 5 / 15 min).
-- Admin : password Supabase ; MFA prévu (`mfa_ready` sur profiles).
+- Admin : password Supabase ; MFA TOTP (`/lab/admin/mfa`, `lab.profiles.mfa_ready`).
 - Guards UI = UX. Autorisation réelle = RLS + RPC.
 
 ## Secrets
 
 - Interdit : `SUPABASE_SERVICE_ROLE_KEY` dans `src/`.
-- Actions privilégiées : Edge Function / `server.js` / Railway (plus tard).
+- Actions privilégiées : `server.js` (`POST /api/lab/flush-emails` + `LAB_CRON_SECRET`) / `scripts/lab-email-worker.mjs` / `scripts/lab-backup.mjs`.
+- Env serveur : `RESEND_API_KEY`, `LAB_FROM_EMAIL`, `LAB_CRON_SECRET`, `LAB_BACKUP_ORG_UUID`. Jamais `VITE_*` pour ces secrets.
 
 ## XSS / injections
 

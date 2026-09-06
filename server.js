@@ -395,6 +395,26 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+/**
+ * Lab email flush (cron). Never expose SERVICE_ROLE to the client.
+ * POST /api/lab/flush-emails
+ * Header: x-lab-cron-secret
+ */
+app.post('/api/lab/flush-emails', async (req, res) => {
+  const secret = process.env.LAB_CRON_SECRET;
+  if (!secret || req.headers['x-lab-cron-secret'] !== secret) {
+    return res.status(401).json({ success: false, error: 'unauthorized' });
+  }
+  try {
+    const { flushLabEmails } = await import('./scripts/lab-email-worker.mjs');
+    const result = await flushLabEmails({ dryRun: req.query.dryRun === '1' });
+    return res.json({ success: !result.error, ...result });
+  } catch (error) {
+    console.error('❌ Lab email flush:', error);
+    return res.status(500).json({ success: false, error: error.message || 'flush failed' });
+  }
+});
+
 // ============================================
 // ADMIN API: Delete exhibitor (bypasses RLS)
 // ============================================

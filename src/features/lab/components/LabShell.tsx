@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FileText, Building2, Send, Beaker, FlaskConical,
-  FileCheck, Receipt, Settings, LogOut, Shield, ClipboardList,
+  FileCheck, Receipt, Settings, LogOut, Shield, ClipboardList, KeyRound, Inbox,
 } from 'lucide-react';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { LAB_ROUTES } from '../routes';
@@ -23,8 +23,11 @@ const NAV = [
   { to: LAB_ROUTES.ADMIN_SUPPLIER_INVOICES, label: 'Fourn. factures', icon: Receipt, perm: 'invoices.read' as const },
   { to: LAB_ROUTES.ADMIN_DEADLINES, label: 'Délais', icon: ClipboardList, perm: 'samples.write' as const },
   { to: LAB_ROUTES.ADMIN_EMAILS, label: 'E-mails', icon: Send, perm: 'settings.write' as const },
+  { to: LAB_ROUTES.ADMIN_INBOX, label: 'Inbox', icon: Inbox, perm: 'settings.write' as const },
+  { to: LAB_ROUTES.ADMIN_MFA, label: 'MFA', icon: KeyRound, perm: 'dashboard.view' as const },
   { to: LAB_ROUTES.ADMIN_SETTINGS, label: 'Réglages', icon: Settings, perm: 'settings.write' as const },
   { to: LAB_ROUTES.ADMIN_AUDIT, label: 'Audit', icon: Shield, perm: 'audit.read' as const },
+  { to: LAB_ROUTES.ADMIN_BACKUPS, label: 'Sauvegardes', icon: Shield, perm: 'audit.read' as const },
 ];
 
 export function LabShell() {

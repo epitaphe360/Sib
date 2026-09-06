@@ -35,6 +35,9 @@ dist-ssr
 .env.railway
 .env.vercel
 
+# Lab backup inventory (may contain org ids, never secrets)
+scripts/output/
+
 # Build / artifact folders
 .cache
 .turbo

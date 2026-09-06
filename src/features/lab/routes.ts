@@ -32,6 +32,8 @@ export const LAB_ROUTES = {
   ADMIN_DEADLINES: '/lab/admin/deadlines',
   ADMIN_SUPPLIER_INVOICES: '/lab/admin/supplier-invoices',
   ADMIN_EMAILS: '/lab/admin/emails',
+  ADMIN_MFA: '/lab/admin/mfa',
+  ADMIN_INBOX: '/lab/admin/inbox',
   CLIENT_DASHBOARD: '/lab/client/dashboard',
   CLIENT_REQUESTS: '/lab/client/requests',
   CLIENT_REQUEST: '/lab/client/requests/:id',

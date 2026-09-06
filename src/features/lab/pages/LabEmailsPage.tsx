@@ -15,7 +15,7 @@ export default function LabEmailsPage() {
   return (
     <div className="space-y-3">
       <h1 className="text-2xl font-semibold text-[#0b1f3a]">File e-mails</h1>
-      <p className="text-xs text-slate-500">Templates : {EMAIL_TEMPLATE_KEYS.join(', ')}. Envoi Resend côté serveur.</p>
+      <p className="text-xs text-slate-500">Templates : {EMAIL_TEMPLATE_KEYS.join(', ')}. Envoi serveur : npm run lab:flush-emails ou POST /api/lab/flush-emails.</p>
       <ul className="rounded-xl border bg-white divide-y text-sm">
         {rows.map((r) => (
           <li key={r.id} className="px-4 py-2">{r.status} · {r.template_key} · {r.subject} → {r.recipient}</li>

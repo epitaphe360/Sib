@@ -13,6 +13,8 @@ import { invoiceProgress } from '@/features/lab/lib/invoices';
 import { pickTemplateKind, reportReadiness } from '@/features/lab/lib/reportReadiness';
 import { renderEmail } from '@/features/lab/lib/emailTemplates';
 import { deadlineState, delayDays } from '@/features/lab/lib/deadlines';
+import { pickQueuedEmails, nextEmailStatus, classifyInboundEmail } from '@/features/lab/lib/emailQueue';
+import { buildBackupManifest, LAB_BACKUP_TABLES } from '@/features/lab/lib/backupManifest';
 
 describe('lab pricing', () => {
   it('applies configurable margin', () => {
@@ -185,6 +187,42 @@ describe('lab emails and deadlines', () => {
     expect(delayDays('2026-01-01', '2026-01-04')).toBe(3);
     expect(deadlineState('2026-01-10', null, new Date('2026-01-09'))).toBe('due_soon');
     expect(deadlineState('2026-01-01', null, new Date('2026-01-03'))).toBe('late');
+  });
+});
+
+describe('lab email queue', () => {
+  it('picks queued with recipient and subject', () => {
+    expect(pickQueuedEmails([
+      { id: '1', status: 'sent', recipient: 'a@x', subject: 'ok' },
+      { id: '2', status: 'queued', recipient: 'b@x', subject: 'hi' },
+      { id: '3', status: 'queued', recipient: '', subject: 'hi' },
+    ]).map((r) => r.id)).toEqual(['2']);
+  });
+
+  it('maps send result to status', () => {
+    expect(nextEmailStatus(true)).toBe('sent');
+    expect(nextEmailStatus(false)).toBe('failed');
+  });
+
+  it('classifies inbound subjects', () => {
+    expect(classifyInboundEmail('Re: Quote EL-1')).toBe('QUOTE_REPLY');
+    expect(classifyInboundEmail('BC-2026-009')).toBe('PURCHASE_ORDER');
+    expect(classifyInboundEmail('Rapport final')).toBe('REPORT');
+    expect(classifyInboundEmail('facture 12')).toBe('OTHER');
+  });
+});
+
+describe('lab backup manifest', () => {
+  it('lists lab entities and restore doc', () => {
+    const m = buildBackupManifest({
+      organizationId: 'org',
+      tables: LAB_BACKUP_TABLES,
+      buckets: ['lab-reports'],
+      createdAt: '2026-09-06T00:00:00.000Z',
+    });
+    expect(m.postgres.schema).toBe('lab');
+    expect(m.postgres.tables).toContain('quotes');
+    expect(m.restore_doc).toBe('docs/RESTORE_TEST.md');
   });
 });
 

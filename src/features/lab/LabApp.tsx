@@ -29,6 +29,8 @@ import LabSettingsPage from './pages/LabSettingsPage';
 import LabDeadlinesPage from './pages/LabDeadlinesPage';
 import LabSupplierInvoicesPage from './pages/LabSupplierInvoicesPage';
 import LabEmailsPage from './pages/LabEmailsPage';
+import LabMfaPage from './pages/LabMfaPage';
+import LabInboxPage from './pages/LabInboxPage';
 import {
   LabAuditPage, LabBackupsPage, LabClientsPage, LabPaymentsPage,
   LabReportTemplatesPage, LabTasksPage, LabUsersPage,
@@ -92,6 +94,8 @@ export default function LabApp() {
         <Route path="supplier-invoices" element={<LabSupplierInvoicesPage />} />
         <Route path="deadlines" element={<LabDeadlinesPage />} />
         <Route path="emails" element={<LabEmailsPage />} />
+        <Route path="inbox" element={<LabInboxPage />} />
+        <Route path="mfa" element={<LabMfaPage />} />
         <Route path="settings" element={<LabSettingsPage />} />
         <Route path="audit" element={<LabAuditPage />} />
         <Route path="backups" element={<LabBackupsPage />} />

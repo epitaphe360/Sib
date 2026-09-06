@@ -9,6 +9,8 @@
 | Sécurité | `docs/security.md` |
 | Checkpoint | `docs/CHECKPOINT.md` |
 | Code lab | `src/features/lab/` |
-| Migration | `supabase/migrations/20260906000001_lab_elitech_foundation.sql` |
+| Migrations | `supabase/migrations/20260906000001` → `05` |
+| Worker e-mails | `scripts/lab-email-worker.mjs` |
+| Backup | `scripts/lab-backup.mjs` + `docs/RESTORE_TEST.md` |
 
 SIB reste sur `public` + routes existantes. Lab = `/lab` + schéma `lab`.
