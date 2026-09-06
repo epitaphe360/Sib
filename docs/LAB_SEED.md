@@ -23,6 +23,20 @@ Mot de passe **jamais** en production. Surcharge : `LAB_SEED_PASSWORD` ou `LAB_S
 
 Aucun de ces mots de passe n’est un secret métier. Ne pas les réutiliser en prod.
 
+## Raccourcis « Comptes démo » (login mobile)
+
+Sur `/lab/login` et `/lab/client-login`, des boutons remplissent les identifiants puis soumettent le flux existant (`signInWithPassword` / `signInWithOtp`). Pas de backdoor.
+
+Affichés tant que `VITE_LAB_DEMO_LOGIN !== 'false'` (défaut **ON**, pour la démo Vercel).
+
+**Prod réelle** : dans Vercel (et tout `.env` non commité),
+
+```bash
+VITE_LAB_DEMO_LOGIN=false
+```
+
+Le client n’a pas de login mot de passe : le bouton préremplit `client@elitech.dev` et demande l’OTP. Il faut encore lire le code dans l’e-mail.
+
 ## Lancer
 
 ```bash

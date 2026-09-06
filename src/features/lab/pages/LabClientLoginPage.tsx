@@ -6,15 +6,37 @@ import { useLabSessionStore } from '../store/labSessionStore';
 import { LAB_ROUTES } from '../routes';
 import { otpCodeSchema, otpEmailSchema } from '../schemas';
 import { LabBtn, LabField, LabPublicFrame, labInputClass } from '../components/LabUi';
+import { LabDemoAccounts } from '../components/LabDemoAccounts';
+import { LAB_DEMO_CLIENT_ACCOUNT } from '../lib/demoAccounts';
 
 export default function LabClientLoginPage() {
   const navigate = useNavigate();
   const { requestClientOtp, verifyClientOtp } = useLabSessionStore();
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [error, setError] = useState<string | null>(null);
+  const [demoId, setDemoId] = useState<string | null>(null);
 
-  const emailForm = useForm({ resolver: zodResolver(otpEmailSchema), mode: 'onChange' });
-  const codeForm = useForm({ resolver: zodResolver(otpCodeSchema), mode: 'onChange' });
+  const emailForm = useForm<{ email: string }>({ resolver: zodResolver(otpEmailSchema), mode: 'onChange' });
+  const codeForm = useForm<{ email: string; token: string }>({ resolver: zodResolver(otpCodeSchema), mode: 'onChange' });
+
+  const requestOtp = async (v: { email: string }) => {
+    setError(null);
+    try {
+      await requestClientOtp(v.email);
+      codeForm.setValue('email', v.email);
+      setStep('code');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Envoi impossible');
+    } finally {
+      setDemoId(null);
+    }
+  };
+
+  const fillAndRequestDemoOtp = () => {
+    setDemoId(LAB_DEMO_CLIENT_ACCOUNT.id);
+    emailForm.setValue('email', LAB_DEMO_CLIENT_ACCOUNT.email, { shouldValidate: true, shouldDirty: true });
+    void emailForm.handleSubmit(requestOtp)();
+  };
 
   return (
     <LabPublicFrame>
@@ -26,16 +48,7 @@ export default function LabClientLoginPage() {
           {step === 'email' ? (
             <form
               className="space-y-3"
-              onSubmit={emailForm.handleSubmit(async (v) => {
-                setError(null);
-                try {
-                  await requestClientOtp(v.email);
-                  codeForm.setValue('email', v.email);
-                  setStep('code');
-                } catch (e) {
-                  setError(e instanceof Error ? e.message : 'Envoi impossible');
-                }
-              })}
+              onSubmit={emailForm.handleSubmit(requestOtp)}
             >
               <LabField label="Email" error={emailForm.formState.errors.email?.message}>
                 <input className={labInputClass()} type="email" placeholder="vous@entreprise.ma" {...emailForm.register('email')} />
@@ -44,6 +57,13 @@ export default function LabClientLoginPage() {
               <LabBtn type="submit" className="w-full" disabled={!emailForm.formState.isValid || emailForm.formState.isSubmitting}>
                 Envoyer le code
               </LabBtn>
+              <LabDemoAccounts
+                accounts={[LAB_DEMO_CLIENT_ACCOUNT]}
+                onPick={fillAndRequestDemoOtp}
+                busyId={demoId}
+                disabled={emailForm.formState.isSubmitting}
+                hint="Pas de connexion mot de passe côté client : le bouton préremplit l’e-mail et envoie le code OTP. Il faut encore ouvrir la boîte client@elitech.dev."
+              />
             </form>
           ) : (
             <form

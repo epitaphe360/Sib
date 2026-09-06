@@ -8,9 +8,15 @@ test.describe('Elitech Lab public shell', () => {
     await page.goto('/lab/login');
     await expect(page.getByRole('heading', { name: /connexion laboratoire/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /entrer/i })).toBeDisabled();
+    await expect(page.getByText('Comptes démo')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Admin/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Madame Zineb/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Technique/i })).toBeVisible();
 
     await page.goto('/lab/client-login');
     await expect(page.getByRole('heading', { name: /espace client/i })).toBeVisible();
+    await expect(page.getByText('Comptes démo')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Client Atlas Oils/i })).toBeVisible();
 
     await page.goto('/lab/request-form');
     await expect(page.getByRole('heading', { name: /demande/i })).toBeVisible();
