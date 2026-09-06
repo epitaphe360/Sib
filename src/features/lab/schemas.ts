@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ANALYSIS_KINDS } from './types';
+import { LAB_COUNTRY_CODES } from './theme/tokens';
 
 export const moroccoPhoneSchema = z
   .string()
@@ -10,7 +11,7 @@ export const clientRequestSchema = z.object({
   company_name: z.string().trim().min(2, 'Société requise'),
   contact_name: z.string().trim().min(2, 'Contact requis'),
   email: z.string().trim().email('Email invalide'),
-  country_code: z.literal('+212'),
+  country_code: z.enum(LAB_COUNTRY_CODES),
   phone: moroccoPhoneSchema,
   product_name: z.string().trim().min(2, 'Produit requis'),
   matrix: z.string().trim().optional().or(z.literal('')),
@@ -25,9 +26,14 @@ export const clientRequestSchema = z.object({
 
 export type ClientRequestInput = z.infer<typeof clientRequestSchema>;
 
+export const EXECUTION_CHANNELS = ['INTERNAL', 'SUBCONTRACTED', 'MIXTE'] as const;
+
 export const qualifySchema = z.object({
   analysis_kind: z.enum(ANALYSIS_KINDS),
+  execution_channel: z.enum(EXECUTION_CHANNELS),
   internal_notes: z.string().max(2000).optional().or(z.literal('')),
+  internal_analyses: z.string().max(4000).optional().or(z.literal('')),
+  subcontracted_analyses: z.string().max(4000).optional().or(z.literal('')),
 });
 
 export const consultationSchema = z.object({
@@ -39,6 +45,8 @@ export const quoteDraftSchema = z.object({
   supplier_amount: z.coerce.number().nonnegative('Montant ≥ 0'),
   turnaround_days: z.coerce.number().int().positive('Délai > 0'),
   conditions: z.string().max(2000).optional().or(z.literal('')),
+  margin_percent: z.coerce.number().min(0).max(100).optional(),
+  market_ceiling: z.coerce.number().optional(),
 });
 
 export const otpEmailSchema = z.object({
@@ -137,6 +145,21 @@ export const taskSchema = z.object({
   title: z.string().trim().min(2),
   priority: z.enum(['low', 'normal', 'high']),
   due_date: z.string().optional().or(z.literal('')),
+});
+
+export const clientCallSchema = z.object({
+  company_name: z.string().trim().min(2, 'Société requise'),
+  contact_name: z.string().trim().min(2, 'Contact requis'),
+  phone: z.string().trim().regex(/^[0-9]*$/, 'Chiffres uniquement').optional().or(z.literal('')),
+  subject: z.string().trim().min(2, 'Objet requis'),
+  notes: z.string().max(4000).optional().or(z.literal('')),
+  follow_up_at: z.string().optional().or(z.literal('')),
+});
+
+export const quoteVersionSchema = z.object({
+  supplier_amount: z.coerce.number().nonnegative(),
+  margin_percent: z.coerce.number().min(0).max(100),
+  reason: z.string().trim().min(2, 'Motif requis'),
 });
 
 

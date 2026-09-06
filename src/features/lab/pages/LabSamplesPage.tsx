@@ -34,7 +34,8 @@ export default function LabSamplesPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Échantillons</h1>
+      <h1 className="font-serif text-3xl font-semibold text-[#071422]">Échantillons</h1>
+      <p className="text-sm text-slate-500">Étape 5 — registre Supabase, code unique.</p>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
         <table className="min-w-full text-sm">

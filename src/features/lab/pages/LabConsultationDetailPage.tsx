@@ -5,6 +5,7 @@ import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { rankOffers, type SupplierOffer } from '../lib/compareOffers';
 import { canTransition } from '../lib/status';
+import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
 
 interface ItemRow {
   id: string;
@@ -76,22 +77,17 @@ export default function LabConsultationDetailPage() {
   const ranked = rankOffers(offers, { accreditationRequired });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-[#0b1f3a]">Comparaison</h1>
-        <p className="text-sm text-slate-500">Critères : prix puis délai. L’IA recommande, la validation reste humaine.</p>
-      </div>
-      {message && <p className="text-sm text-green-700">{message}</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-slate-500">
+    <LabPage kicker="Étape 3" title="Comparaison" subtitle="Critères : prix, délai, accréditation. L’IA recommande, Zineb choisit.">
+      {message && <LabAlert>{message}</LabAlert>}
+      {error && <LabAlert tone="err">{error}</LabAlert>}
+      <LabTable>
+        <thead className="bg-[#f7f4ee] text-left text-slate-500">
             <tr>
-              <th className="px-4 py-2">Rang</th>
-              <th className="px-4 py-2">Fournisseur</th>
-              <th className="px-4 py-2">Prix</th>
-              <th className="px-4 py-2">Délai</th>
-              <th className="px-4 py-2"></th>
+              <LabTh>Rang</LabTh>
+              <LabTh>Fournisseur</LabTh>
+              <LabTh>Prix</LabTh>
+              <LabTh>Délai</LabTh>
+              <LabTh></LabTh>
             </tr>
           </thead>
           <tbody>
@@ -106,6 +102,7 @@ export default function LabConsultationDetailPage() {
                     type="button"
                     onClick={async () => {
                       if (!orgId || !requestId || !id) return;
+                      if (!confirmLabAction(`Choisir ${o.supplierName} ? Décision humaine, jamais automatique.`)) return;
                       const { error: sErr } = await labSchema().from('supplier_selection').insert({
                         organization_id: orgId,
                         request_id: requestId,
@@ -128,16 +125,15 @@ export default function LabConsultationDetailPage() {
               </tr>
             ))}
             {ranked.length === 0 && (
-              <tr><td className="px-4 py-8 text-slate-400" colSpan={5}>Aucune offre. Lien public : /lab/supplier-offer/:token</td></tr>
+              <tr><td colSpan={5}><LabEmpty>Aucune offre. Lien public : /lab/supplier-offer/:token</LabEmpty></td></tr>
             )}
           </tbody>
-        </table>
-      </div>
+      </LabTable>
       <ul className="text-xs text-slate-500 space-y-1">
         {items.map((item) => (
           <li key={item.id}>Lien offre : /lab/supplier-offer/{item.token}</li>
         ))}
       </ul>
-    </div>
+    </LabPage>
   );
 }

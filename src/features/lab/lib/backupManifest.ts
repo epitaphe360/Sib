@@ -17,6 +17,7 @@ export function buildBackupManifest(input: {
 export const LAB_BACKUP_TABLES = [
   'organizations', 'client_requests', 'quotes', 'purchase_orders',
   'samples', 'analysis_results', 'reports', 'client_invoices', 'audit_logs',
+  'client_calls', 'regulatory_proposals', 'regulatory_texts',
 ];
 
 export const LAB_BACKUP_BUCKETS = [

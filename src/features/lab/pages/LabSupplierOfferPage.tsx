@@ -28,13 +28,13 @@ export default function LabSupplierOfferPage() {
   }, [token]);
 
   if (done) {
-    return <div className="min-h-screen grid place-items-center text-green-700">Offer received. Thank you.</div>;
+    return <div className="grid min-h-screen place-items-center bg-[#f7f4ee] text-emerald-800">Offer received. Thank you.</div>;
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4">
+    <div className="min-h-screen bg-[#f7f4ee] px-4 py-10">
       <form
-        className="max-w-md mx-auto rounded-2xl border border-slate-200 bg-white p-6 space-y-3"
+        className="mx-auto max-w-md space-y-3 rounded-3xl border border-[#e8e2d4] bg-white p-7 shadow-xl"
         onSubmit={form.handleSubmit(async (v) => {
           if (!token) return;
           const { error: rpcErr } = await labSchema().rpc('submit_supplier_offer', {

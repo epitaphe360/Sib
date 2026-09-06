@@ -1,0 +1,55 @@
+.lab-root {
+  --lab-navy: #071422;
+  --lab-navy-mid: #0b1f3a;
+  --lab-navy-deep: #050d18;
+  --lab-gold: #d4af37;
+  --lab-gold-soft: #f0d78c;
+  --lab-cyan: #22d3ee;
+  --lab-cyan-soft: #67e8f9;
+  --lab-ink: #e8eef7;
+  --lab-muted: #94a3b8;
+  --lab-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --lab-body: ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--lab-body);
+  color: var(--lab-ink);
+}
+
+.lab-root h1, .lab-root h2, .lab-root .lab-display {
+  font-family: var(--lab-display);
+}
+
+.lab-public {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(34, 211, 238, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, rgba(212, 175, 55, 0.16), transparent 50%),
+    linear-gradient(165deg, #050d18 0%, #0b1f3a 48%, #071422 100%);
+}
+
+.lab-glass {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.lab-gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+.lab-step-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.lab-step-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -40% auto;
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 70%);
+  pointer-events: none;
+}

@@ -8,6 +8,10 @@ NEW_REQUEST → QUALIFICATION → WAITING_SUPPLIER_QUOTES → SUPPLIER_SELECTED 
 
 Branches : CORRECTION_REQUESTED (depuis TECHNICAL_REVIEW / FINAL_REVIEW).
 
+## Parcours 12 étapes (UI + statuts)
+
+Voir `src/features/lab/lib/journey.ts` et `docs/LAB_AUDIT.md`.
+
 ## Checkpoint 1 (implémenté)
 
 1. Client (ou public) soumet une demande (`/lab/request-form`).

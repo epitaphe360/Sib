@@ -104,7 +104,8 @@ export function LabTasksPage() {
   useEffect(() => { void load(); }, [orgId]);
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Tâches</h1>
+      <h1 className="font-serif text-3xl font-semibold text-[#071422]">Tâches</h1>
+      <p className="text-sm text-slate-500">À faire · en attente · en retard · à valider.</p>
       <form className="flex gap-2" onSubmit={form.handleSubmit(async (v) => {
         if (!orgId) return;
         const parsed = taskSchema.safeParse(v);

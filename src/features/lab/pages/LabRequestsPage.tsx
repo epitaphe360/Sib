@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import type { LabClientRequest } from '../types';
+import { LabBadge, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
+import { journeyStepForStatus } from '../lib/journey';
 
 export default function LabRequestsPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);
@@ -28,36 +30,35 @@ export default function LabRequestsPage() {
   }, [orgId]);
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Demandes</h1>
+    <LabPage kicker="Étapes 1–2" title="Demandes" subtitle="Dossier maître unique. Qualification interne FR / sous-traitance EN.">
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-slate-500">
-            <tr>
-              <th className="px-4 py-2">Dossier</th>
-              <th className="px-4 py-2">Client</th>
-              <th className="px-4 py-2">Produit</th>
-              <th className="px-4 py-2">Statut</th>
+      <LabTable>
+        <thead className="bg-[#f7f4ee]">
+          <tr>
+            <LabTh>Dossier</LabTh>
+            <LabTh>Client</LabTh>
+            <LabTh>Produit</LabTh>
+            <LabTh>Étape</LabTh>
+            <LabTh>Statut</LabTh>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id} className="border-t border-[#f0eadb]">
+              <td className="px-4 py-3">
+                <Link className="font-medium text-cyan-800" to={`/lab/admin/requests/${row.id}`}>{row.dossier_number}</Link>
+              </td>
+              <td className="px-4 py-3">{row.company_name}</td>
+              <td className="px-4 py-3">{row.product_name}</td>
+              <td className="px-4 py-3">{journeyStepForStatus(row.status) || '—'}</td>
+              <td className="px-4 py-3"><LabBadge tone="gold">{row.status}</LabBadge></td>
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id} className="border-t border-slate-100">
-                <td className="px-4 py-2">
-                  <Link className="text-cyan-700" to={`/lab/admin/requests/${row.id}`}>{row.dossier_number}</Link>
-                </td>
-                <td className="px-4 py-2">{row.company_name}</td>
-                <td className="px-4 py-2">{row.product_name}</td>
-                <td className="px-4 py-2">{row.status}</td>
-              </tr>
-            ))}
-            {rows.length === 0 && (
-              <tr><td className="px-4 py-8 text-slate-400" colSpan={4}>Aucune demande</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          ))}
+          {rows.length === 0 && (
+            <tr><td colSpan={5}><LabEmpty>Aucune demande</LabEmpty></td></tr>
+          )}
+        </tbody>
+      </LabTable>
+    </LabPage>
   );
 }

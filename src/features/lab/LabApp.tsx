@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import './theme/lab.css';
 import { LabClientShell, LabShell } from './components/LabShell';
 import { LabGuard } from './components/LabGuard';
 import LabLandingPage from './pages/LabLandingPage';
@@ -31,6 +32,9 @@ import LabSupplierInvoicesPage from './pages/LabSupplierInvoicesPage';
 import LabEmailsPage from './pages/LabEmailsPage';
 import LabMfaPage from './pages/LabMfaPage';
 import LabInboxPage from './pages/LabInboxPage';
+import LabCallsPage from './pages/LabCallsPage';
+import LabRegulatoryPage from './pages/LabRegulatoryPage';
+import LabRegulationPage from './pages/LabRegulationPage';
 import {
   LabAuditPage, LabBackupsPage, LabClientsPage, LabPaymentsPage,
   LabReportTemplatesPage, LabTasksPage, LabUsersPage,
@@ -95,6 +99,9 @@ export default function LabApp() {
         <Route path="deadlines" element={<LabDeadlinesPage />} />
         <Route path="emails" element={<LabEmailsPage />} />
         <Route path="inbox" element={<LabInboxPage />} />
+        <Route path="regulatory" element={<LabRegulatoryPage />} />
+        <Route path="regulation" element={<LabRegulationPage />} />
+        <Route path="calls" element={<LabCallsPage />} />
         <Route path="mfa" element={<LabMfaPage />} />
         <Route path="settings" element={<LabSettingsPage />} />
         <Route path="audit" element={<LabAuditPage />} />

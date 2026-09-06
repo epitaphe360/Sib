@@ -42,7 +42,8 @@ export default function LabInvoicesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Facturation client</h1>
+      <h1 className="font-serif text-3xl font-semibold text-[#071422]">Facturation client</h1>
+      <p className="text-sm text-slate-500">Étape 11 — client, règlements, marge. Statuts : payé / attente / retard.</p>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2 flex-wrap">
         {requests.filter((r) => r.status === 'REPORT_SENT').map((r) => (

@@ -82,6 +82,7 @@ export interface LabClientRequest {
   accreditation_required: boolean;
   notes: string | null;
   analysis_kind: AnalysisKind | null;
+  execution_channel?: 'INTERNAL' | 'SUBCONTRACTED' | 'MIXTE' | null;
   status: DossierStatus;
   created_at: string;
 }

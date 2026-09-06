@@ -19,7 +19,9 @@ export type LabPermission =
   | 'settings.write'
   | 'audit.read'
   | 'users.write'
-  | 'portal.client';
+  | 'portal.client'
+  | 'regulatory.write'
+  | 'calls.write';
 
 const ROLE_PERMS: Record<LabRole, LabPermission[]> = {
   SUPER_ADMIN: [
@@ -27,17 +29,20 @@ const ROLE_PERMS: Record<LabRole, LabPermission[]> = {
     'suppliers.read', 'suppliers.write', 'consultations.write', 'quotes.write',
     'quotes.validate', 'samples.write', 'results.review.technical', 'results.review.final',
     'reports.write', 'invoices.read', 'invoices.write', 'settings.write', 'audit.read', 'users.write',
+    'regulatory.write', 'calls.write',
   ],
   DIRECTION: [
     'dashboard.view', 'requests.read', 'requests.write', 'requests.qualify',
     'suppliers.read', 'suppliers.write', 'consultations.write', 'quotes.write',
     'quotes.validate', 'samples.write', 'results.review.final', 'reports.write',
     'invoices.read', 'invoices.write', 'settings.write', 'audit.read', 'users.write',
+    'regulatory.write', 'calls.write',
   ],
   RESPONSABLE_VALIDATION: [
     'dashboard.view', 'requests.read', 'requests.write', 'requests.qualify',
     'suppliers.read', 'consultations.write', 'quotes.write', 'quotes.validate',
     'samples.write', 'results.review.final', 'reports.write', 'invoices.read',
+    'regulatory.write', 'calls.write',
   ],
   RESPONSABLE_TECHNIQUE: [
     'dashboard.view', 'requests.read', 'requests.qualify', 'suppliers.read',
@@ -45,7 +50,7 @@ const ROLE_PERMS: Record<LabRole, LabPermission[]> = {
   ],
   ASSISTANTE: [
     'dashboard.view', 'requests.read', 'requests.write', 'suppliers.read',
-    'consultations.write', 'quotes.write', 'samples.write',
+    'consultations.write', 'quotes.write', 'samples.write', 'calls.write',
   ],
   TECHNICIEN: ['dashboard.view', 'requests.read', 'samples.write'],
   FINANCE: ['dashboard.view', 'requests.read', 'invoices.read', 'invoices.write'],

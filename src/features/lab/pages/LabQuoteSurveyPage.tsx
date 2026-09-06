@@ -17,13 +17,13 @@ export default function LabQuoteSurveyPage() {
   });
 
   if (done) {
-    return <div className="min-h-screen grid place-items-center text-green-700">Merci, votre retour est enregistré.</div>;
+    return <div className="grid min-h-screen place-items-center bg-[#f7f4ee] text-emerald-800">Merci, votre retour est enregistré.</div>;
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-slate-50 px-4">
+    <div className="grid min-h-screen place-items-center bg-[#f7f4ee] px-4">
       <form
-        className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 space-y-3"
+        className="w-full max-w-md space-y-3 rounded-3xl border border-[#e8e2d4] bg-white p-7 shadow-xl"
         onSubmit={form.handleSubmit(async (v) => {
           if (!token) return;
           const { error: rpcErr } = await labSchema().rpc('submit_quote_survey', {
@@ -38,7 +38,8 @@ export default function LabQuoteSurveyPage() {
           setDone(true);
         })}
       >
-        <h1 className="text-xl font-semibold text-[#0b1f3a]">Retour devis</h1>
+        <p className="text-[11px] uppercase tracking-[0.22em] text-[#c9a45c]">Étape 4</p>
+        <h1 className="font-serif text-2xl text-[#071422]">Retour devis</h1>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...form.register('received')} /> Avez-vous reçu le devis ?</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...form.register('priceOk')} /> Prix satisfaisant</label>
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" {...form.register('delayOk')} /> Délai acceptable</label>

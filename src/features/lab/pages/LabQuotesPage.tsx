@@ -8,6 +8,7 @@ import { canTransition } from '../lib/status';
 import { LAB_ROUTES } from '../routes';
 import { queueEmailPayload } from '../lib/emailTemplates';
 import { can } from '../rbac';
+import { confirmLabAction, LabAlert, LabEmpty, LabPage, LabTable, LabTh } from '../components/labUi';
 
 interface QuoteRow {
   id: string;
@@ -48,6 +49,7 @@ export default function LabQuotesPage() {
   async function validateQuote(row: QuoteRow) {
     if (!orgId || !userId) return;
     if (!can(role, 'quotes.validate')) { setError('Seule Madame Zineb (validation) peut valider'); return; }
+    if (!confirmLabAction(`Valider le devis ${row.quote_number} avant envoi ?`)) return;
     const { error: uErr } = await labSchema().from('quotes').update({
       status: 'validated',
       validated_by: userId,
@@ -63,6 +65,7 @@ export default function LabQuotesPage() {
       setError('Validation Zineb requise avant envoi');
       return;
     }
+    if (!confirmLabAction(`Envoyer le devis ${row.quote_number} au client ?`)) return;
     const sentAt = new Date();
     const due = followupDueAt(sentAt, followupDays);
     const { error: uErr } = await labSchema().from('quotes').update({
@@ -101,19 +104,16 @@ export default function LabQuotesPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Devis</h1>
-      <p className="text-xs text-slate-500">Relance auto après {followupDays} j. Prix jamais modifié automatiquement.</p>
-      {message && <p className="text-sm text-green-700">{message}</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-slate-500">
+    <LabPage kicker="Étape 3–4" title="Devis" subtitle={`Relance auto après ${followupDays} j. Prix jamais modifié automatiquement.`}>
+      {message && <LabAlert>{message}</LabAlert>}
+      {error && <LabAlert tone="err">{error}</LabAlert>}
+      <LabTable>
+        <thead className="bg-[#f7f4ee] text-left text-slate-500">
             <tr>
-              <th className="px-4 py-2">N°</th>
-              <th className="px-4 py-2">Montant</th>
-              <th className="px-4 py-2">Statut</th>
-              <th className="px-4 py-2"></th>
+              <LabTh>N°</LabTh>
+              <LabTh>Montant</LabTh>
+              <LabTh>Statut</LabTh>
+              <LabTh></LabTh>
             </tr>
           </thead>
           <tbody>
@@ -141,10 +141,9 @@ export default function LabQuotesPage() {
                 </td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td className="px-4 py-8 text-slate-400" colSpan={4}>Aucun devis</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={4}><LabEmpty>Aucun devis</LabEmpty></td></tr>}
           </tbody>
-        </table>
-      </div>
-    </div>
+      </LabTable>
+    </LabPage>
   );
 }

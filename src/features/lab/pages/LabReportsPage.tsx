@@ -35,7 +35,8 @@ export default function LabReportsPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Rapports</h1>
+      <h1 className="font-serif text-3xl font-semibold text-[#071422]">Rapports</h1>
+      <p className="text-sm text-slate-500">Étape 8 — gabarit selon le type d’analyse. PDF versionné.</p>
       {message && <p className="text-sm text-green-700">{message}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
       {rows.filter((r) => ['APPROVED', 'REPORT_GENERATION', 'REPORT_SENT'].includes(r.status)).map((r) => (

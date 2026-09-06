@@ -6,6 +6,7 @@ import { labSchema } from '../services/labClient';
 import { can } from '../rbac';
 import { correctionDueAt, shouldEmailSupplierOnDoubleRefuse } from '../lib/resultReview';
 import { canTransition } from '../lib/status';
+import { confirmLabAction, LabAlert, LabCard, LabPage } from '../components/labUi';
 
 interface ResultRow {
   id: string;
@@ -40,6 +41,7 @@ export default function LabValidationsPage() {
       setError('Motif obligatoire en cas de refus');
       return;
     }
+    if (!confirmLabAction(`${level} — ${decision} ? Action auditée, non silencieuse.`)) return;
     const { error: iErr } = await labSchema().from('result_reviews').insert({
       organization_id: orgId, result_id: row.id, level, decision, comment: comments[row.id] || null, reviewer_id: userId,
     });
@@ -75,13 +77,11 @@ export default function LabValidationsPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-[#0b1f3a]">Triple contrôle</h1>
-      <p className="text-xs text-slate-500">Niveau 1 IA = aide uniquement. Validation humaine obligatoire.</p>
-      {message && <p className="text-sm text-green-700">{message}</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+    <LabPage kicker="Étape 7" title="Triple contrôle" subtitle="Niveau 1 IA = aide uniquement. Tech puis Zineb. Double refus → e-mail + 6 h.">
+      {message && <LabAlert>{message}</LabAlert>}
+      {error && <LabAlert tone="err">{error}</LabAlert>}
       {rows.map((row) => (
-        <div key={row.id} className="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
+        <LabCard key={row.id} className="space-y-2">
           <p className="font-medium">{row.analysis_name}</p>
           <p className="text-xs text-slate-500">{row.ai_summary ?? 'Pas encore d’avis IA'}</p>
           {row.correction_due_at && <p className="text-xs text-orange-600">Correction avant {new Date(row.correction_due_at).toLocaleString('fr-MA')}</p>}
@@ -100,8 +100,8 @@ export default function LabValidationsPage() {
               </>
             )}
           </div>
-        </div>
+        </LabCard>
       ))}
-    </div>
+    </LabPage>
   );
 }
