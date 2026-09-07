@@ -33,6 +33,8 @@ export interface DashRequest {
   analysis_kind?: string | null;
   company_name?: string;
   dossier_number?: string;
+  product_name?: string | null;
+  execution_channel?: string | null;
 }
 
 export interface DashQuote {

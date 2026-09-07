@@ -4,17 +4,14 @@ import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
-import { ArrowUpRight, Bell, CheckCircle2, Clock3, PackageSearch } from 'lucide-react';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import { LAB_ROUTES } from '../routes';
-import { LabJourneyGrid, LabJourneyRail } from '../components/LabJourney';
 import { LabBtn } from '../components/LabUi';
 import { LAB_THEME } from '../theme/tokens';
 import {
   buildDashboardModel,
   demoDashboardSnapshot,
-  hrefForJourneyStep,
   type DashDeadline,
   type DashInvoice,
   type DashPayment,
@@ -25,8 +22,12 @@ import {
   type DashSample,
   type DashTask,
   type DashboardModel,
-  type TrackingItem,
 } from '../lib/dashboardStats';
+import {
+  QUEUE_BUCKETS,
+  buildOperatorQueue,
+  type QueueBucketKey,
+} from '../lib/dossierPhases';
 
 const CHART = {
   gold: LAB_THEME.gold,
@@ -48,54 +49,31 @@ function ChartCard({ title, hint, children }: { title: string; hint?: string; ch
   );
 }
 
-function TrackList({
-  title,
-  items,
-  empty,
-  href,
-}: {
-  title: string;
-  items: TrackingItem[];
-  empty: string;
-  href: string;
-}) {
-  return (
-    <section className="rounded-3xl border border-[#e8e2d4] bg-white/90 p-5 shadow-[0_18px_40px_-28px_rgba(7,20,34,0.45)]">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="lab-display text-xl font-semibold text-[#0B1F33]">{title}</h2>
-        <Link to={href} className="text-xs text-cyan-800 hover:underline">Ouvrir</Link>
-      </div>
-      <ul className="divide-y divide-[#f0eadb]">
-        {items.map((item) => (
-          <li key={item.id}>
-            <Link to={item.href} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-cyan-800">
-              <span>
-                <span className="font-medium text-[#0b1f3a]">{item.label}</span>
-                <span className="mt-0.5 block text-xs text-[#3d4f63]">{item.meta}</span>
-              </span>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-amber-600" />
-            </Link>
-          </li>
-        ))}
-        {items.length === 0 && <li className="py-6 text-center text-sm text-[#3d4f63]">{empty}</li>}
-      </ul>
-    </section>
-  );
+function secondsAgo(ts: number): string {
+  const s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (s < 5) return 'à l’instant';
+  return `il y a ${s} s`;
 }
 
 export default function LabDashboardPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);
   const [model, setModel] = useState<DashboardModel>(() => demoDashboardSnapshot());
+  const [queueSource, setQueueSource] = useState<DashRequest[]>([]);
+  const [lateIds, setLateIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [live, setLive] = useState(false);
+  const [fetchedAt, setFetchedAt] = useState(() => Date.now());
+  const [tick, setTick] = useState(0);
+  const [filter, setFilter] = useState<QueueBucketKey | 'all'>('all');
 
   useEffect(() => {
     if (!orgId) return;
     let cancelled = false;
-    (async () => {
+
+    async function load() {
       try {
         const [req, quotes, inv, pay, late, tasks, pos, reviews, samples, rule, settings] = await Promise.all([
-          labSchema().from('client_requests').select('id,status,analysis_kind,company_name,dossier_number').eq('organization_id', orgId).is('deleted_at', null),
+          labSchema().from('client_requests').select('id,status,analysis_kind,company_name,dossier_number,product_name,execution_channel').eq('organization_id', orgId).is('deleted_at', null),
           labSchema().from('quotes').select('id,amount,status,sent_at,followup_due_at,followup_sent_at,created_at,quote_number').eq('organization_id', orgId).is('deleted_at', null),
           labSchema().from('client_invoices').select('id,amount_total,status,invoice_date,invoice_number').eq('organization_id', orgId).is('deleted_at', null),
           labSchema().from('client_payments').select('amount,paid_at').eq('organization_id', orgId),
@@ -110,12 +88,15 @@ export default function LabDashboardPage() {
         if (cancelled) return;
         const firstErr = [req, quotes, inv, late].find((q) => q.error)?.error;
         if (firstErr) throw firstErr;
+        const requests = (req.data ?? []) as DashRequest[];
+        const deadlines = (late.data ?? []) as DashDeadline[];
+        const now = new Date();
         const built = buildDashboardModel({
-          requests: (req.data ?? []) as DashRequest[],
+          requests,
           quotes: (quotes.data ?? []) as DashQuote[],
           invoices: (inv.data ?? []) as DashInvoice[],
           payments: (pay.data ?? []) as DashPayment[],
-          deadlines: (late.data ?? []) as DashDeadline[],
+          deadlines,
           tasks: (tasks.data ?? []) as DashTask[],
           purchaseOrders: (pos.data ?? []) as DashPo[],
           reviews: (reviews.data ?? []) as DashReview[],
@@ -123,19 +104,81 @@ export default function LabDashboardPage() {
           marginPercent: Number(rule.data?.margin_percent ?? 30),
           penaltyPercentPerDay: Number(settings.data?.penalty_percent_per_day ?? 1),
         });
+        const lateRequestIds = deadlines
+          .filter((d) => !d.actual_date && d.request_id && new Date(d.expected_date) < now)
+          .map((d) => d.request_id as string);
         if (built.empty) {
-          setModel({ ...demoDashboardSnapshot(), empty: true, demo: true });
+          const demo = demoDashboardSnapshot();
+          setModel({ ...demo, empty: true, demo: true });
+          setQueueSource(demo.tracking.inProgress.map((t) => ({
+            id: t.id,
+            status: 'NEW_REQUEST',
+            dossier_number: t.label,
+            company_name: t.meta,
+          })));
+          setLateIds([]);
           setLive(false);
         } else {
           setModel(built);
+          setQueueSource(requests);
+          setLateIds(lateRequestIds);
           setLive(true);
         }
+        setFetchedAt(Date.now());
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Chargement impossible');
       }
-    })();
-    return () => { cancelled = true; };
+    }
+
+    void load();
+    const poll = window.setInterval(() => { void load(); }, 15_000);
+    const clock = window.setInterval(() => setTick((n) => n + 1), 1000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(poll);
+      window.clearInterval(clock);
+    };
   }, [orgId]);
+
+  const queue = useMemo(() => {
+    if (live) return buildOperatorQueue(queueSource, lateIds);
+    return buildOperatorQueue(
+      (model.tracking.inProgress.length
+        ? model.tracking.inProgress.map((t) => ({
+          id: t.href.split('/').pop() || t.id,
+          status: t.meta.includes('NEW_REQUEST') ? 'NEW_REQUEST' : 'QUALIFICATION',
+          dossier_number: t.label,
+          company_name: t.meta,
+        }))
+        : [
+          { id: 'demo-1', status: 'NEW_REQUEST', dossier_number: 'DEM-SEED-01', company_name: 'Atlas Oils', product_name: 'Huile d’argan' },
+          { id: 'demo-2', status: 'QUALIFICATION', dossier_number: 'DEM-SEED-02', company_name: 'Oasis Food' },
+          { id: 'demo-5', status: 'CLIENT_QUOTE_SENT', dossier_number: 'DEM-SEED-05', company_name: 'Oasis Food' },
+          { id: 'demo-6', status: 'WAITING_SAMPLES', dossier_number: 'DEM-SEED-06', company_name: 'Coopérative Souss' },
+          { id: 'demo-9', status: 'FINAL_REVIEW', dossier_number: 'DEM-SEED-09', company_name: 'Coopérative Souss' },
+        ]),
+      ['demo-6'],
+    );
+  }, [live, queueSource, lateIds, model.tracking.inProgress]);
+
+  const counts = useMemo(() => {
+    const n = { late: 0, todo: 0, wait: 0, validate: 0 };
+    for (const item of queue) n[item.bucket] += 1;
+    return n;
+  }, [queue]);
+
+  const visible = filter === 'all' ? queue : queue.filter((q) => q.bucket === filter);
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, typeof visible>();
+    for (const item of visible) {
+      const key = `${item.bucket}-${item.phase}`;
+      const list = map.get(key) ?? [];
+      list.push(item);
+      map.set(key, list);
+    }
+    return [...map.entries()];
+  }, [visible]);
 
   const pie = useMemo(() => [
     { name: 'Réussis', value: model.successRate, fill: CHART.cyan },
@@ -147,151 +190,139 @@ export default function LabDashboardPage() {
     { name: 'Cible 30%', value: model.targetMargin, fill: CHART.cyan },
   ], [model.realizedMargin, model.targetMargin]);
 
+  void tick;
+
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.28em] text-cyan-700">Étape 10 · Pilotage</p>
-          <h1 className="lab-display text-4xl font-semibold text-[#0B1F33]">Tableau de bord</h1>
-          <p className="mt-1 text-sm text-[#3d4f63]">
-            {live
-              ? 'Données Laboratoire — suivi, relances et KPI.'
-              : 'Jeu de démo local (Laboratoire vide). Les graphes restent lisibles. Seed : npm run lab:seed'}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
+    <div className="lab-editorial space-y-8">
+      <header className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="lab-live-dot">{live ? `Temps réel · ${secondsAgo(fetchedAt)}` : 'Jeu de démo local'}</p>
           <Link to={LAB_ROUTES.REQUEST_FORM}><LabBtn tone="gold">Nouvelle demande</LabBtn></Link>
-          <Link to={LAB_ROUTES.ADMIN_QUOTES}><LabBtn tone="cyan">Relances devis</LabBtn></Link>
-          <Link to={LAB_ROUTES.ADMIN_VALIDATIONS} className="inline-flex h-10 items-center rounded-xl border border-[#d4af37] bg-white px-4 text-sm text-[#071422]">Validations</Link>
-          <Link to={LAB_ROUTES.ADMIN_TASKS} className="inline-flex h-10 items-center rounded-xl border border-[#d4af37] bg-white px-4 text-sm text-[#071422]">Tâches</Link>
         </div>
-      </div>
+        <h1 className="lab-display text-4xl font-semibold text-[#0B1F33] sm:text-5xl">File d’attente</h1>
+        <p className="max-w-xl text-sm leading-relaxed text-[#3d4f63]">
+          Un dossier, une phase, une action. Ouvrir envoie au wizard — pas à une liste satellite.
+        </p>
+        <div className="lab-hairline" />
+      </header>
 
       {error && <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">{error}</p>}
 
-      <LabJourneyRail tone="light" status="NEW_REQUEST" hrefForStep={hrefForJourneyStep} />
-
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {model.kpis.map((k) => (
-          <Link key={k.label} to={k.to} className="lab-kpi-tile rounded-2xl p-5">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{k.label}</p>
-            <p className="lab-display mt-2 text-4xl text-white">{k.value}</p>
-            {k.hint && <p className="mt-1 text-xs text-white/50">{k.hint}</p>}
-          </Link>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {QUEUE_BUCKETS.map((b) => (
+          <button
+            key={b.key}
+            type="button"
+            onClick={() => setFilter((cur) => (cur === b.key ? 'all' : b.key))}
+            className={`min-h-16 rounded-2xl border px-3 py-3 text-left ${
+              filter === b.key ? 'border-[#d4af37] bg-white' : 'border-[#c9bea8] bg-[#fffdf8]'
+            }`}
+          >
+            <p className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${b.key === 'late' ? 'lab-bucket-late' : 'text-[#3d4f63]'}`}>
+              {b.label}
+            </p>
+            <p className={`lab-display mt-1 text-3xl ${b.key === 'late' ? 'lab-bucket-late' : 'text-[#0B1F33]'}`}>{counts[b.key]}</p>
+          </button>
         ))}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {model.buckets.map((b) => (
-          <Link key={b.key} to={b.href} className="rounded-2xl border border-[#d4af37]/40 bg-[#0b1f3a] p-4 text-white transition hover:border-cyan-300">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{b.label}</p>
-            <p className="lab-display mt-2 text-3xl">{b.n}</p>
-          </Link>
-        ))}
-      </div>
-
-      <div className="grid gap-4 xl:grid-cols-2">
-        <ChartCard title="Pipeline 12 étapes" hint="dossiers">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={model.pipeline.map((s) => ({ ...s, label: String(s.n).padStart(2, '0') }))}>
-              <CartesianGrid stroke={CHART.grid} vertical={false} />
-              <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} />
-              <YAxis stroke="#94a3b8" allowDecimals={false} fontSize={11} />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
-              <Bar dataKey="count" fill={CHART.gold} radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Devis" hint="montant · mois">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={model.quotesByMonth}>
-              <CartesianGrid stroke={CHART.grid} />
-              <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
-              <YAxis stroke="#94a3b8" fontSize={11} />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
-              <Area type="monotone" dataKey="amount" stroke={CHART.cyan} fill="rgba(34,211,238,0.25)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Transactions" hint="facturé / encaissé">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={model.transactionsByMonth}>
-              <CartesianGrid stroke={CHART.grid} vertical={false} />
-              <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
-              <YAxis stroke="#94a3b8" fontSize={11} />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
-              <Legend />
-              <Bar dataKey="invoiced" name="Facturé" fill={CHART.gold} radius={[6, 6, 0, 0]} />
-              <Bar dataKey="paid" name="Encaissé" fill={CHART.cyan} radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Avancement par analyse" hint="lab / type">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={model.progressByKind} layout="vertical">
-              <CartesianGrid stroke={CHART.grid} horizontal={false} />
-              <XAxis type="number" stroke="#94a3b8" allowDecimals={false} fontSize={11} />
-              <YAxis type="category" dataKey="kind" stroke="#94a3b8" width={120} fontSize={10} />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
-              <Bar dataKey="count" fill={CHART.navy} radius={[0, 6, 6, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Taux de succès" hint={`${model.successRate} %`}>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Legend />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
-              <Pie data={pie} dataKey="value" nameKey="name" innerRadius={58} outerRadius={88} paddingAngle={3}>
-                {pie.map((p) => <Cell key={p.name} fill={p.fill} />)}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Marge & pénalités" hint={`retards ${model.lateCount}`}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={[...marginBars, { name: 'Pénalités', value: model.penaltyTotal, fill: CHART.rose }]}>
-              <CartesianGrid stroke={CHART.grid} vertical={false} />
-              <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
-              <YAxis stroke="#94a3b8" fontSize={11} />
-              <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(251,113,133,0.3)', color: '#fff' }} />
-              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                {[...marginBars, { fill: CHART.rose }].map((c, i) => <Cell key={i} fill={c.fill} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <TrackList title="Dossiers en cours" items={model.tracking.inProgress} empty="Aucun dossier ouvert" href={LAB_ROUTES.ADMIN_REQUESTS} />
-        <TrackList title="Relances devis en retard" items={model.tracking.followupsOverdue} empty="Aucune relance due" href={LAB_ROUTES.ADMIN_QUOTES} />
-        <TrackList title="BDC sans échantillons" items={model.tracking.poAwaitingSamples} empty="Aucun BDC en attente d’échantillons" href={LAB_ROUTES.ADMIN_ORDERS} />
-        <TrackList title="Revues en attente" items={model.tracking.reviewsPending} empty="Aucune revue pendante" href={LAB_ROUTES.ADMIN_VALIDATIONS} />
-        <TrackList title="Tâches en retard" items={model.tracking.tasksOverdue} empty="Aucune tâche en retard" href={LAB_ROUTES.ADMIN_TASKS} />
-        <section className="rounded-3xl border border-[#e8e2d4] bg-[#071422] p-5 text-white">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200">Actions rapides</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {[
-              { to: LAB_ROUTES.ADMIN_CALLS, label: 'Suivi appels', icon: Bell },
-              { to: LAB_ROUTES.ADMIN_SAMPLES, label: 'Réception ECH', icon: PackageSearch },
-              { to: LAB_ROUTES.ADMIN_DEADLINES, label: 'Délais / pénalités', icon: Clock3 },
-              { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Factures', icon: CheckCircle2 },
-            ].map((a) => (
-              <Link key={a.to} to={a.to} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm hover:border-cyan-300">
-                <a.icon className="h-4 w-4 text-cyan-300" />
-                {a.label}
+      <section>
+        {grouped.map(([key, items]) => (
+          <div key={key} className="mb-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b4e0b]">
+              Phase {items[0].phase} · {items[0].phaseTitle}
+            </p>
+            {items.map((item) => (
+              <Link key={item.id} to={item.href} className="lab-queue-card">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0e5f73]">{item.dossier}</p>
+                  <span className="lab-queue-open text-xs font-semibold text-[#6b4e0b]">Ouvrir</span>
+                </div>
+                <p className="lab-display mt-1 text-2xl text-[#0B1F33]">{item.company}</p>
+                {item.product && <p className="text-sm text-[#3d4f63]">{item.product}</p>}
+                <p className="mt-2 text-sm leading-relaxed text-[#0B1F33]">{item.nextAction}</p>
               </Link>
             ))}
           </div>
-        </section>
-      </div>
+        ))}
+        {visible.length === 0 && (
+          <p className="py-10 text-center text-sm text-[#3d4f63]">Rien dans ce seau.</p>
+        )}
+      </section>
 
-      <div className="rounded-3xl bg-[#071422] p-6 text-white">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-amber-200">Parcours officiel</p>
-        <h2 className="lab-display mt-1 mb-4 text-3xl text-white">Les 12 étapes</h2>
-        <LabJourneyGrid compact />
-      </div>
+      <details className="lab-pilotage border-t border-[#d4af37]/40 pt-2">
+        <summary>Pilotage direction</summary>
+        <p className="mb-4 text-sm text-[#3d4f63]">KPI et graphes — repliés pour laisser la file d’abord.</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {model.kpis.slice(0, 4).map((k) => (
+            <Link key={k.label} to={k.to} className="lab-kpi-tile rounded-2xl p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-300">{k.label}</p>
+              <p className="lab-display mt-2 text-4xl text-white">{k.value}</p>
+            </Link>
+          ))}
+        </div>
+        <div className="mt-4 grid gap-4">
+          <ChartCard title="Pipeline 12 étapes" hint="infographie">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={model.pipeline.map((s) => ({ ...s, label: String(s.n).padStart(2, '0') }))}>
+                <CartesianGrid stroke={CHART.grid} vertical={false} />
+                <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} />
+                <YAxis stroke="#94a3b8" allowDecimals={false} fontSize={11} />
+                <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
+                <Bar dataKey="count" fill={CHART.gold} radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <ChartCard title="Devis" hint="montant · mois">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={model.quotesByMonth}>
+                <CartesianGrid stroke={CHART.grid} />
+                <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
+                <YAxis stroke="#94a3b8" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
+                <Area type="monotone" dataKey="amount" stroke={CHART.cyan} fill="rgba(34,211,238,0.25)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <ChartCard title="Transactions" hint="facturé / encaissé">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={model.transactionsByMonth}>
+                <CartesianGrid stroke={CHART.grid} vertical={false} />
+                <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
+                <YAxis stroke="#94a3b8" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(212,175,55,0.3)', color: '#fff' }} />
+                <Legend />
+                <Bar dataKey="invoiced" name="Facturé" fill={CHART.gold} radius={[6, 6, 0, 0]} />
+                <Bar dataKey="paid" name="Encaissé" fill={CHART.cyan} radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <ChartCard title="Taux de succès" hint={`${model.successRate} %`}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Legend />
+                <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(34,211,238,0.3)', color: '#fff' }} />
+                <Pie data={pie} dataKey="value" nameKey="name" innerRadius={58} outerRadius={88} paddingAngle={3}>
+                  {pie.map((p) => <Cell key={p.name} fill={p.fill} />)}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <ChartCard title="Marge & pénalités" hint={`retards ${model.lateCount}`}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={[...marginBars, { name: 'Pénalités', value: model.penaltyTotal, fill: CHART.rose }]}>
+                <CartesianGrid stroke={CHART.grid} vertical={false} />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+                <YAxis stroke="#94a3b8" fontSize={11} />
+                <Tooltip contentStyle={{ background: '#071422', border: '1px solid rgba(251,113,133,0.3)', color: '#fff' }} />
+                <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                  {[...marginBars, { fill: CHART.rose }].map((c, i) => <Cell key={i} fill={c.fill} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+        </div>
+      </details>
     </div>
   );
 }

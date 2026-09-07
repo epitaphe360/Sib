@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLabSessionStore } from '../store/labSessionStore';
 import { labSchema } from '../services/labClient';
 import type { LabClientRequest } from '../types';
-import { LabBadge, LabEmpty, LabPage, LabTable, LabTh } from '../components/LabUi';
-import { journeyStepForStatus } from '../lib/journey';
+import { LabEmpty, LabPage } from '../components/LabUi';
+import {
+  LAB_CASE_PHASES,
+  dossierPhaseForStatus,
+  nextActionForStatus,
+  requestWizardHref,
+  statusLabelFr,
+} from '../lib/dossierPhases';
 
 export default function LabRequestsPage() {
   const orgId = useLabSessionStore((s) => s.activeOrg?.id);
@@ -17,7 +23,7 @@ export default function LabRequestsPage() {
     (async () => {
       const { data, error: qErr } = await labSchema()
         .from('client_requests')
-        .select('id,organization_id,dossier_number,company_name,contact_name,email,phone,product_name,matrix,sample_type,sample_count,accreditation_required,notes,analysis_kind,status,created_at')
+        .select('id,organization_id,dossier_number,company_name,contact_name,email,phone,product_name,matrix,sample_type,sample_count,accreditation_required,notes,analysis_kind,status,created_at,execution_channel')
         .eq('organization_id', orgId)
         .is('deleted_at', null)
         .order('created_at', { ascending: false })
@@ -29,36 +35,44 @@ export default function LabRequestsPage() {
     return () => { cancelled = true; };
   }, [orgId]);
 
+  const grouped = useMemo(() => {
+    const map = new Map<number, LabClientRequest[]>();
+    for (const row of rows) {
+      const phase = dossierPhaseForStatus(row.status);
+      const list = map.get(phase) ?? [];
+      list.push(row);
+      map.set(phase, list);
+    }
+    return LAB_CASE_PHASES
+      .map((phase) => ({ phase, rows: map.get(phase.n) ?? [] }))
+      .filter((g) => g.rows.length > 0);
+  }, [rows]);
+
   return (
-    <LabPage kicker="Étapes 1–2" title="Demandes" subtitle="Dossier maître unique. Qualification interne FR / sous-traitance EN.">
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <LabTable>
-        <thead className="bg-[#f7f4ee]">
-          <tr>
-            <LabTh>Dossier</LabTh>
-            <LabTh>Client</LabTh>
-            <LabTh>Produit</LabTh>
-            <LabTh>Étape</LabTh>
-            <LabTh>Statut</LabTh>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id} className="border-t border-[#f0eadb]">
-              <td className="px-4 py-3">
-                <Link className="font-medium text-cyan-800" to={`/lab/admin/requests/${row.id}`}>{row.dossier_number}</Link>
-              </td>
-              <td className="px-4 py-3">{row.company_name}</td>
-              <td className="px-4 py-3">{row.product_name}</td>
-              <td className="px-4 py-3">{journeyStepForStatus(row.status) || '—'}</td>
-              <td className="px-4 py-3"><LabBadge tone="gold">{row.status}</LabBadge></td>
-            </tr>
-          ))}
-          {rows.length === 0 && (
-            <tr><td colSpan={5}><LabEmpty>Aucune demande</LabEmpty></td></tr>
-          )}
-        </tbody>
-      </LabTable>
+    <LabPage
+      kicker="Dossiers"
+      title="Tous les dossiers"
+      subtitle="Groupés par phase. Clic = wizard à la phase courante."
+    >
+      {error && <p className="text-sm font-medium text-red-700">{error}</p>}
+      <div className="lab-editorial mx-0 space-y-8">
+        {grouped.map(({ phase, rows: list }) => (
+          <section key={phase.n}>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b4e0b]">
+              Phase {phase.n} · {phase.title}
+            </p>
+            {list.map((row) => (
+              <Link key={row.id} to={requestWizardHref(row.id)} className="lab-queue-card">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0e5f73]">{row.dossier_number}</p>
+                <p className="lab-display mt-1 text-2xl text-[#0B1F33]">{row.company_name}</p>
+                <p className="text-sm text-[#3d4f63]">{row.product_name} · {statusLabelFr(row.status)}</p>
+                <p className="mt-2 text-sm text-[#0B1F33]">{nextActionForStatus(row.status, row.execution_channel)}</p>
+              </Link>
+            ))}
+          </section>
+        ))}
+        {rows.length === 0 && <LabEmpty>Aucun dossier</LabEmpty>}
+      </div>
     </LabPage>
   );
 }

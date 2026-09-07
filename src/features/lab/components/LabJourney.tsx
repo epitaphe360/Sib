@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
 import { LAB_JOURNEY, journeyState, journeyStepForStatus } from '../lib/journey';
+import {
+  LAB_CASE_PHASES,
+  canOpenPhase,
+  dossierPhaseForStatus,
+  phaseRailState,
+} from '../lib/dossierPhases';
 import type { DossierStatus } from '../types';
 import { LAB_THEME } from '../theme/tokens';
 
@@ -65,6 +71,46 @@ export function LabJourneyRail({
               </Link>
             ) : (
               <span className={`flex min-h-10 items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium ${cls}`}>{inner}</span>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/** 10-phase dossier rail. Portail + dashboard are not case states. */
+export function LabCaseRail({
+  status,
+  viewPhase,
+  onOpen,
+}: {
+  status?: DossierStatus | string | null;
+  viewPhase?: number;
+  onOpen?: (phase: number) => void;
+}) {
+  const current = dossierPhaseForStatus(status);
+  const viewing = viewPhase ?? current;
+  return (
+    <ol className="lab-case-rail" aria-label="Phases du dossier">
+      {LAB_CASE_PHASES.map((phase) => {
+        const state = phaseRailState(phase.n, current);
+        const open = canOpenPhase(phase.n, current);
+        const active = viewing === phase.n;
+        return (
+          <li key={phase.n} className="lab-case-rail-item">
+            <button
+              type="button"
+              disabled={!open}
+              aria-current={state === 'current' ? 'step' : undefined}
+              aria-label={`${phase.n}. ${phase.title}${state === 'locked' ? ' (verrouillée)' : ''}`}
+              onClick={() => open && onOpen?.(phase.n)}
+              className={`lab-case-dot lab-case-dot-${state}${active ? ' is-viewing' : ''}`}
+            >
+              {state === 'done' ? '✓' : String(phase.n)}
+            </button>
+            {(state === 'current' || active) && (
+              <span className="lab-case-dot-label">{phase.short}</span>
             )}
           </li>
         );

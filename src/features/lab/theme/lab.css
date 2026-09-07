@@ -153,3 +153,209 @@
 .lab-journey-rail > * {
   scroll-snap-align: start;
 }
+
+/* Editorial operator surfaces — Aesop / Hermès air, navy ink, gold rules */
+.lab-editorial {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .lab-editorial {
+    max-width: 46rem;
+  }
+}
+
+.lab-hairline {
+  height: 1px;
+  background: linear-gradient(90deg, #d4af37, rgba(212, 175, 55, 0.15));
+}
+
+.lab-phase-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid var(--lab-gold);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--lab-ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lab-next-action {
+  margin: 0;
+  font-family: var(--lab-display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--lab-ink);
+}
+
+.lab-live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lab-muted);
+}
+
+.lab-live-dot::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--lab-success);
+  box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.15);
+}
+
+.lab-case-rail {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 0.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lab-case-rail-item {
+  display: flex;
+  min-width: 2.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lab-case-dot {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--lab-card-border);
+  background: #fff;
+  color: var(--lab-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lab-case-dot:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.lab-case-dot-current,
+.lab-case-dot-current.is-viewing {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-color: var(--lab-gold);
+  background: #0b1f3a;
+  color: #f8f4ea;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.28);
+}
+
+.lab-case-dot-done {
+  border-color: var(--lab-gold);
+  background: #f4ead0;
+  color: var(--lab-gold-ink);
+}
+
+.lab-case-dot-label {
+  max-width: 5.5rem;
+  text-align: center;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lab-ink);
+}
+
+.lab-phase-row {
+  display: flex;
+  width: 100%;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.28);
+  background: transparent;
+  color: var(--lab-ink);
+  text-align: left;
+}
+
+.lab-phase-row:disabled {
+  cursor: not-allowed;
+  color: var(--lab-muted);
+}
+
+.lab-phase-current {
+  margin: 0.5rem 0 1.25rem;
+  padding: 1.5rem 0 0.25rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.45);
+}
+
+.lab-suivant {
+  width: 100% !important;
+  min-height: 3.25rem !important;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
+.lab-queue-card {
+  display: block;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  color: var(--lab-ink);
+}
+
+.lab-queue-card:hover .lab-queue-open {
+  color: var(--lab-cyan-ink);
+}
+
+.lab-bucket-late {
+  color: var(--lab-danger);
+}
+
+.lab-pilotage summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  font-family: var(--lab-display);
+  font-size: 1.35rem;
+  color: var(--lab-ink);
+}
+
+.lab-pilotage summary::-webkit-details-marker {
+  display: none;
+}
+
+.lab-nav-label {
+  padding: 0.75rem 0.75rem 0.35rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f0d78c;
+}
+
+.lab-nav-link {
+  min-height: 2.75rem;
+}
+
+.lab-app-light > .flex-1 > main {
+  padding: 1.25rem 1rem 3rem;
+}
+
+@media (min-width: 640px) {
+  .lab-app-light > .flex-1 > main {
+    padding: 2rem 2rem 4rem;
+  }
+}
