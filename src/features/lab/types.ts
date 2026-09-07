@@ -85,4 +85,6 @@ export interface LabClientRequest {
   execution_channel?: 'INTERNAL' | 'SUBCONTRACTED' | 'MIXTE' | null;
   status: DossierStatus;
   created_at: string;
+  qualification?: Record<string, unknown> | null;
+  ice_status?: string | null;
 }

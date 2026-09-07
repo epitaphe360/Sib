@@ -1,6 +1,6 @@
 # Audit CDC Elitech Lab — 2026-09-06
 
-Sources : *Cahier des charges fonctionnel & technique* v1.0 (05/09/2026) + infographie 12 étapes.  
+Sources : *Cahier des charges fonctionnel & technique* v1.0 (05/09/2026) + infographie 12 étapes + **Document 27** (qualification demande, voir `docs/LAB_DOC27.md`).  
 Verdict global : **PARTIAL**. Le workflow métier est codé. Ce qui manque est surtout l’allumage prod (Resend, Drive, premier admin), les gabarits officiels, la boîte mail réelle, et l’Excel/PDF binaire.
 
 Légende : **OK** = codé et testé (logique + UI/SQL). **PARTIAL** = présent mais incomplet ou heuristique. **MISSING** = pas dans le produit.

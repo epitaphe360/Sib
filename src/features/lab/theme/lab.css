@@ -154,6 +154,41 @@
   scroll-snap-align: start;
 }
 
+.lab-qualify-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.lab-qualify-rail button {
+  min-height: 2.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lab-qualify-rail button[data-state='done'] {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #f0d78c;
+}
+
+.lab-qualify-rail button[data-state='current'] {
+  border-color: #22d3ee;
+  background: rgba(34, 211, 238, 0.14);
+  color: #fff;
+}
+
+@media (max-width: 639px) {
+  .lab-qualify-rail {
+    display: none;
+  }
+}
+
 /* Editorial operator surfaces — Aesop / Hermès air, navy ink, gold rules */
 .lab-editorial {
   width: 100%;

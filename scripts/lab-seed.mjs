@@ -171,11 +171,18 @@ async function main() {
   }
 
   let migration07 = false;
+  let migration08 = false;
   const calls = await query(`select to_regclass('lab.client_calls') as t`);
   if (!calls[0]?.t) {
     const sql = fs.readFileSync(path.join(root, 'supabase/migrations/20260906000007_lab_cdc_gaps.sql'), 'utf8');
     await query(sql);
     migration07 = true;
+  }
+  const cats = await query(`select to_regclass('lab.sample_categories') as t`);
+  if (!cats[0]?.t) {
+    const sql = fs.readFileSync(path.join(root, 'supabase/migrations/20260907000008_lab_qualification.sql'), 'utf8');
+    await query(sql);
+    migration08 = true;
   }
 
   const service = await labServiceRole();
@@ -205,6 +212,7 @@ async function main() {
     org: 'elitech',
     project: REF,
     migration07,
+    migration08,
     usersCreated: users.created,
     usersExisting: users.existing,
     usersAttached: Boolean(service),

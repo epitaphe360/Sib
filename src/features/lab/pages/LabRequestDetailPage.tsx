@@ -20,6 +20,7 @@ import { queueEmailPayload } from '../lib/emailTemplates';
 import { can } from '../rbac';
 import { LabCaseRail } from '../components/LabJourney';
 import { LabBtn, LabField, labControlClass, confirmLabAction } from '../components/LabUi';
+import { LabQualificationRecap } from '../components/LabQualificationRecap';
 import {
   LAB_CASE_PHASES,
   canOpenPhase,
@@ -371,6 +372,13 @@ export default function LabRequestDetailPage() {
                         <div><dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#3d4f63]">Échantillons</dt><dd>{row.sample_count} · {row.accreditation_required ? 'Accréditation requise' : 'Sans accréditation'}</dd></div>
                         {row.notes && <div><dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#3d4f63]">Notes</dt><dd>{row.notes}</dd></div>}
                       </dl>
+                      <LabQualificationRecap
+                        requestId={row.id}
+                        qualification={row.qualification}
+                        iceStatus={row.ice_status}
+                        canEdit={current <= 4}
+                        onSaved={() => void load()}
+                      />
                       {current === 1 && (
                         <label className="flex min-h-12 items-start gap-3 text-sm font-medium text-[#0B1F33]">
                           <input type="checkbox" className="mt-1 accent-[#0e5f73]" checked={acknowledgedRead} onChange={(e) => setAcknowledgedRead(e.target.checked)} />

@@ -27,6 +27,7 @@ const SECONDARY: NavItem[] = [
   { to: LAB_ROUTES.ADMIN_INVOICES, label: 'Finance', icon: Receipt, perm: 'invoices.read' },
   { to: LAB_ROUTES.ADMIN_INBOX, label: 'Courrier', icon: Inbox, perm: 'settings.write' },
   { to: LAB_ROUTES.ADMIN_SETTINGS, label: 'Réglages', icon: Settings, perm: 'settings.write' },
+  { to: LAB_ROUTES.ADMIN_SAMPLE_CATALOG, label: 'Catalogue ECH', icon: Beaker, perm: 'settings.write' },
 ];
 
 const MORE: NavItem[] = [

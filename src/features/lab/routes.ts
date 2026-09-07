@@ -37,6 +37,7 @@ export const LAB_ROUTES = {
   ADMIN_CALLS: '/lab/admin/calls',
   ADMIN_REGULATION: '/lab/admin/regulatory',
   ADMIN_REGULATORY: '/lab/admin/regulatory',
+  ADMIN_SAMPLE_CATALOG: '/lab/admin/sample-catalog',
   CLIENT_DASHBOARD: '/lab/client/dashboard',
   CLIENT_REQUESTS: '/lab/client/requests',
   CLIENT_REQUEST: '/lab/client/requests/:id',
