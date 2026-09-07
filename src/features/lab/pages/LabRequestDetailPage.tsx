@@ -107,19 +107,21 @@ export default function LabRequestDetailPage() {
 
   async function load() {
     if (!orgId || !id) return;
-    const req = await labSchema().from('client_requests').select('*').eq('id', id).eq('organization_id', orgId).maybeSingle();
-    const sup = await labSchema().from('suppliers').select('id,name,quality_score,delay_score,price_score,accreditations').eq('organization_id', orgId).eq('is_active', true).is('deleted_at', null);
-    const rule = await labSchema().from('pricing_rules').select('margin_percent').eq('organization_id', orgId).eq('is_active', true).maybeSingle();
-    const consultRow = await labSchema().from('supplier_consultations').select('id').eq('request_id', id).eq('organization_id', orgId).order('created_at', { ascending: false }).limit(1).maybeSingle();
-    const sel = await labSchema().from('supplier_selection').select('id').eq('request_id', id).limit(1).maybeSingle();
-    const q = await labSchema().from('quotes').select('id,quote_number,amount,status,validated_by,supplier_amount').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle();
-    const order = await labSchema().from('purchase_orders').select('id,reference,review_status,amount').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle();
-    const samples = await labSchema().from('samples').select('code').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null);
-    const ao = await labSchema().from('analysis_orders').select('id').eq('request_id', id).limit(1).maybeSingle();
-    const reviews = await labSchema().from('result_reviews').select('level,decision').eq('organization_id', orgId);
-    const reports = await labSchema().from('reports').select('sent_at').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null);
-    const inv = await labSchema().from('client_invoices').select('id').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).limit(1).maybeSingle();
-    const settings = await labSchema().from('settings').select('sample_code_pattern,quote_followup_days').eq('organization_id', orgId).maybeSingle();
+    const [req, sup, rule, consultRow, sel, q, order, samples, ao, reviews, reports, inv, settings] = await Promise.all([
+      labSchema().from('client_requests').select('*').eq('id', id).eq('organization_id', orgId).maybeSingle(),
+      labSchema().from('suppliers').select('id,name,quality_score,delay_score,price_score,accreditations').eq('organization_id', orgId).eq('is_active', true).is('deleted_at', null),
+      labSchema().from('pricing_rules').select('margin_percent').eq('organization_id', orgId).eq('is_active', true).maybeSingle(),
+      labSchema().from('supplier_consultations').select('id').eq('request_id', id).eq('organization_id', orgId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+      labSchema().from('supplier_selection').select('id').eq('request_id', id).limit(1).maybeSingle(),
+      labSchema().from('quotes').select('id,quote_number,amount,status,validated_by,supplier_amount').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+      labSchema().from('purchase_orders').select('id,reference,review_status,amount').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+      labSchema().from('samples').select('code').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null),
+      labSchema().from('analysis_orders').select('id').eq('request_id', id).limit(1).maybeSingle(),
+      labSchema().from('result_reviews').select('level,decision').eq('organization_id', orgId),
+      labSchema().from('reports').select('sent_at').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null),
+      labSchema().from('client_invoices').select('id').eq('request_id', id).eq('organization_id', orgId).is('deleted_at', null).limit(1).maybeSingle(),
+      labSchema().from('settings').select('sample_code_pattern,quote_followup_days').eq('organization_id', orgId).maybeSingle(),
+    ]);
     if (req.error) { setError(req.error.message); return; }
     const next = req.data as LabClientRequest | null;
     setRow(next);
