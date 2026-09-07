@@ -319,6 +319,7 @@ export default function LabRequestDetailPage() {
           {row.execution_channel ? ` · ${row.execution_channel}` : ''}
         </p>
         <div className="lab-hairline" />
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6b4e0b]">Prochaine action</p>
         <p className="lab-next-action">{nextActionForStatus(row.status, row.execution_channel)}</p>
         <p className="lab-live-dot">Mis à jour {seconds < 5 ? 'à l’instant' : `il y a ${seconds} s`}</p>
       </header>
