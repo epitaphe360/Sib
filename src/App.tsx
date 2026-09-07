@@ -191,6 +191,8 @@ import { usePushNotifications } from './hooks/usePushNotifications';
 import { useAuthStore } from './store/authStore';
 import { UrbaEventNav } from './components/layout/UrbaEventNav';
 import { isPremiumHomePath } from './components/home/sib2026/tokens';
+import { isLabPath } from './features/lab/routes';
+const LabApp = lazyRetry(() => import('./features/lab/LabApp'));
 
 const URBA_ROUTES = ['/salons', '/salon/sir', '/salon/sip', '/salon/btp', '/salon/sie'];
 
@@ -198,6 +200,15 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isUrbaRoute = URBA_ROUTES.some(r => location.pathname.startsWith(r));
   const isPremiumHome = isPremiumHomePath(location.pathname);
+  const isLab = isLabPath(location.pathname);
+  if (isLab) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <SkipToContent />
+        <main id="main-content" className="flex-1">{children}</main>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <SkipToContent />
@@ -225,6 +236,7 @@ const App = () => {
   const { currentLanguage } = useLanguageStore();
   const location = useLocation();
   const isPremiumHome = isPremiumHomePath(location.pathname);
+  const isLab = isLabPath(location.pathname);
 
   // Tracking des visites de pages pour le trafic hebdomadaire (admin dashboard)
   usePageTracking();
@@ -498,6 +510,8 @@ const App = () => {
               </Link>
             </div>} />
 
+            <Route path="/lab/*" element={<LabApp />} />
+
             {/* 404 catch-all route - must be last */}
             <Route path="*" element={<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
@@ -509,33 +523,31 @@ const App = () => {
           </Routes>
         </Suspense>
       </AppShell>
-      {!isPremiumHome && <Footer />}
+      {!isPremiumHome && !isLab && <Footer />}
 
       <Suspense fallback={null}>
-        {/* ChatBot */}
-        <ChatBot
-          isOpen={isChatBotOpen}
-          onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
-        />
-
-        {/* ChatBot Toggle Button */}
-        {!isChatBotOpen && (
-          <ChatBotToggle
-            onClick={() => setIsChatBotOpen(true)}
-            hasUnreadMessages={false}
-          />
+        {!isLab && (
+          <>
+            <ChatBot
+              isOpen={isChatBotOpen}
+              onToggle={() => setIsChatBotOpen(!isChatBotOpen)}
+            />
+            {!isChatBotOpen && (
+              <ChatBotToggle
+                onClick={() => setIsChatBotOpen(true)}
+                hasUnreadMessages={false}
+              />
+            )}
+            <WhatsAppFloatingWidget
+              position="bottom-right"
+              offsetBottom={100}
+              offsetSide={24}
+              defaultVisible={true}
+            />
+          </>
         )}
 
-        {/* WhatsApp Floating Widget */}
-        <WhatsAppFloatingWidget
-          position="bottom-right"
-          offsetBottom={100}
-          offsetSide={24}
-          defaultVisible={true}
-        />
-
-        {/* Dev Tools - Subscription Switcher (Development Only) */}
-        {import.meta.env.DEV && <DevSubscriptionSwitcher />}
+        {import.meta.env.DEV && !isLab && <DevSubscriptionSwitcher />}
       </Suspense>
 
       <Toaster position="top-right" />

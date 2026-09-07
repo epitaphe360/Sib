@@ -207,6 +207,13 @@
   SALON_SIP: '/salon/sip',
   SALON_BTP: '/salon/btp',
   SALON_SIE: '/salon/sie',
+
+  // Elitech Lab (isolated product)
+  LAB: '/lab',
+  LAB_LOGIN: '/lab/login',
+  LAB_CLIENT_LOGIN: '/lab/client-login',
+  LAB_REQUEST_FORM: '/lab/request-form',
+  LAB_ADMIN_DASHBOARD: '/lab/admin/dashboard',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

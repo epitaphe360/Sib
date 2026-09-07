@@ -395,6 +395,81 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+/**
+ * Lab email flush (cron). Never expose SERVICE_ROLE to the client.
+ * POST /api/lab/flush-emails
+ * Header: x-lab-cron-secret
+ */
+app.post('/api/lab/flush-emails', async (req, res) => {
+  const secret = process.env.LAB_CRON_SECRET;
+  if (!secret || req.headers['x-lab-cron-secret'] !== secret) {
+    return res.status(401).json({ success: false, error: 'unauthorized' });
+  }
+  try {
+    const { flushLabEmails } = await import('./scripts/lab-email-worker.mjs');
+    const result = await flushLabEmails({ dryRun: req.query.dryRun === '1' });
+    return res.json({ success: !result.error, ...result });
+  } catch (error) {
+    console.error('❌ Lab email flush:', error);
+    return res.status(500).json({ success: false, error: error.message || 'flush failed' });
+  }
+});
+
+/**
+ * Queue due follow-ups and deadline notices, then optionally flush.
+ * POST /api/lab/cron
+ * Header: x-lab-cron-secret
+ */
+app.post('/api/lab/cron', async (req, res) => {
+  const secret = process.env.LAB_CRON_SECRET;
+  if (!secret || req.headers['x-lab-cron-secret'] !== secret) {
+    return res.status(401).json({ success: false, error: 'unauthorized' });
+  }
+  try {
+    const { runLabCron } = await import('./scripts/lab-cron.mjs');
+    const cron = await runLabCron({ dryRun: req.query.dryRun === '1' });
+    if (req.query.flush === '1' && !cron.error) {
+      const { flushLabEmails } = await import('./scripts/lab-email-worker.mjs');
+      const flush = await flushLabEmails({ dryRun: req.query.dryRun === '1' });
+      return res.json({ success: !flush.error, cron, flush });
+    }
+    return res.json({ success: !cron.error, cron });
+  } catch (error) {
+    console.error('❌ Lab cron:', error);
+    return res.status(500).json({ success: false, error: error.message || 'cron failed' });
+  }
+});
+
+/**
+ * Inbound email webhook (Resend / poll every 30 min).
+ * POST /api/lab/inbound-email
+ * Header: x-lab-cron-secret
+ */
+app.post('/api/lab/inbound-email', async (req, res) => {
+  const secret = process.env.LAB_CRON_SECRET;
+  if (!secret || req.headers['x-lab-cron-secret'] !== secret) {
+    return res.status(401).json({ success: false, error: 'unauthorized' });
+  }
+  const { message_id, subject, body, org_slug } = req.body || {};
+  if (!message_id) return res.status(400).json({ success: false, error: 'message_id required' });
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.VITE_LAB_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return res.status(503).json({ success: false, error: 'missing_supabase_admin' });
+  try {
+    const supabase = createSupabaseServerClient(url, key);
+    const { data, error } = await supabase.schema('lab').rpc('process_inbound_email', {
+      p_org_slug: org_slug || 'elitech',
+      p_message_id: String(message_id),
+      p_subject: subject || '',
+      p_body: body || '',
+    });
+    if (error) return res.status(400).json({ success: false, error: error.message });
+    return res.json({ success: true, classification: data });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message || 'inbound failed' });
+  }
+});
+
 // ============================================
 // ADMIN API: Delete exhibitor (bypasses RLS)
 // ============================================

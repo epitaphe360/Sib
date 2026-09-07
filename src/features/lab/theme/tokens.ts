@@ -1,0 +1,35 @@
+/** Elitech Lab visual system — navy / gold / cyan. Isolated from SIB. */
+
+export const LAB_THEME = {
+  navy: '#071422',
+  navyMid: '#0b1f3a',
+  navyDeep: '#050d18',
+  navyLight: '#16325a',
+  gold: '#d4af37',
+  goldSoft: '#f0d78c',
+  goldMuted: 'rgba(212,175,55,0.22)',
+  goldInk: '#6b4e0b',
+  cyan: '#22d3ee',
+  cyanSoft: '#67e8f9',
+  cyanInk: '#0e5f73',
+  emerald: '#047857',
+  rose: '#b91c1c',
+  glass: 'rgba(255,255,255,0.07)',
+  glassStrong: 'rgba(255,255,255,0.12)',
+  cream: '#f4f1ea',
+  card: '#fffdf8',
+  cardBorder: '#c9bea8',
+  ink: '#0B1F33',
+  muted: '#3d4f63',
+  placeholder: '#5c6b7d',
+  inputBorder: '#8a7d68',
+  inkOnDark: '#e8eef7',
+  mutedOnDark: '#c5d0dc',
+  placeholderOnDark: '#b7c4d4',
+  fontDisplay: '"Playfair Display", "Cormorant Garamond", Georgia, serif',
+  fontBody: 'ui-sans-serif, system-ui, sans-serif',
+  slogan: 'Science aujourd’hui, un monde plus sûr demain.',
+  brand: 'Elitech Holding',
+} as const;
+
+export const LAB_COUNTRY_CODES = ['+212', '+33', '+1', '+34', '+351', '+39', '+49', '+44', '+213', '+216'] as const;
